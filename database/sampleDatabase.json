@@ -1,0 +1,275 @@
+[
+  {
+    "_id": { "$oid": "60c72b2f5b9f8c23a4d5b8e1" },
+    "dokumen": {
+      "nomorInternal": "UN62/PKS/FT/2024/001",
+      "nomorMitra": "MOU-TELKOM/2024/005",
+      "judul": "Kerja Sama Pengembangan Kurikulum Teknologi Informatika",
+      "tanggalTtd": { "$date": "2024-03-15T00:00:00Z" },
+      "tempatTtd": "Gedung Rektorat UPN, Jakarta",
+      "fileUpload": {
+        "nama": "PKS_Telkom_2024.pdf",
+        "tipe": "application/pdf",
+        "path": "/dokumen/kerjasama/2024/telkom_pks.pdf"
+      }
+    },
+    "notaKesepahaman": {
+      "ada": true,
+      "nomorInternal": "UN62/MoU/FT/2023/012",
+      "nomorMitra": "MOU-TELKOM/2023/087",
+      "tanggal": { "$date": "2023-09-20T00:00:00Z" }
+    },
+    "pihakKesatu": {
+      "nama": "Dr. Ahmad Suryono, S.T., M.T.",
+      "institusi": "Fakultas Teknik UPN Veteran Jakarta",
+      "alamat": "Jl. RS. Fatmawati, Pondok Labu, Jakarta Selatan",
+      "jabatan": "Dekan Fakultas Teknik",
+      "kontakNama": "Dr. Rina Kurniawati, S.T., M.Eng.",
+      "kontakEmail": "kerjasama.ft@upnvj.ac.id",
+      "kontakTelp": "+62 21 7656971"
+    },
+    "pihakKedua": {
+      "nama": "Hendro Martono, S.Kom., M.B.A.",
+      "institusi": "PT Telkom Indonesia",
+      "alamat": "Jl. Japati No. 3, Bandung, Jawa Barat",
+      "jabatan": "Direktur Pengembangan Sumber Daya",
+      "kontakNama": "Adi Nugroho, S.T.",
+      "kontakEmail": "partnership@telkom.co.id",
+      "kontakTelp": "+62 22 4567890",
+      "fileLogo": {
+        "nama": "telkom_logo.png",
+        "tipe": "image/png",
+        "path": "/logos/telkom_2024.png"
+      }
+    },
+    "isiPerjanjian": {
+      "tujuan": "Meningkatkan kualitas pendidikan dan pengembangan kompetensi mahasiswa di bidang teknologi informasi",
+      "ruangLingkup": [
+        "Pengembangan kurikulum",
+        "Pertukaran dosen",
+        "Magang industri",
+        "Penelitian bersama"
+      ],
+      "programStudi": ["Teknik Informatika", "Sistem Informasi"],
+      "kewajibanPihakKesatu": [
+        "Menyediakan fasilitas akademik",
+        "Melakukan koordinasi kurikulum",
+        "Memfasilitasi pertukaran dosen"
+      ],
+      "kewajibanPihakKedua": [
+        "Memberikan materi praktik industri",
+        "Menyediakan tempat magang",
+        "Berbagi pengetahuan industri"
+      ],
+      "hakPihakKesatu": [
+        "Mendapatkan materi pengembangan kurikulum",
+        "Akses ke praktisi industri"
+      ],
+      "hakPihakKedua": [
+        "Mendapatkan calon tenaga kerja berkualitas",
+        "Mengusulkan perbaikan kurikulum"
+      ],
+      "jangkaWaktu": {
+        "tahun": 3,
+        "tanggalMulai": { "$date": "2024-04-01T00:00:00Z" },
+        "tanggalAkhir": { "$date": "2027-03-31T00:00:00Z" }
+      },
+      "hakKekayaanIntelektual": {
+        "ada": true,
+        "keterangan": "Hasil kerja sama yang bersifat intelektual akan dibagi sesuai kontribusi"
+      }
+    },
+    "status": {
+      "aktif": true,
+      "dibatalkan": false,
+      "tanggalPembatalan": null,
+      "alasanPembatalan": null
+    },
+    "dibuatPada": { "$date": "2024-03-31T00:00:00Z" },
+    "diperbaraiPada": { "$date": "2024-03-31T00:00:00Z" },
+    "dibuatOleh": "admin.kerjasama",
+    "diperbaraiOleh": "admin.kerjasama",
+    "catatan": "Kerja sama strategis dalam pengembangan SDM teknologi informasi"
+  },
+  {
+    "_id": { "$oid": "60c72b2f5b9f8c23a4d5b8e2" },
+    "dokumen": {
+      "nomorInternal": "UN62/PKS/FEB/2024/002",
+      "nomorMitra": "MOU-BNI/2024/012",
+      "judul": "Kerja Sama Penelitian Ekonomi dan Bisnis",
+      "tanggalTtd": { "$date": "2024-02-10T00:00:00Z" },
+      "tempatTtd": "Gedung Rektorat UPN, Jakarta",
+      "fileUpload": {
+        "nama": "PKS_BNI_2024.pdf",
+        "tipe": "application/pdf",
+        "path": "/dokumen/kerjasama/2024/bni_pks.pdf"
+      }
+    },
+    "notaKesepahaman": {
+      "ada": true,
+      "nomorInternal": "UN62/MoU/FEB/2023/045",
+      "nomorMitra": "MOU-BNI/2023/231",
+      "tanggal": { "$date": "2023-11-15T00:00:00Z" }
+    },
+    "pihakKesatu": {
+      "nama": "Prof. Dr. Sri Wahyuni, S.E., M.M.",
+      "institusi": "Fakultas Ekonomi dan Bisnis UPN Veteran Jakarta",
+      "alamat": "Jl. RS. Fatmawati, Pondok Labu, Jakarta Selatan",
+      "jabatan": "Dekan Fakultas Ekonomi dan Bisnis",
+      "kontakNama": "Dr. Bambang Priyo, S.E., M.Si.",
+      "kontakEmail": "kerjasama.feb@upnvj.ac.id",
+      "kontakTelp": "+62 21 7656972"
+    },
+    "pihakKedua": {
+      "nama": "Herry Sidharta, S.E., M.B.A.",
+      "institusi": "PT Bank Negara Indonesia (Persero) Tbk",
+      "alamat": "Jl. Jenderal Sudirman Kav. 1, Jakarta Pusat",
+      "jabatan": "Direktur Utama",
+      "kontakNama": "Andi Wijaya, S.E.",
+      "kontakEmail": "corporate.partnership@bni.co.id",
+      "kontakTelp": "+62 21 2511946",
+      "fileLogo": {
+        "nama": "bni_logo.png",
+        "tipe": "image/png",
+        "path": "/logos/bni_2024.png"
+      }
+    },
+    "isiPerjanjian": {
+      "tujuan": "Mendukung pengembangan penelitian di bidang ekonomi dan perbankan",
+      "ruangLingkup": [
+        "Penelitian bersama",
+        "Publikasi ilmiah",
+        "Seminar dan workshop",
+        "Pertukaran data dan informasi"
+      ],
+      "programStudi": ["Manajemen", "Akuntansi", "Ekonomi Pembangunan"],
+      "kewajibanPihakKesatu": [
+        "Melakukan penelitian berkualitas",
+        "Mempublikasikan hasil penelitian",
+        "Melibatkan mahasiswa dalam penelitian"
+      ],
+      "kewajibanPihakKedua": [
+        "Menyediakan data dan informasi",
+        "Mendanai sebagian penelitian",
+        "Memberikan akses ke praktisi perbankan"
+      ],
+      "hakPihakKesatu": [
+        "Mendapatkan data penelitian",
+        "Akses ke ahli industri perbankan"
+      ],
+      "hakPihakKedua": ["Mendapatkan hasil penelitian", "Publikasi bersama"],
+      "jangkaWaktu": {
+        "tahun": 2,
+        "tanggalMulai": { "$date": "2024-03-01T00:00:00Z" },
+        "tanggalAkhir": { "$date": "2026-02-28T00:00:00Z" }
+      },
+      "hakKekayaanIntelektual": {
+        "ada": true,
+        "keterangan": "Hak cipta penelitian dibagi secara proporsional"
+      }
+    },
+    "status": {
+      "aktif": true,
+      "dibatalkan": false,
+      "tanggalPembatalan": null,
+      "alasanPembatalan": null
+    },
+    "dibuatPada": { "$date": "2024-03-31T00:00:00Z" },
+    "diperbaraiPada": { "$date": "2024-03-31T00:00:00Z" },
+    "dibuatOleh": "admin.kerjasama",
+    "diperbaraiOleh": "admin.kerjasama",
+    "catatan": "Kolaborasi strategis dalam penelitian ekonomi dan perbankan"
+  },
+  {
+    "_id": { "$oid": "60c72b2f5b9f8c23a4d5b8e3" },
+    "dokumen": {
+      "nomorInternal": "UN62/PKS/FISIP/2024/003",
+      "nomorMitra": "MOU-KEMENLU/2024/007",
+      "judul": "Kerja Sama Pengembangan Diplomasi dan Hubungan Internasional",
+      "tanggalTtd": { "$date": "2024-01-25T00:00:00Z" },
+      "tempatTtd": "Gedung Kementerian Luar Negeri, Jakarta",
+      "fileUpload": {
+        "nama": "PKS_Kemenlu_2024.pdf",
+        "tipe": "application/pdf",
+        "path": "/dokumen/kerjasama/2024/kemenlu_pks.pdf"
+      }
+    },
+    "notaKesepahaman": {
+      "ada": true,
+      "nomorInternal": "UN62/MoU/FISIP/2023/078",
+      "nomorMitra": "MOU-KEMENLU/2023/342",
+      "tanggal": { "$date": "2023-10-05T00:00:00Z" }
+    },
+    "pihakKesatu": {
+      "nama": "Dr. Endang Retnawati, S.IP., M.Si.",
+      "institusi": "Fakultas Ilmu Sosial dan Ilmu Politik UPN Veteran Jakarta",
+      "alamat": "Jl. RS. Fatmawati, Pondok Labu, Jakarta Selatan",
+      "jabatan": "Dekan Fakultas Ilmu Sosial dan Ilmu Politik",
+      "kontakNama": "Dr. Hariyanto, S.IP., M.A.",
+      "kontakEmail": "kerjasama.fisip@upnvj.ac.id",
+      "kontakTelp": "+62 21 7656973"
+    },
+    "pihakKedua": {
+      "nama": "Drs. Mahendra Siregar, M.A.",
+      "institusi": "Kementerian Luar Negeri Republik Indonesia",
+      "alamat": "Jl. Taman Pejambon No. 6, Jakarta Pusat",
+      "jabatan": "Sekretaris Jenderal",
+      "kontakNama": "Ratna Kusuma, S.IP.",
+      "kontakEmail": "kerjasama.setjen@kemenlu.go.id",
+      "kontakTelp": "+62 21 3844608",
+      "fileLogo": {
+        "nama": "kemenlu_logo.png",
+        "tipe": "image/png",
+        "path": "/logos/kemenlu_2024.png"
+      }
+    },
+    "isiPerjanjian": {
+      "tujuan": "Meningkatkan kapasitas akademik dan praktis di bidang hubungan internasional",
+      "ruangLingkup": [
+        "Pertukaran mahasiswa",
+        "Pelatihan diplomatik",
+        "Penelitian bersama",
+        "Seminar internasional"
+      ],
+      "programStudi": ["Hubungan Internasional", "Ilmu Politik"],
+      "kewajibanPihakKesatu": [
+        "Menyelenggarakan program pertukaran mahasiswa",
+        "Mengembangkan kurikulum diplomasi",
+        "Memfasilitasi penelitian bersama"
+      ],
+      "kewajibanPihakKedua": [
+        "Memberikan materi pelatihan diplomatik",
+        "Menyediakan narasumber ahli",
+        "Membuka kesempatan magang"
+      ],
+      "hakPihakKesatu": [
+        "Akses ke praktisi diplomatik",
+        "Mendapatkan materi pelatihan khusus"
+      ],
+      "hakPihakKedua": [
+        "Mendapatkan calon diplomat berkualitas",
+        "Mendapatkan masukan akademis"
+      ],
+      "jangkaWaktu": {
+        "tahun": 4,
+        "tanggalMulai": { "$date": "2024-02-15T00:00:00Z" },
+        "tanggalAkhir": { "$date": "2028-02-14T00:00:00Z" }
+      },
+      "hakKekayaanIntelektual": {
+        "ada": true,
+        "keterangan": "Hak intelektual hasil kerja sama akan diatur secara khusus"
+      }
+    },
+    "status": {
+      "aktif": true,
+      "dibatalkan": false,
+      "tanggalPembatalan": null,
+      "alasanPembatalan": null
+    },
+    "dibuatPada": { "$date": "2024-03-31T00:00:00Z" },
+    "diperbaraiPada": { "$date": "2024-03-31T00:00:00Z" },
+    "dibuatOleh": "admin.kerjasama",
+    "diperbaraiOleh": "admin.kerjasama",
+    "catatan": "Kerja sama strategis dalam pengembangan diplomasi dan hubungan internasional"
+  }
+]
