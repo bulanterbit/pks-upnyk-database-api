@@ -1,112 +1,16 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin Pengajuan PKS</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get All PKS</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            color: #333;
+            margin: 20px;
         }
 
-        /* Green Navbar */
-        .navbar {
-            background-color: #2e7d32;
-            color: white;
-            padding: 15px 20px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .navbar h1 {
-            margin: 0;
-            font-size: 1.5em;
-        }
-
-        .logout-button {
-            background-color: #d32f2f;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        /* Main Content */
-        .main-content {
-            padding: 20px;
-        }
-
-        /* Search and Table Container */
-        .content-container {
-            margin: 50px 200px;
-        }
-
-        /* Search and Button Container */
-        .action-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .search-box {
-            display: flex;
-            align-items: center;
-        }
-
-        .search-box input {
-            padding: 8px 12px;
-            border: 1px solid #ddd;
-            border-radius: 4px 0 0 4px;
-            width: 300px;
-            outline: none;
-        }
-
-        .search-button {
-            padding: 8px 15px;
-            background-color: #2e7d32;
-            color: white;
-            border: none;
-            border-radius: 0 4px 4px 0;
-            cursor: pointer;
-        }
-
-        .add-button {
-            background-color: #2e7d32;
-            color: white;
-            border: none;
-            padding: 10px 40px;
-            border-radius: 4px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            transition: background-color 0.3s;
-            min-width: 180px;
-            justify-content: center;
-            font-size: 14px;
-            text-decoration: none;
-        }
-
-        .add-button:hover {
-            background-color: #1b5e20;
-        }
-
-        .plus-icon {
-            margin-right: 10px;
-            font-weight: bold;
-            font-size: 16px;
-        }
-
-        /* Table Styling */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -116,271 +20,101 @@
         th,
         td {
             border: 1px solid #ddd;
-            padding: 12px;
+            padding: 8px;
             text-align: left;
         }
 
         th {
             background-color: #f2f2f2;
-            font-weight: bold;
         }
 
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
-        tr:hover {
-            background-color: #f1f1f1;
-        }
-
-        /* Status Containers */
-        .status-container {
-            display: inline-block;
-            padding: 5px 12px;
-            border-radius: 15px;
-            font-size: 13px;
-            font-weight: bold;
-            text-align: center;
-            min-width: 100px;
-        }
-
-        .status-disetujui {
-            background-color: #4caf50;
-            color: white;
-        }
-
-        .status-review {
-            background-color: #ffc107;
-            color: #333;
-        }
-
-        .status-draft {
-            background-color: #9e9e9e;
-            color: white;
-        }
-
-        .status-ditolak {
-            background-color: #f44336;
-            color: white;
-        }
-
-        /* Action Buttons */
-        .action-buttons {
-            display: flex;
-            gap: 8px;
-        }
-
-        .action-button {
-            padding: 6px 12px;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            font-size: 13px;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .detail-button {
-            background-color: #2196f3;
-            color: white;
-        }
-
-        .edit-button {
-            background-color: #ff9800;
-            color: white;
-        }
-
-        .delete-button {
-            background-color: #f44336;
-            color: white;
-        }
-
-        .action-button:hover {
-            opacity: 0.9;
+        .error-message {
+            color: red;
+            margin-top: 10px;
         }
     </style>
 </head>
 
 <body>
-    <!-- Green Navbar with Logout -->
 
-    <header class="bg-green-700 text-white shadow-md">
-        <div class="container mx-auto flex justify-between items-center px-6 py-4">
-            <div class="flex items-center">
-                <img src="img/logo_upn.png" alt="Logo" class="h-12 mr-4" />
-                <h1 class="text-2xl font-bold">Admin Pengajuan PKS UPNYK</h1>
-            </div>
-            <button class="logout-button">Logout</button>
-        </div>
-    </header>
-
-    <!-- Main Content -->
-    <div class="main-content">
-        <div class="content-container">
-            <!-- Search and Button Section -->
-            <div class="action-container">
-                <div class="search-box">
-                    <input type="text" placeholder="Cari berdasarkan judul" />
-                    <button class="search-button">Cari</button>
-                </div>
-                <a href="form.html" class="add-button">
-                    <span class="plus-icon">+</span>
-                    Buat PKS Baru
-                </a>
-            </div>
-
-            <!-- Table Section -->
-            <table>
-                <thead>
-                    <tr>
-                        <th>Judul</th>
-                        <th>Fakultas</th>
-                        <th>Tanggal</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Kerjasama Pendidikan dengan Universitas XYZ</td>
-                        <td>Teknik</td>
-                        <td>15/03/2023</td>
-                        <td>
-                            <span class="status-container status-disetujui">Disetujui</span>
-                        </td>
-                        <td>
-                            <div class="action-buttons">
-                                <a href="detailadmin.html" class="action-button detail-button">Detail</a>
-                                <a href="editform.html" class="action-button edit-button">Edit</a>
-                                <button class="action-button delete-button">Hapus</button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Penelitian Bersama PT ABC</td>
-                        <td>Kedokteran</td>
-                        <td>22/04/2023</td>
-                        <td>
-                            <span class="status-container status-review">Proses Review</span>
-                        </td>
-                        <td>
-                            <div class="action-buttons">
-                                <a href="detailadmin.html" class="action-button detail-button">Detail</a>
-                                <a href="editform.html" class="action-button edit-button">Edit</a>
-                                <button class="action-button delete-button">Hapus</button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Program Magang Industri</td>
-                        <td>Ekonomi</td>
-                        <td>05/05/2023</td>
-                        <td><span class="status-container status-draft">Draft</span></td>
-                        <td>
-                            <div class="action-buttons">
-                                <a href="detailadmin.html" class="action-button detail-button">Detail</a>
-                                <a href="editform.html" class="action-button edit-button">Edit</a>
-                                <button class="action-button delete-button">Hapus</button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Pelatihan Karyawan</td>
-                        <td>Psikologi</td>
-                        <td>18/06/2023</td>
-                        <td>
-                            <span class="status-container status-ditolak">Ditolak</span>
-                        </td>
-                        <td>
-                            <div class="action-buttons">
-                                <a href="detailadmin.html" class="action-button detail-button">Detail</a>
-                                <a href="editform.html" class="action-button edit-button">Edit</a>
-                                <button class="action-button delete-button">Hapus</button>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+    <h1>Get All PKS</h1>
+    <button id="fetch-pks">Fetch PKS Data</button>
+    <div id="error-container" class="error-message"></div>
+    <table id="pks-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Judul</th>
+                <th>Nomor Internal</th>
+                <th>Tanggal TTD</th>
+                <th>Tempat TTD</th>
+                <th>Pihak Kesatu</th>
+                <th>Pihak Kedua</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- PKS data will be inserted here -->
+        </tbody>
+    </table>
 
     <script>
-        // Fetch and display PKS data
-        async function fetchPKS() {
-            try {
-                const response = await fetch('http://localhost:3000/api/pks');
-                const result = await response.json();
-                if (result.success) {
-                    const tbody = document.querySelector('tbody');
-                    tbody.innerHTML = ''; // Clear existing rows
-                    result.data.forEach(pks => {
-                        const row = document.createElement('tr');
-                        row.innerHTML = `
-                  <td>${pks.dokumen.judul}</td>
-                  <td>${pks.pihakKesatu.institusi}</td>
-                  <td>${new Date(pks.dibuatPada).toLocaleDateString()}</td>
-                  <td><span class="status-container ${getStatusClass(pks.status)}">${getStatusText(pks.status)}</span></td>
-                  <td>
-                    <div class="action-buttons">
-                      <a href="detailadmin.html?id=${pks._id}" class="action-button detail-button">Detail</a>
-                      <a href="editform.html?id=${pks._id}" class="action-button edit-button">Edit</a>
-                      <button class="action-button delete-button" data-id="${pks._id}">Hapus</button>
-                    </div>
-                  </td>
-                `;
-                        tbody.appendChild(row);
-                    });
-                }
-            } catch (error) {
-                console.error('Error fetching PKS:', error);
-            }
-        }
+        document.getElementById('fetch-pks').addEventListener('click', function () {
+            const errorContainer = document.getElementById('error-container');
+            errorContainer.textContent = ''; // Clear previous errors
 
-        // Get status class based on status object
-        function getStatusClass(status) {
-            if (status.aktif && !status.dibatalkan) return 'status-disetujui';
-            if (status.dibatalkan) return 'status-ditolak';
-            return 'status-draft';
-        }
-
-        // Get status text based on status object
-        function getStatusText(status) {
-            if (status.aktif && !status.dibatalkan) return 'Disetujui';
-            if (status.dibatalkan) return 'Ditolak';
-            return 'Draft';
-        }
-
-        // Delete PKS functionality
-        document.addEventListener('click', async function (event) {
-            if (event.target.classList.contains('delete-button')) {
-                const pksId = event.target.getAttribute('data-id');
-                if (confirm("Apakah Anda yakin ingin menghapus PKS ini?")) {
-                    try {
-                        const response = await fetch(`/api/pks/${pksId}`, { method: 'DELETE' });
-                        const result = await response.json();
-                        if (result.success) {
-                            alert(result.message);
-                            fetchPKS(); // Refresh the list
-                        }
-                    } catch (error) {
-                        console.error('Error deleting PKS:', error);
+            fetch('http://localhost:3000/api/pks')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
                     }
-                }
-            }
-        });
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Data dari API:', data);
 
-        // Logout functionality
-        document.querySelector(".logout-button").addEventListener("click", function () {
-            if (confirm("Apakah Anda yakin ingin logout?")) {
-                // Redirect to logout page or login page
-                window.location.href = "login.html";
-            }
-        });
+                    const tableBody = document.getElementById('pks-table').getElementsByTagName('tbody')[0];
+                    tableBody.innerHTML = ''; // Clear existing data
 
-        // Initial fetch of PKS data
-        fetchPKS();
+                    // Check if data exists and is an array
+                    if (data.success && Array.isArray(data.data)) {
+                        // Loop through each PKS item
+                        data.data.forEach(pks => {
+                            const row = tableBody.insertRow();
+
+                            // Add each cell with data
+                            row.insertCell(0).textContent = pks._id || '-';
+                            row.insertCell(1).textContent = pks.dokumen?.judul || '-';
+                            row.insertCell(2).textContent = pks.dokumen?.nomorInternal || '-';
+                            row.insertCell(3).textContent = pks.dokumen?.tanggalTtd ?
+                                new Date(pks.dokumen.tanggalTtd).toLocaleDateString('id-ID') : '-';
+                            row.insertCell(4).textContent = pks.dokumen?.tempatTtd || '-';
+                            row.insertCell(5).textContent = pks.pihakKesatu?.nama || '-';
+                            row.insertCell(6).textContent = pks.pihakKedua?.nama || '-';
+                        });
+                    } else if (data.success && data.data) {
+                        // Handle case where data might be a single object
+                        const pks = data.data;
+                        const row = tableBody.insertRow();
+
+                        row.insertCell(0).textContent = pks._id || '-';
+                        row.insertCell(1).textContent = pks.dokumen?.judul || '-';
+                        row.insertCell(2).textContent = pks.dokumen?.nomorInternal || '-';
+                        row.insertCell(3).textContent = pks.dokumen?.tanggalTtd ?
+                            new Date(pks.dokumen.tanggalTtd).toLocaleDateString('id-ID') : '-';
+                        row.insertCell(4).textContent = pks.dokumen?.tempatTtd || '-';
+                        row.insertCell(5).textContent = pks.pihakKesatu?.nama || '-';
+                        row.insertCell(6).textContent = pks.pihakKedua?.nama || '-';
+                    } else {
+                        errorContainer.textContent = 'Tidak ada data PKS yang ditemukan';
+                    }
+                })
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                    errorContainer.textContent = 'Error: ' + error.message;
+                });
+        });
     </script>
+
 </body>
 
 </html>

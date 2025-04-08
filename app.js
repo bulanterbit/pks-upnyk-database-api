@@ -1,6 +1,7 @@
 import express from "express";
 import pksRouter from "./routes/pks.routes.js";
 import connectToDatabase from "./database/mongodb.js";
+import cors from "cors";
 
 import { PORT } from "./config/env.js";
 import uploadRouter from "./routes/upload.routes.js";
@@ -9,6 +10,7 @@ import fileRouter from "./routes/file.routes.js";
 const app = express();
 
 // Middleware
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
