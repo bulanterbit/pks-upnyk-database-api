@@ -35,8 +35,14 @@ const pksSchema = new mongoose.Schema(
         type: Boolean,
         default: false,
       },
-      nomorInternal: String,
-      nomorMitra: String,
+      nomorInternal: {
+        type: String,
+        trim: true,
+      },
+      nomorMitra: {
+        type: String,
+        trim: true,
+      },
       tanggal: Date,
     },
 
@@ -51,16 +57,28 @@ const pksSchema = new mongoose.Schema(
         required: [true, "Institusi pihak kesatu is required"],
         trim: true,
       },
-      alamat: String,
-      jabatan: String,
-      kontakNama: String,
+      alamat: {
+        type: String,
+        trim: true,
+      },
+      jabatan: {
+        type: String,
+        trim: true,
+      },
+      kontakNama: {
+        type: String,
+        trim: true,
+      },
       kontakEmail: {
         type: String,
         trim: true,
         lowercase: true,
         match: [/\S+@\S+\.\S+/, "Please use a valid email address"],
       },
-      kontakTelp: String,
+      kontakTelp: {
+        type: String,
+        trim: true,
+      },
     },
 
     pihakKedua: {
@@ -74,16 +92,28 @@ const pksSchema = new mongoose.Schema(
         required: [true, "Institusi pihak kedua is required"],
         trim: true,
       },
-      alamat: String,
-      jabatan: String,
-      kontakNama: String,
+      alamat: {
+        type: String,
+        trim: true,
+      },
+      jabatan: {
+        type: String,
+        trim: true,
+      },
+      kontakNama: {
+        type: String,
+        trim: true,
+      },
       kontakEmail: {
         type: String,
         trim: true,
         lowercase: true,
         match: [/\S+@\S+\.\S+/, "Please use a valid email address"],
       },
-      kontakTelp: String,
+      kontakTelp: {
+        type: String,
+        trim: true,
+      },
       fileLogo: {
         nama: String,
         tipe: String,
@@ -92,13 +122,46 @@ const pksSchema = new mongoose.Schema(
     },
 
     isiPerjanjian: {
-      tujuan: String,
-      ruangLingkup: [String],
-      programStudi: [String],
-      kewajibanPihakKesatu: [String],
-      kewajibanPihakKedua: [String],
-      hakPihakKesatu: [String],
-      hakPihakKedua: [String],
+      tujuan: {
+        type: String,
+        trim: true,
+      },
+      ruangLingkup: [
+        {
+          type: String,
+          trim: true,
+        },
+      ],
+      programStudi: [
+        {
+          type: String,
+          trim: true,
+        },
+      ],
+      kewajibanPihakKesatu: [
+        {
+          type: String,
+          trim: true,
+        },
+      ],
+      kewajibanPihakKedua: [
+        {
+          type: String,
+          trim: true,
+        },
+      ],
+      hakPihakKesatu: [
+        {
+          type: String,
+          trim: true,
+        },
+      ],
+      hakPihakKedua: [
+        {
+          type: String,
+          trim: true,
+        },
+      ],
       jangkaWaktu: {
         tahun: Number,
         tanggalMulai: Date,
@@ -109,7 +172,10 @@ const pksSchema = new mongoose.Schema(
           type: Boolean,
           default: false,
         },
-        keterangan: String,
+        keterangan: {
+          type: String,
+          trim: true,
+        },
       },
     },
 
@@ -123,13 +189,25 @@ const pksSchema = new mongoose.Schema(
         default: false,
       },
       tanggalPembatalan: Date,
-      alasanPembatalan: String,
+      alasanPembatalan: {
+        type: String,
+        trim: true,
+      },
     },
 
-    catatan: String,
+    catatan: {
+      type: String,
+      trim: true,
+    },
 
-    dibuatOleh: String,
-    diperbaraiOleh: String,
+    dibuatOleh: {
+      type: String,
+      trim: true,
+    },
+    diperbaraiOleh: {
+      type: String,
+      trim: true,
+    },
   },
   {
     timestamps: {
