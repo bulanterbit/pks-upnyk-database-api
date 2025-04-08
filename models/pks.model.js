@@ -182,7 +182,7 @@ const pksSchema = new mongoose.Schema(
     status: {
       aktif: {
         type: Boolean,
-        default: true,
+        default: false,
       },
       dibatalkan: {
         type: Boolean,
