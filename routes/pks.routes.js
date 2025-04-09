@@ -17,6 +17,8 @@ pksRouter.post("/", insertPKS);
 
 pksRouter.put("/:id", updatePKS);
 
+pksRouter.post("/update/:id", updatePKS);
+
 // Add the new delete route
 pksRouter.delete("/:id", deletePKS);
 
