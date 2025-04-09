@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Detail PKS - UPNYK</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+</head>
+
+<body class="bg-gray-50">
+  <!-- Header -->
+  <header class="bg-green-700 text-white shadow-md">
+    <div class="container mx-auto flex justify-between items-center px-6 py-4">
+      <div class="flex items-center">
+        <img src="img/logo_upn.png" alt="Logo" class="h-12 mr-4" />
+        <h1 class="text-2xl font-bold">Detail PKS UPNYK</h1>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container mx-auto px-6 py-8">
+    <!-- Back button -->
+    <div class="mb-6">
+      <a href="adminview.html" class="text-green-600 hover:text-green-800 flex items-center">
+        <i class="fas fa-arrow-left mr-2"></i> Kembali ke Daftar PKS
+      </a>
+    </div>
+
+    <!-- PKS Details -->
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <h2 class="text-2xl font-bold text-gray-800 mb-4" id="pksTitle">
+        Detail PKS
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div>
+          <p class="text-gray-600 mb-1">Nama PKS:</p>
+          <p class="font-medium text-gray-800 mb-4" id="pksNama"></p>
+
+          <p class="text-gray-600 mb-1">Fakultas:</p>
+          <p class="font-medium text-gray-800 mb-4" id="pksFakultas"></p>
+
+          <p class="text-gray-600 mb-1">Tanggal:</p>
+          <p class="font-medium text-gray-800 mb-4" id="pksTanggal"></p>
+
+          <p class="text-gray-600 mb-1">Status:</p>
+          <p class="font-medium text-gray-800" id="pksStatus"></p>
+
+          <p class="font-medium text-gray-800" id="pksStatus"></p>
+        </div>
+
+        <div>
+          <h3 class="text-lg font-semibold mb-3">Dokumen PKS</h3>
+          <div id="filesList" class="mb-4">
+            <p id="noFiles" class="text-gray-500 italic">Belum ada dokumen</p>
+          </div>
+          <form id="uploadForm" class="flex flex-col space-y-3">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Upload Dokumen PKS</label>
+              <input type="file" id="pksFile" name="file" class="w-full p-2 border border-gray-300 rounded-lg" />
+            </div>
+            <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+              <i class="fas fa-upload mr-2"></i> Upload
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+
+</html>

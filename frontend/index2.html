@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pengajuan PKS UPNYK</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        color: #333;
+      }
+
+      /* Green Navbar */
+      .navbar {
+        background-color: #2e7d32;
+        color: white;
+        padding: 15px 20px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .navbar h1 {
+        margin: 0;
+        font-size: 1.5em;
+      }
+
+      /* Main Content */
+      .main-content {
+        padding: 20px;
+      }
+
+      /* Search and Table Container */
+      .content-container {
+        margin: 50px 200px;
+      }
+
+      /* Search and Button Container */
+      .action-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .search-box {
+        display: flex;
+        align-items: center;
+      }
+
+      .search-box input {
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+        border-radius: 4px 0 0 4px;
+        width: 300px;
+        outline: none;
+      }
+
+      .search-button {
+        padding: 8px 15px;
+        background-color: #2e7d32;
+        color: white;
+        border: none;
+        border-radius: 0 4px 4px 0;
+        cursor: pointer;
+      }
+
+      .add-button {
+        background-color: #2e7d32;
+        color: white;
+        border: none;
+        padding: 10px 40px;
+        border-radius: 4px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        transition: background-color 0.3s;
+        min-width: 180px;
+        justify-content: center;
+        font-size: 14px;
+      }
+
+      .add-button:hover {
+        background-color: #1b5e20;
+      }
+
+      .plus-icon {
+        margin-right: 10px;
+        font-weight: bold;
+        font-size: 16px;
+      }
+
+      /* Table Styling */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 12px;
+        text-align: left;
+      }
+
+      th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+      }
+
+      tr:nth-child(even) {
+        background-color: #f9f9f9;
+      }
+
+      tr:hover {
+        background-color: #f1f1f1;
+      }
+
+      /* Status Containers */
+      .status-container {
+        display: inline-block;
+        padding: 5px 12px;
+        border-radius: 15px;
+        font-size: 13px;
+        font-weight: bold;
+        text-align: center;
+        min-width: 100px;
+      }
+
+      .status-disetujui {
+        background-color: #4caf50;
+        color: white;
+      }
+
+      .status-review {
+        background-color: #ffc107;
+        color: #333;
+      }
+
+      .status-draft {
+        background-color: #9e9e9e;
+        color: white;
+      }
+
+      .status-ditolak {
+        background-color: #f44336;
+        color: white;
+      }
+
+      .action-button {
+        padding: 6px 12px;
+        background-color: #2e7d32;
+        color: white;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      .action-button:hover {
+        background-color: #1b5e20;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-green-700 text-white shadow-md">
+      <div
+        class="container mx-auto flex justify-between items-center px-6 py-4"
+      >
+        <div class="flex items-center">
+          <img src="img/logo_upn.png" alt="Logo" class="h-12 mr-4" />
+          <h1 class="text-2xl font-bold">Pengajuan PKS UPNYK</h1>
+        </div>
+      </div>
+    </header>
+
+    <!-- Stats Cards -->
+    <main class="container mx-auto px-6 py-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="bg-white rounded-lg shadow-md p-6">
+          <div class="flex items-center">
+            <div class="bg-blue-100 p-3 rounded-full">
+              <i class="fas fa-file-signature text-blue-600 text-xl"></i>
+            </div>
+            <div class="ml-4">
+              <h3 class="text-gray-500 text-sm">Total PKS</h3>
+              <p class="text-2xl font-bold text-gray-800">4</p>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white rounded-lg shadow-md p-6">
+          <div class="flex items-center">
+            <div class="bg-green-100 p-3 rounded-full">
+              <i class="fas fa-university text-green-600 text-xl"></i>
+            </div>
+            <div class="ml-4">
+              <h3 class="text-gray-500 text-sm">Fakultas</h3>
+              <p class="text-2xl font-bold text-gray-800">4</p>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white rounded-lg shadow-md p-6">
+          <div class="flex items-center">
+            <div class="bg-purple-100 p-3 rounded-full">
+              <i class="fas fa-calendar-check text-purple-600 text-xl"></i>
+            </div>
+            <div class="ml-4">
+              <h3 class="text-gray-500 text-sm">PKS Aktif</h3>
+              <p class="text-2xl font-bold text-gray-800">1</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Table Section -->
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <div class="action-container">
+          <div class="search-box">
+            <input type="text" placeholder="Cari berdasarkan judul" />
+            <button class="search-button">Cari</button>
+          </div>
+          <button class="add-button">
+            <span class="plus-icon">+</span>
+            Buat PKS
+          </button>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Judul</th>
+              <th>Fakultas</th>
+              <th>Tanggal</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Kerjasama Pendidikan dengan Universitas XYZ</td>
+              <td>Teknik</td>
+              <td>15/03/2023</td>
+              <td>
+                <span class="status-container status-disetujui">Disetujui</span>
+              </td>
+              <td>
+                <a href="detail.html">
+                  <button class="action-button">Detail</button>
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td>Penelitian Bersama PT ABC</td>
+              <td>Kedokteran</td>
+              <td>22/04/2023</td>
+              <td>
+                <span class="status-container status-review"
+                  >Proses Review</span
+                >
+              </td>
+              <td>
+                <a href="detail.html">
+                  <button class="action-button">Detail</button>
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td>Program Magang Industri</td>
+              <td>Ekonomi</td>
+              <td>05/05/2023</td>
+              <td><span class="status-container status-draft">Draft</span></td>
+              <td>
+                <a href="detail.html">
+                  <button class="action-button">Detail</button>
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td>Pelatihan Karyawan</td>
+              <td>Psikologi</td>
+              <td>18/06/2023</td>
+              <td>
+                <span class="status-container status-ditolak">Ditolak</span>
+              </td>
+              <td>
+                <a href="detail.html">
+                  <button class="action-button">Detail</button>
+                </a>
+              </td>
+              <!-- Tombol untuk mengarahkan ke halaman Detail PKS -->
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </body>
+</html>

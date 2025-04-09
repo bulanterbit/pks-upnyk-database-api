@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pengajuan PKS</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+
+    /* Green Navbar */
+    .navbar {
+      background-color: #2e7d32;
+      color: white;
+      padding: 15px 20px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar h1 {
+      margin: 0;
+      font-size: 1.5em;
+    }
+
+    /* Main Content */
+    .main-content {
+      padding: 20px;
+    }
+
+    /* Search and Table Container */
+    .content-container {
+      margin: 50px 200px;
+    }
+
+    /* Search and Button Container */
+    .action-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+    }
+
+    .search-box input {
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px 0 0 4px;
+      width: 300px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .search-button {
+      padding: 8px 15px;
+      background-color: #2e7d32;
+      color: white;
+      border: none;
+      border-radius: 0 4px 4px 0;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .search-button:hover {
+      background-color: #1b5e20;
+    }
+
+    .add-button {
+      background-color: #2e7d32;
+      color: white;
+      border: none;
+      padding: 10px 40px;
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      transition: background-color 0.3s;
+      min-width: 180px;
+      justify-content: center;
+      font-size: 14px;
+      text-decoration: none;
+    }
+
+    .add-button:hover {
+      background-color: #1b5e20;
+    }
+
+    .plus-icon {
+      margin-right: 10px;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    /* Table Styling */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th,
+    td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f2f2f2;
+      font-weight: bold;
+      cursor: pointer;
+      position: relative;
+      user-select: none;
+    }
+
+    th:hover {
+      background-color: #e6e6e6;
+    }
+
+    th.sort-asc::after,
+    th.sort-desc::after {
+      content: '';
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 0;
+      height: 0;
+    }
+
+    th.sort-asc::after {
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-bottom: 5px solid #333;
+    }
+
+    th.sort-desc::after {
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 5px solid #333;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    tr:hover {
+      background-color: #f1f1f1;
+    }
+
+    /* Status Containers */
+    .status-container {
+      display: inline-block;
+      padding: 5px 12px;
+      border-radius: 15px;
+      font-size: 13px;
+      font-weight: bold;
+      text-align: center;
+      min-width: 100px;
+    }
+
+    .status-disetujui {
+      background-color: #4caf50;
+      color: white;
+    }
+
+    .status-review {
+      background-color: #ffc107;
+      color: #333;
+    }
+
+    .status-draft {
+      background-color: #9e9e9e;
+      color: white;
+    }
+
+    .status-ditolak {
+      background-color: #f44336;
+      color: white;
+    }
+
+    .action-button {
+      padding: 6px 12px;
+      background-color: #2e7d32;
+      color: white;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      text-decoration: none;
+      font-size: 13px;
+      display: inline-block;
+    }
+
+    .action-button:hover {
+      background-color: #1b5e20;
+    }
+
+    /* Login Modal */
+    .login-modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-content {
+      background-color: white;
+      margin: 15% auto;
+      padding: 20px;
+      border-radius: 8px;
+      width: 350px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .modal-header h2 {
+      margin: 0;
+      color: #2e7d32;
+    }
+
+    .close-btn {
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    .login-submit {
+      width: 100%;
+      padding: 10px;
+      background-color: #2e7d32;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .login-submit:hover {
+      background-color: #1b5e20;
+    }
+
+    .error-message {
+      color: #f44336;
+      font-size: 14px;
+      margin-top: 10px;
+      display: none;
+    }
+
+    .login-button {
+      background-color: white;
+      color: #2e7d32;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+
+    .login-button:hover {
+      background-color: #f1f1f1;
+    }
+
+    .no-results {
+      text-align: center;
+      padding: 20px;
+      font-style: italic;
+      color: #666;
+      display: none;
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      margin-top: 10px;
+    }
+
+    /* Loading indicator */
+    .loading {
+      text-align: center;
+      padding: 20px;
+      color: #2e7d32;
+      display: none;
+    }
+
+    /* Error message */
+    .error-container {
+      text-align: center;
+      padding: 15px;
+      color: white;
+      background-color: #f44336;
+      border-radius: 4px;
+      margin-top: 10px;
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Green Navbar -->
+  <header class="bg-green-700 text-white shadow-md">
+    <div class="container mx-auto flex justify-between items-center px-6 py-4">
+      <div class="flex items-center">
+        <img src="img/logo_upn.png" alt="Logo" class="h-12 mr-4" />
+        <h1 class="text-2xl font-bold">Pengajuan PKS UPNYK</h1>
+      </div>
+      <button class="login-button" id="loginBtn">
+        <i class="fas fa-sign-in-alt mr-2"></i>Login
+      </button>
+    </div>
+  </header>
+
+  <!-- Login Modal -->
+  <div id="loginModal" class="login-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Login Admin</h2>
+        <span class="close-btn">&times;</span>
+      </div>
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" required />
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" required />
+        </div>
+        <button type="submit" class="login-submit">Login</button>
+        <div id="errorMessage" class="error-message">
+          Username atau password salah!
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="content-container">
+      <!-- Search and Button Section -->
+      <div class="action-container">
+        <div class="search-box">
+          <input type="text" id="searchInput" placeholder="Cari berdasarkan judul, institusi, atau status" />
+          <button class="search-button" id="searchButton">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+        <a href="form.html" class="add-button">
+          <span class="plus-icon">+</span>
+          Buat PKS
+        </a>
+      </div>
+
+      <!-- Loading indicator -->
+      <div id="loading" class="loading">
+        <i class="fas fa-spinner fa-spin fa-2x"></i>
+        <p>Memuat data...</p>
+      </div>
+
+      <!-- Error message container -->
+      <div id="errorContainer" class="error-container"></div>
+
+      <!-- Table Section -->
+      <table id="pksTable">
+        <thead>
+          <tr>
+            <th data-sort="judul">Judul <i class="fas fa-sort ml-1"></i></th>
+            <th data-sort="pihakKesatu">Pihak Kesatu <i class="fas fa-sort ml-1"></i></th>
+            <th data-sort="pihakKedua">Pihak Kedua <i class="fas fa-sort ml-1"></i></th>
+            <th data-sort="tanggal">Tanggal <i class="fas fa-sort ml-1"></i></th>
+            <th data-sort="status">Status <i class="fas fa-sort ml-1"></i></th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          <!-- Data will be loaded here -->
+        </tbody>
+      </table>
+      <div id="noResults" class="no-results">Tidak ada hasil yang ditemukan</div>
+    </div>
+  </div>
+
+  <script>
+    // Global variables to store data and sorting state
+    let pksData = [];
+    let currentSortColumn = null;
+    let isAscending = true;
+
+    document.addEventListener("DOMContentLoaded", () => {
+      // Login Modal Functionality
+      const loginBtn = document.getElementById("loginBtn");
+      const loginModal = document.getElementById("loginModal");
+      const closeBtn = document.querySelector(".close-btn");
+      const loginForm = document.getElementById("loginForm");
+      const errorMessage = document.getElementById("errorMessage");
+
+      // Show modal when login button is clicked
+      loginBtn.addEventListener("click", () => {
+        loginModal.style.display = "block";
+      });
+
+      // Close modal when X is clicked
+      closeBtn.addEventListener("click", () => {
+        loginModal.style.display = "none";
+        errorMessage.style.display = "none";
+      });
+
+      // Close modal when clicking outside of it
+      window.addEventListener("click", (event) => {
+        if (event.target === loginModal) {
+          loginModal.style.display = "none";
+          errorMessage.style.display = "none";
+        }
+      });
+
+      // Handle form submission
+      loginForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+
+        // Static credentials (username: admin, password: admin123)
+        if (username === "admin" && password === "admin123") {
+          // Redirect to adminview.html if login is successful
+          window.location.href = "adminview.html";
+        } else {
+          // Show error message
+          errorMessage.style.display = "block";
+        }
+      });
+
+      // Load PKS data when page loads
+      fetchPKSData();
+
+      // Search functionality
+      const searchInput = document.getElementById("searchInput");
+      const searchButton = document.getElementById("searchButton");
+
+      // Search when button is clicked
+      searchButton.addEventListener("click", performSearch);
+
+      // Search when typing
+      searchInput.addEventListener("input", performSearch);
+
+      // Search when Enter key is pressed
+      searchInput.addEventListener("keyup", (event) => {
+        if (event.key === "Enter") {
+          performSearch();
+        }
+      });
+
+      // Add sorting functionality to table headers
+      setupSorting();
+    });
+
+    // Set up sorting on table headers
+    function setupSorting() {
+      const headers = document.querySelectorAll('th[data-sort]');
+
+      headers.forEach(header => {
+        header.addEventListener('click', () => {
+          const sortKey = header.getAttribute('data-sort');
+
+          // If clicking the same column, toggle sort direction
+          if (currentSortColumn === sortKey) {
+            isAscending = !isAscending;
+          } else {
+            currentSortColumn = sortKey;
+            isAscending = true;
+          }
+
+          // Update header styling
+          updateSortHeaderStyles(header);
+
+          // Sort and display data
+          sortData(sortKey, isAscending);
+        });
+      });
+    }
+
+    // Update header styles to show sort direction
+    function updateSortHeaderStyles(clickedHeader) {
+      // Remove all existing sort classes
+      document.querySelectorAll('th').forEach(th => {
+        th.classList.remove('sort-asc', 'sort-desc');
+      });
+
+      // Add appropriate class to the clicked header
+      if (isAscending) {
+        clickedHeader.classList.add('sort-asc');
+      } else {
+        clickedHeader.classList.add('sort-desc');
+      }
+    }
+
+    // Fetch PKS data from API
+    async function fetchPKSData() {
+      const tableBody = document.getElementById("tableBody");
+      const loading = document.getElementById("loading");
+      const errorContainer = document.getElementById("errorContainer");
+
+      // Show loading indicator
+      loading.style.display = "block";
+      errorContainer.style.display = "none";
+
+      try {
+        const response = await fetch('http://localhost:3000/api/pks');
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+
+        // Hide loading indicator
+        loading.style.display = "none";
+
+        // Check if data exists and is an array
+        if (data.success && Array.isArray(data.data)) {
+          // Store data globally
+          pksData = data.data;
+
+          // Display the data
+          displayTableData(pksData);
+
+          // Initial search to handle any existing search term
+          performSearch();
+        } else {
+          document.getElementById("noResults").style.display = "block";
+        }
+      } catch (error) {
+        console.error('Error fetching PKS data:', error);
+        loading.style.display = "none";
+        errorContainer.textContent = 'Error: ' + error.message;
+        errorContainer.style.display = "block";
+      }
+    }
+
+    // Display the table data
+    function displayTableData(data) {
+      const tableBody = document.getElementById("tableBody");
+
+      // Clear existing data
+      tableBody.innerHTML = '';
+
+      // Add the rows
+      data.forEach(pks => {
+        const row = createTableRow(pks);
+        tableBody.appendChild(row);
+      });
+    }
+
+    // Create table row for a PKS item
+    function createTableRow(pks) {
+      const row = document.createElement('tr');
+      row.setAttribute('data-id', pks._id);
+
+      // Format date
+      const tanggalTtd = pks.dokumen?.tanggalTtd ?
+        new Date(pks.dokumen.tanggalTtd).toLocaleDateString('id-ID') : '-';
+
+      // Store raw date for sorting
+      if (pks.dokumen?.tanggalTtd) {
+        row.setAttribute('data-date', new Date(pks.dokumen.tanggalTtd).getTime());
+      } else {
+        row.setAttribute('data-date', 0);
+      }
+
+      // Map the API status to our UI status
+      let statusClass = 'status-draft';
+      let statusText = 'Draft';
+
+      if (pks.status) {
+        if (pks.status.aktif) {
+          statusClass = 'status-disetujui';
+          statusText = 'Disetujui';
+        } else if (pks.status.proses) {
+          statusClass = 'status-review';
+          statusText = 'Proses Review';
+        } else if (pks.status.ditolak) {
+          statusClass = 'status-ditolak';
+          statusText = 'Ditolak';
+        }
+      }
+
+      // Create table cells
+      row.innerHTML = `
+          <td>${pks.dokumen?.judul || '-'}</td>
+          <td>${pks.pihakKesatu?.institusi || '-'}</td>
+          <td>${pks.pihakKedua?.institusi || '-'}</td>
+          <td>${tanggalTtd}</td>
+          <td><span class="status-container ${statusClass}">${statusText}</span></td>
+          <td>
+            <a href="detail.html?id=${pks._id}" class="action-button">Detail</a>
+          </td>
+        `;
+
+      return row;
+    }
+
+    // Sort data based on column and direction
+    function sortData(sortKey, ascending) {
+      const sortedData = [...pksData].sort((a, b) => {
+        let valueA, valueB;
+
+        // Extract values based on sort key
+        switch (sortKey) {
+          case 'judul':
+            valueA = a.dokumen?.judul || '';
+            valueB = b.dokumen?.judul || '';
+            break;
+          case 'pihakKesatu':
+            valueA = a.pihakKesatu?.institusi || '';
+            valueB = b.pihakKesatu?.institusi || '';
+            break;
+          case 'pihakKedua':
+            valueA = a.pihakKedua?.institusi || '';
+            valueB = b.pihakKedua?.institusi || '';
+            break;
+          case 'tanggal':
+            // Sort by date numerically
+            valueA = a.dokumen?.tanggalTtd ? new Date(a.dokumen.tanggalTtd).getTime() : 0;
+            valueB = b.dokumen?.tanggalTtd ? new Date(b.dokumen.tanggalTtd).getTime() : 0;
+            break;
+          case 'status':
+            // Sort by status priority
+            const statusOrder = { 'Disetujui': 1, 'Proses Review': 2, 'Draft': 3, 'Ditolak': 4 };
+
+            // Get status text
+            let statusA = 'Draft';
+            if (a.status?.aktif) statusA = 'Disetujui';
+            else if (a.status?.proses) statusA = 'Proses Review';
+            else if (a.status?.ditolak) statusA = 'Ditolak';
+
+            let statusB = 'Draft';
+            if (b.status?.aktif) statusB = 'Disetujui';
+            else if (b.status?.proses) statusB = 'Proses Review';
+            else if (b.status?.ditolak) statusB = 'Ditolak';
+
+            valueA = statusOrder[statusA];
+            valueB = statusOrder[statusB];
+            break;
+          default:
+            valueA = '';
+            valueB = '';
+        }
+
+        // Compare values based on type
+        if (typeof valueA === 'number' && typeof valueB === 'number') {
+          return ascending ? valueA - valueB : valueB - valueA;
+        } else {
+          // String comparison
+          valueA = String(valueA).toLowerCase();
+          valueB = String(valueB).toLowerCase();
+          return ascending ?
+            valueA.localeCompare(valueB, 'id') :
+            valueB.localeCompare(valueA, 'id');
+        }
+      });
+
+      // Display the sorted data
+      displayTableData(sortedData);
+
+      // Reapply search filtering
+      performSearch();
+    }
+
+    // Perform search on table
+    function performSearch() {
+      const searchTerm = document.getElementById("searchInput").value.toLowerCase().trim();
+      const tableBody = document.getElementById("tableBody");
+      const rows = tableBody.getElementsByTagName("tr");
+      const noResults = document.getElementById("noResults");
+
+      let hasResults = false;
+
+      for (let i = 0; i < rows.length; i++) {
+        const row = rows[i];
+        const cells = row.getElementsByTagName("td");
+        let rowMatches = false;
+
+        // Search in Judul (0), Pihak Kesatu (2), Pihak Kedua (3), and Status (5) columns
+        if (cells.length >= 6) {
+          const judulText = cells[0].textContent.toLowerCase();
+          const pihakKesatuText = cells[2].textContent.toLowerCase();
+          const pihakKeduaText = cells[3].textContent.toLowerCase();
+          const statusText = cells[5].textContent.toLowerCase();
+
+          rowMatches = judulText.includes(searchTerm) ||
+            pihakKesatuText.includes(searchTerm) ||
+            pihakKeduaText.includes(searchTerm) ||
+            statusText.includes(searchTerm);
+        }
+
+        if (rowMatches) {
+          row.style.display = "";
+          hasResults = true;
+        } else {
+          row.style.display = "none";
+        }
+      }
+
+      // Show no results message if no matches found
+      noResults.style.display = hasResults || searchTerm === "" ? "none" : "block";
+
+      // Visual feedback
+      const searchInput = document.getElementById("searchInput");
+      searchInput.style.borderColor = searchTerm === "" ? "#ddd" : hasResults ? "#4CAF50" : "#F44336";
+    }
+  </script>
+</body>
+
+</html>

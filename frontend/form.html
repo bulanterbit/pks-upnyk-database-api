@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Perjanjian Kerja Sama</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <style>
+    .navbar-custom {
+      background-color: #2e7d32;
+      padding: 20px 0;
+    }
+
+    .navbar-brand {
+      color: white !important;
+      font-weight: bold;
+      margin-left: 20px;
+      font-size: 24px;
+    }
+
+    body {
+      font-size: 14px;
+    }
+
+    .form-section {
+      margin-bottom: 20px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+
+    .section-title {
+      background-color: #f8f9fa;
+      padding: 8px;
+      margin-bottom: 15px;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    .form-label {
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+
+    .form-control,
+    .form-select,
+    .btn {
+      font-size: 14px;
+      padding: 6px 12px;
+    }
+
+    .array-item {
+      border: 1px solid #eee;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 4px;
+      position: relative;
+    }
+
+    .remove-btn {
+      position: absolute;
+      top: 3px;
+      right: 3px;
+      padding: 2px 6px;
+      font-size: 12px;
+    }
+
+    textarea.form-control {
+      min-height: 80px;
+    }
+  </style>
+</head>
+
+<body>
+  <header class="bg-green-700 text-white shadow-md">
+    <div class="container mx-auto flex justify-between items-center px-6 py-4">
+      <div class="flex items-center">
+        <img src="img/logo_upn.png" alt="Logo" class="h-12 mr-4" />
+        <h1 class="text-2xl font-bold">Pengajuan PKS UPNYK</h1>
+      </div>
+    </div>
+
+  </header>
+  <div class="container mx-auto px-6 py-8">
+    <a href="index.html" class="text-green-600 hover:text-green-800 flex items-center">
+      <i class="fas fa-arrow-left mr-2"></i> Kembali ke Daftar PKS
+    </a>
+  </div>
+
+  <div class="container mb-4">
+    <form id="perjanjianForm">
+      <!-- Informasi Dokumen -->
+      <div class="form-section">
+        <div class="section-title">
+          <h2>Informasi Dokumen</h2>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <label class="form-label" for="judul">Judul Perjanjian</label>
+            <input type="text" class="form-control" id="judul" required />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="tanggalTtd">Tanggal Tanda Tangan</label>
+            <input type="date" class="form-control" id="tanggalTtd" required />
+          </div>
+        </div>
+      </div>
+
+      <!-- Pihak Pertama -->
+      <div class="form-section">
+        <div class="section-title">
+          <h2>Pihak Pertama (UPN)</h2>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <label class="form-label" for="pihakKesatuNama">Nama Pejabat</label>
+            <input type="text" class="form-control" id="pihakKesatuNama" required />
+            <label class="form-label mt-2" for="pihakKesatuInstitusi">Institusi/Fakultas</label>
+            <input type="text" class="form-control" id="pihakKesatuInstitusi" required />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="pihakKesatuJabatan">Jabatan</label>
+            <input type="text" class="form-control" id="pihakKesatuJabatan" required />
+            <label class="form-label mt-2" for="pihakKesatuKontakEmail">Email Kontak</label>
+            <input type="email" class="form-control" id="pihakKesatuKontakEmail" required />
+          </div>
+        </div>
+      </div>
+
+      <!-- Pihak Kedua -->
+      <div class="form-section">
+        <div class="section-title">
+          <h2>Pihak Kedua (Mitra)</h2>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <label class="form-label" for="pihakKeduaNama">Nama Perwakilan</label>
+            <input type="text" class="form-control" id="pihakKeduaNama" required />
+            <label class="form-label mt-2" for="pihakKeduaInstitusi">Institusi</label>
+            <input type="text" class="form-control" id="pihakKeduaInstitusi" required />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="pihakKeduaJabatan">Jabatan</label>
+            <input type="text" class="form-control" id="pihakKeduaJabatan" required />
+            <label class="form-label mt-2" for="pihakKeduaKontakEmail">Email Kontak</label>
+            <input type="email" class="form-control" id="pihakKeduaKontakEmail" required />
+          </div>
+        </div>
+      </div>
+
+      <!-- Isi Perjanjian -->
+      <div class="form-section">
+        <div class="section-title">
+          <h2>Isi Perjanjian</h2>
+        </div>
+        <label class="form-label" for="tujuan">Tujuan Kerjasama</label>
+        <textarea class="form-control mb-3" id="tujuan" required></textarea>
+        <label class="form-label">Ruang Lingkup Kerjasama</label>
+        <div id="ruangLingkupContainer">
+          <div class="array-item">
+            <div class="input-group mb-2">
+              <input type="text" class="form-control ruang-lingkup-input" required />
+              <button type="button" class="btn btn-danger remove-btn" onclick="removeArrayItem(this)">×</button>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="btn btn-secondary btn-sm" onclick="addArrayItem()">Tambah Ruang Lingkup</button>
+      </div>
+
+      <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-3">
+        <button type="button" class="btn btn-secondary me-md-2 btn-sm">Batal</button>
+        <button type="submit" class="btn btn-primary btn-sm">Simpan Perjanjian</button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    function addArrayItem() {
+      const container = document.getElementById("ruangLingkupContainer");
+      const newItem = document.createElement("div");
+      newItem.className = "array-item";
+      newItem.innerHTML = `
+          <div class="input-group mb-2">
+            <input type="text" class="form-control ruang-lingkup-input" required />
+            <button type="button" class="btn btn-danger remove-btn" onclick="removeArrayItem(this)">×</button>
+          </div>`;
+      container.appendChild(newItem);
+    }
+
+    function removeArrayItem(button) {
+      const item = button.closest(".array-item");
+      if (document.querySelectorAll(".array-item").length > 1) {
+        item.remove();
+      } else {
+        alert("Minimal harus ada satu item");
+      }
+    }
+
+    document.getElementById("perjanjianForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const ruangLingkupInputs = document.querySelectorAll(".ruang-lingkup-input");
+      const ruangLingkup = Array.from(ruangLingkupInputs).map(input => input.value.trim());
+
+      const data = {
+        dokumen: {
+          judul: document.getElementById("judul").value,
+          tanggalTtd: document.getElementById("tanggalTtd").value,
+        },
+        pihakKesatu: {
+          nama: document.getElementById("pihakKesatuNama").value,
+          institusi: document.getElementById("pihakKesatuInstitusi").value,
+          jabatan: document.getElementById("pihakKesatuJabatan").value,
+          kontakEmail: document.getElementById("pihakKesatuKontakEmail").value,
+        },
+        pihakKedua: {
+          nama: document.getElementById("pihakKeduaNama").value,
+          institusi: document.getElementById("pihakKeduaInstitusi").value,
+          jabatan: document.getElementById("pihakKeduaJabatan").value,
+          kontakEmail: document.getElementById("pihakKeduaKontakEmail").value,
+        },
+        isiPerjanjian: {
+          tujuan: document.getElementById("tujuan").value,
+          ruangLingkup,
+        },
+        status: {
+          aktif: true,
+          dibatalkan: false
+        },
+        dibuatOleh: "admin"
+      };
+
+      try {
+        const response = await fetch("http://localhost:3000/api/pks", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+
+        if (!response.ok) throw new Error(`Status: ${response.status}, ${await response.text()}`);
+        const result = await response.json();
+        alert("Data berhasil disimpan!");
+        document.getElementById("perjanjianForm").reset();
+        console.log(result);
+      } catch (err) {
+        console.error(err);
+        alert("Terjadi kesalahan saat menyimpan data: " + err.message);
+      }
+    });
+  </script>
+</body>
+
+</html>
