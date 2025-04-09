@@ -1,14 +1,9 @@
 import express from "express";
-import {
-  downloadFile,
-  viewFiles,
-  deleteFile,
-} from "../controllers/file.controller.js";
-import { checkFileExists } from "../middleware/file.middleware.js";
+import { generateDocument } from "../controllers/document.controller";
 
 const generateRouter = express.Router();
 
 // Route untuk generate document
-generateRouter.get("/", generateCDocument);
+generateRouter.get("/", generateDocument);
 
 export default generateRouter;
