@@ -447,7 +447,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.repeater/1.2.1/jquery.repeater.min.js"></script>
   <script>
     $(document).ready(function () {
-
+      // Initialize repeaters
+      initializeRepeaters();
 
       // Toggle MoU fields
       $('input[name="notaKesepahaman.ada"]').change(function () {
@@ -565,6 +566,97 @@
       });
     });
 
+    // Function to initialize all repeaters
+    function initializeRepeaters() {
+      const repeaterLists = [
+        "ruangLingkup",
+        "programStudi",
+        "kewajibanPihakKesatu",
+        "kewajibanPihakKedua",
+        "hakPihakKesatu",
+        "hakPihakKedua"
+      ];
+
+      repeaterLists.forEach(fieldName => {
+        initializeRepeater(fieldName);
+      });
+    }
+
+    // Function to initialize a single repeater
+    function initializeRepeater(fieldName) {
+      // Set up the add button click handler
+      $(`button[data-repeater-create][data-repeater-list="${fieldName}"]`).off('click').on('click', function () {
+        addRepeaterItem(fieldName);
+      });
+
+      // If no data-repeater-create attribute with list, use selector based on the button near the repeater
+      if ($(`button[data-repeater-create][data-repeater-list="${fieldName}"]`).length === 0) {
+        $(`[data-repeater-list="${fieldName}"]`).closest('.form-elem').find('button[data-repeater-create]').off('click').on('click', function () {
+          addRepeaterItem(fieldName);
+        });
+      }
+
+      // Set up existing delete buttons
+      $(`[data-repeater-list="${fieldName}"] [data-repeater-delete]`).off('click').on('click', function () {
+        $(this).closest('[data-repeater-item]').remove();
+      });
+    }
+
+    // Function to add a new repeater item
+    function addRepeaterItem(fieldName) {
+      const container = $(`[data-repeater-list="${fieldName}"]`);
+      if (!container.length) {
+        console.error(`Container for '${fieldName}' not found`);
+        return;
+      }
+
+      // Create a new repeater item
+      const item = $('<div data-repeater-item></div>');
+      const inputGroup = $('<div class="input-group mb-2"></div>');
+
+      // Create input field based on the fieldName
+      const input = $('<input type="text" class="form-control">');
+
+      // Set the appropriate name attribute based on the fieldName
+      let inputName = '';
+      if (fieldName === 'ruangLingkup') {
+        inputName = 'ruangLingkup';
+      } else {
+        inputName = `isiPerjanjian.${fieldName}[]`;
+      }
+
+      input.attr('name', inputName);
+      input.attr('placeholder', getPlaceholder(fieldName));
+
+      // Create remove button
+      const deleteBtn = $('<button type="button" class="btn btn-danger remove-btn" data-repeater-delete>×</button>');
+
+      // Append elements
+      inputGroup.append(input);
+      inputGroup.append(deleteBtn);
+      item.append(inputGroup);
+      container.append(item);
+
+      // Initialize the delete button
+      deleteBtn.on('click', function () {
+        $(this).closest('[data-repeater-item]').remove();
+      });
+    }
+
+    // Helper function to get placeholder text
+    function getPlaceholder(fieldName) {
+      const placeholders = {
+        'ruangLingkup': 'Ruang lingkup kerjasama (Pasal 2)',
+        'programStudi': 'Nama program studi',
+        'kewajibanPihakKesatu': 'Kewajiban UPN',
+        'kewajibanPihakKedua': 'Kewajiban mitra',
+        'hakPihakKesatu': 'Hak UPN',
+        'hakPihakKedua': 'Hak mitra'
+      };
+
+      return placeholders[fieldName] || 'Input value';
+    }
+
     async function fetchPKSData(id) {
       try {
         const response = await fetch(`http://localhost:3000/api/pks/${id}`);
@@ -629,6 +721,15 @@
           const input = document.createElement('input');
           input.type = 'text';
           input.className = 'form-control';
+
+          // Set the appropriate name attribute based on the fieldName
+          if (fieldName === 'ruangLingkup') {
+            input.name = 'ruangLingkup';
+          } else {
+            input.name = `isiPerjanjian.${fieldName}[]`;
+          }
+
+          input.placeholder = getPlaceholder(fieldName);
           input.value = value || '';
 
           // Buat tombol hapus
@@ -645,11 +746,9 @@
           container.appendChild(item);
         });
 
-        // Reinisialisasi fungsi repeater
-        $(container).find('[data-repeater-delete]').on('click', function () {
-          if (confirm('Apakah Anda yakin ingin menghapus item ini?')) {
-            $(this).closest('[data-repeater-item]').remove();
-          }
+        // Reinisialisasi fungsi repeater untuk delete buttons
+        $(container).find('[data-repeater-delete]').off('click').on('click', function () {
+          $(this).closest('[data-repeater-item]').remove();
         });
       }
 
@@ -753,6 +852,9 @@
           document.getElementById('pembatalanFields').style.display = 'block';
         }
       }
+
+      // Initialize repeaters after populating the form
+      initializeRepeaters();
     }
 
     async function updatePKS(id, data) {
