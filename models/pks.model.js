@@ -1,221 +1,113 @@
 import mongoose from "mongoose";
+import { generateDocumentNumber } from "../middleware/documentNumber.middleware";
 
-const pksSchema = new mongoose.Schema(
-  {
-    dokumen: {
-      nomorInternal: {
-        type: String,
-        trim: true,
-      },
-      nomorMitra: {
-        type: String,
-        trim: true,
-      },
-      judul: {
-        type: String,
-        required: [true, "Judul perjanjian is required"],
-        trim: true,
-      },
-      tanggalTtd: {
-        type: Date,
-      },
-      tempatTtd: {
-        type: String,
-        trim: true,
-      },
-      fileUpload: {
-        nama: String,
-        tipe: String,
-        path: String,
-      },
-    },
+// variabel untuk menjaga format email agar benar
+const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-    notaKesepahaman: {
-      ada: {
-        type: Boolean,
-        default: false,
-      },
-      nomorInternal: {
-        type: String,
-        trim: true,
-      },
-      nomorMitra: {
-        type: String,
-        trim: true,
-      },
-      tanggal: Date,
-    },
-
-    pihakKesatu: {
-      nama: {
-        type: String,
-        required: [true, "Nama pihak kesatu is required"],
-        trim: true,
-      },
-      institusi: {
-        type: String,
-        required: [true, "Institusi pihak kesatu is required"],
-        trim: true,
-      },
-      alamat: {
-        type: String,
-        trim: true,
-      },
-      jabatan: {
-        type: String,
-        trim: true,
-      },
-      kontakNama: {
-        type: String,
-        trim: true,
-      },
-      kontakEmail: {
-        type: String,
-        trim: true,
-        lowercase: true,
-        match: [/\S+@\S+\.\S+/, "Please use a valid email address"],
-      },
-      kontakTelp: {
-        type: String,
-        trim: true,
-      },
-    },
-
-    pihakKedua: {
-      nama: {
-        type: String,
-        required: [true, "Nama pihak kedua is required"],
-        trim: true,
-      },
-      institusi: {
-        type: String,
-        required: [true, "Institusi pihak kedua is required"],
-        trim: true,
-      },
-      alamat: {
-        type: String,
-        trim: true,
-      },
-      jabatan: {
-        type: String,
-        trim: true,
-      },
-      kontakNama: {
-        type: String,
-        trim: true,
-      },
-      kontakEmail: {
-        type: String,
-        trim: true,
-        lowercase: true,
-        match: [/\S+@\S+\.\S+/, "Please use a valid email address"],
-      },
-      kontakTelp: {
-        type: String,
-        trim: true,
-      },
-      fileLogo: {
-        nama: String,
-        tipe: String,
-        path: String,
-      },
-    },
-
-    isiPerjanjian: {
-      tujuan: {
-        type: String,
-        trim: true,
-      },
-      ruangLingkup: [
-        {
-          type: String,
-          trim: true,
-        },
-      ],
-      programStudi: [
-        {
-          type: String,
-          trim: true,
-        },
-      ],
-      kewajibanPihakKesatu: [
-        {
-          type: String,
-          trim: true,
-        },
-      ],
-      kewajibanPihakKedua: [
-        {
-          type: String,
-          trim: true,
-        },
-      ],
-      hakPihakKesatu: [
-        {
-          type: String,
-          trim: true,
-        },
-      ],
-      hakPihakKedua: [
-        {
-          type: String,
-          trim: true,
-        },
-      ],
-      jangkaWaktu: {
-        tahun: Number,
-        tanggalMulai: Date,
-        tanggalAkhir: Date,
-      },
-      hakKekayaanIntelektual: {
-        ada: {
-          type: Boolean,
-          default: false,
-        },
-        keterangan: {
-          type: String,
-          trim: true,
-        },
-      },
-    },
-
-    status: {
-      aktif: {
-        type: Boolean,
-        default: true,
-      },
-      dibatalkan: {
-        type: Boolean,
-        default: false,
-      },
-      tanggalPembatalan: Date,
-      alasanPembatalan: {
-        type: String,
-        trim: true,
-      },
-    },
-
-    catatan: {
+// skema struktur database
+const pksSchema = new mongoose.Schema({
+  content: {
+    nomor: {
       type: String,
+      required: [true, "Nomor is required"],
+      unique: true,
+    },
+    judul: {
+      type: String,
+      required: [true, "Judul perjanjian is required"],
       trim: true,
     },
+    tanggal: {
+      type: Date,
+      required: [true, "Tanggal is required"],
+    },
+  },
 
-    dibuatOleh: {
+  pihakKedua: {
+    nama: {
       type: String,
+      required: [true, "Nama is required"],
       trim: true,
     },
-    diperbaraiOleh: {
+    jabatan: {
+      type: String,
+      required: [true, "Jabatan is required"],
+      trim: true,
+    },
+    alamat: {
+      type: String,
+      required: [true, "Alamat is required"],
+      trim: true,
+    },
+    nomor: {
+      // tidak wajib ada
       type: String,
       trim: true,
     },
   },
-  {
-    timestamps: {
-      createdAt: "dibuatPada",
-      updatedAt: "diperbaraiPada",
+
+  properties: {
+    uploadDate: {
+      type: Date,
     },
+    status: {
+      type: String,
+      enum: [
+        "draft",
+        "menunggu dokumen",
+        "menunggu review",
+        "approved",
+        "rejected",
+      ],
+      default: "draft",
+    },
+    comment: {
+      type: String,
+      trim: true,
+    },
+    email: {
+      type: String,
+      required: [true, "email is required"],
+      trim: true,
+      lowercase: true,
+      match: [emailRegex, "Format email tidak valid"],
+      validate: {
+        validator: function (v) {
+          return emailRegex.test(v);
+        },
+        message: (props) => `${props.value} bukan format email yang valid!`,
+      },
+    },
+  },
+
+  fileUpload: {
+    // untuk menyimpan path scan pdf PKS dan logo
+    docName: {
+      type: String,
+      trim: true,
+    },
+    docPath: {
+      type: String,
+      trim: true,
+    },
+    logoName: {
+      type: String,
+      trim: true,
+    },
+    logoPath: {
+      type: String,
+      trim: true,
+    },
+  },
+});
+
+// mengambil nomor dokumen
+pksSchema.pre("save", function (next) {
+  if (this.isNew) {
+    return generateDocumentNumber(this, next);
   }
-);
+  next();
+});
 
 const PKS = mongoose.model("PKS", pksSchema, "perjanjian-kerja-sama");
 
