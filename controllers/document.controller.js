@@ -417,7 +417,7 @@ const kalimatTanggal = `${namaHari}, tanggal ${tanggalHuruf} bulan ${namaBulan} 
                     new Paragraph({
                       style: "Normal",
                       children: [
-                        new TextRun({ text: `Surat Keputusan Rektor Universitas pembangunan Nasional “Veteran” Yogyakarta Nomor … tanggal … dalam jabatan tersebut bertindak untuk dan atas nama Universitas Pembangunan Nasional “Veteran” Yogyakarta`, bold: false, size: 24 })
+                        new TextRun({ text: `Surat Keputusan Rektor Universitas pembangunan Nasional “Veteran” Yogyakarta Nomor 1569/UN62/KP/2024 tanggal 20 Maret 2024 dalam jabatan tersebut bertindak untuk dan atas nama Universitas Pembangunan Nasional “Veteran” Yogyakarta`, bold: false, size: 24 })
                       ],
                       alignment: AlignmentType.JUSTIFIED
                     })
@@ -701,7 +701,7 @@ const kalimatTanggal = `${namaHari}, tanggal ${tanggalHuruf} bulan ${namaBulan} 
         new Paragraph({
           style: "Normal",
           children: [
-            new TextRun({ text: `Dengan tetap mengindahkan ketentuan dan peraturan perundang-undangan yang berlaku bagi PARA PIHAK, Perjanjian Kerjasama ini dibuat dalam rangka menunjang Pelaksanaan Tri Darma Perguruan Tinggi serta membina hubungan kelembagaan antara PARA PIHAK untuk bekerjasama dan saling membantu dalam pelaksanaan Pengabdian Masyarakat dengan judul … . yang selanjutnya akan disebut program kerjasama.`, bold: false, size: 24 })
+            new TextRun({ text: `Dengan tetap mengindahkan ketentuan dan peraturan perundang-undangan yang berlaku bagi PARA PIHAK, Perjanjian Kerjasama ini dibuat dalam rangka menunjang Pelaksanaan Tri Darma Perguruan Tinggi serta membina hubungan kelembagaan antara PARA PIHAK untuk bekerjasama dan saling membantu dalam pelaksanaan Pengabdian Masyarakat dengan judul ${content.judul} . yang selanjutnya akan disebut program kerjasama.`, bold: false, size: 24 })
           ],
           alignment: AlignmentType.JUSTIFIED
         }),
@@ -816,7 +816,7 @@ const kalimatTanggal = `${namaHari}, tanggal ${tanggalHuruf} bulan ${namaBulan} 
                     new Paragraph({
                       style: "Normal",
                       children: [
-                        new TextRun({ text: `Kegiatan pengabdian dengan ${content.judul}`, bold: false, size: 24 })
+                        new TextRun({ text: `Kegiatan pengabdian dengan ${content.judul}.`, bold: false, size: 24 })
                       ],
                       alignment: AlignmentType.JUSTIFIED
                     })
