@@ -6,6 +6,7 @@ import connectToDatabase from "./database/mongodb.js";
 import { PORT } from "./config/env.js";
 import uploadRouter from "./routes/upload.routes.js";
 import fileRouter from "./routes/file.routes.js";
+import documentRouter from "./routes/document.routes.js";
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use(express.static("public"));
 app.use("/api/pks", pksRouter);
 app.use("/api/upload", uploadRouter);
 app.use("/api/file", fileRouter);
+app.use("/api/document", documentRouter);
 
 app.get("/", (req, res) => {
   res.send("Welcome to the lppm archive API");
