@@ -9,7 +9,7 @@ const pksSchema = new mongoose.Schema({
   content: {
     nomor: {
       type: String,
-      //required: [true, "Nomor is required"],
+      required: [true, "Nomor is required"],
       unique: true,
       imutable: true,
     },
@@ -17,6 +17,7 @@ const pksSchema = new mongoose.Schema({
       type: String,
       required: [true, "Judul perjanjian is required"],
       trim: true,
+      set: (value) => value.toUpperCase(),
     },
     tanggal: {
       type: Date,
@@ -100,6 +101,15 @@ const pksSchema = new mongoose.Schema({
       trim: true,
     },
   },
+});
+
+pksSchema.pre("save", function (next) {
+  // Check if docName or docPath is empty/undefined
+  if (!this.fileUpload.docName || !this.fileUpload.docPath) {
+    // Set status to "menunggu dokumen"
+    this.properties.status = "menunggu dokumen";
+  }
+  next();
 });
 
 // mengambil nomor dokumen
