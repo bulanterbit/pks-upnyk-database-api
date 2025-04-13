@@ -70,13 +70,14 @@ export const generateDocument = async (req, res) => {
 
 // tanggal
 
+const capitalizeEachWord = (str) => {
+  return str.replace(/\b\w/g, char => char.toUpperCase());
+};
 const tgl = new Date(content.tanggal);
-// Nama hari dan bulan
-const namaHari = tanggal.toLocaleDateString('id-ID', { weekday: 'long' });
-const namaBulan = tanggal.toLocaleDateString('id-ID', { month: 'long' });
-// Tanggal dan tahun dalam huruf
-const tanggalHuruf = terbilang(tanggal.getDate());
-const tahunHuruf = terbilang(tanggal.getFullYear());
+const namaHari = capitalizeEachWord(tanggal.toLocaleDateString('id-ID', { weekday: 'long' }));
+const namaBulan = capitalizeEachWord(tanggal.toLocaleDateString('id-ID', { month: 'long' }));
+const tanggalHuruf = capitalizeEachWord(terbilang(tanggal.getDate()));
+const tahunHuruf = capitalizeEachWord(terbilang(tanggal.getFullYear()));
 // Format (08-04-2025)
 const formatAngka = `${tanggal.getDate().toString().padStart(2, '0')}-${(tanggal.getMonth() + 1).toString().padStart(2, '0')}-${tanggal.getFullYear()}`;
 // Gabungkan kalimat lengkap
@@ -312,7 +313,7 @@ const kalimatTanggal = `${namaHari}, tanggal ${tanggalHuruf} bulan ${namaBulan} 
                     new Paragraph({
                       style: "Normal",
                       children: [
-                        new TextRun({ text: `...`, bold: true, size: 24 })
+                        new TextRun({ text: `Dr. Dyah Sugandini, SE, M.Si`, bold: true, size: 24 })
                       ],
                       alignment: AlignmentType.JUSTIFIED
                     })

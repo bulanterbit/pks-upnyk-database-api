@@ -1,36 +1,109 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form Pengajuan PKS</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Unduh File DOCX</title>
+    <!-- Tailwind CSS Play CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <div class="container">
-        <h1>Form Pengajuan PKS</h1>
-        <form id="pksForm" enctype="multipart/form-data">
-            <label for="nama_mitra">Nama Mitra:</label>
-            <input type="text" id="nama_mitra" name="nama_mitra" required>
-
-            <label for="alamat">Alamat:</label>
-            <input type="text" id="alamat" name="alamat" required>
-
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
-
-            <label for="telepon">Telepon:</label>
-            <input type="text" id="telepon" name="telepon" required>
-
-            <label for="logo">Logo:</label>
-            <input type="file" id="logo" name="logo" accept="image/*">
-
-            <button type="submit">Kirim</button>
-        </form>
-
-        <div id="responseMessage"></div>
+<body class="bg-gray-100 font-sans">
+    <div class="max-w-md mx-auto p-6">
+        <div class="bg-white rounded-lg shadow-md p-6 mt-10">
+            <h1 class="text-2xl font-bold text-center text-gray-800 mb-6">Unduh File DOCX</h1>
+            
+            <!-- Form untuk unduhan file -->
+            <form id="downloadForm" method="GET" target="_blank">
+                <div class="mb-4">
+                    <label for="fileId" class="block text-sm font-medium text-gray-700 mb-2">ID File:</label>
+                    <input type="text" id="fileId" name="fileId"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                        placeholder="Masukkan ID file">
+                </div>
+                
+                <div class="mb-4">
+                    <label for="serverUrl" class="block text-sm font-medium text-gray-700 mb-2">URL Server:</label>
+                    <input type="text" id="serverUrl" 
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                        value="http://localhost:3000">
+                </div>
+                
+                <button type="button" id="downloadBtn" 
+                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition duration-300">
+                    Unduh File
+                </button>
+            </form>
+            
+            <div id="statusMessage" class="hidden mt-4 p-3 bg-yellow-100 text-yellow-800 rounded-md text-center"></div>
+        </div>
+        
+        <div class="mt-4 p-3 text-gray-600 text-sm rounded-md text-center">
+            Terakhir diakses: <span id="lastAccessed">-</span>
+        </div>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const downloadBtn = document.getElementById('downloadBtn');
+            const fileIdInput = document.getElementById('fileId');
+            const serverUrlInput = document.getElementById('serverUrl');
+            const statusMessage = document.getElementById('statusMessage');
+            const downloadForm = document.getElementById('downloadForm');
+            const lastAccessed = document.getElementById('lastAccessed');
+            
+            // Cek apakah ada ID file yang tersimpan
+            if (localStorage.getItem('lastFileId')) {
+                fileIdInput.value = localStorage.getItem('lastFileId');
+            }
+            
+            // Cek apakah ada server URL yang tersimpan
+            if (localStorage.getItem('serverUrl')) {
+                serverUrlInput.value = localStorage.getItem('serverUrl');
+            }
+            
+            // Tampilkan waktu akses terakhir jika ada
+            if (localStorage.getItem('lastAccess')) {
+                lastAccessed.textContent = new Date(localStorage.getItem('lastAccess')).toLocaleString();
+            }
+            
+            downloadBtn.addEventListener('click', function() {
+                const fileId = fileIdInput.value.trim();
+                const serverUrl = serverUrlInput.value.trim();
+                
+                // Reset status messages
+                statusMessage.classList.add('hidden');
+                
+                if (!fileId) {
+                    statusMessage.textContent = 'Silakan masukkan ID file terlebih dahulu.';
+                    statusMessage.classList.remove('hidden');
+                    return;
+                }
+                
+                if (!serverUrl) {
+                    statusMessage.textContent = 'Silakan masukkan URL server.';
+                    statusMessage.classList.remove('hidden');
+                    return;
+                }
+                
+                // Buat URL untuk download
+                downloadForm.action = `${serverUrl}/api/document/${fileId}`;
+                
+                // Simpan data untuk penggunaan berikutnya
+                localStorage.setItem('lastFileId', fileId);
+                localStorage.setItem('serverUrl', serverUrl);
+                localStorage.setItem('lastAccess', new Date().toString());
+                
+                // Update last accessed time
+                lastAccessed.textContent = new Date().toLocaleString();
+                
+                // Tampilkan pesan
+                statusMessage.textContent = 'Mengunduh file...';
+                statusMessage.classList.remove('hidden');
+                
+                // Submit form untuk mengunduh
+                downloadForm.submit();
+            });
+        });
+    </script>
 </body>
 </html>
