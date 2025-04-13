@@ -6,6 +6,7 @@ import {
   updatePKS,
   deletePKS,
 } from "../controllers/pks.controller.js";
+import { sendPksDocumentEmail } from "../controllers/pks.controller.js";
 
 const pksRouter = Router();
 
@@ -18,6 +19,8 @@ pksRouter.post("/", insertPKS);
 pksRouter.put("/:id", updatePKS);
 
 pksRouter.post("/update/:id", updatePKS);
+
+pksRouter.post("/:id/send-email", sendPksDocumentEmail);
 
 // Add the new delete route
 pksRouter.delete("/:id", deletePKS);

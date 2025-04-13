@@ -1,4 +1,35 @@
 import PKS from "../models/pks.model.js";
+import { sendPksNotificationEmail } from "../utils/send-email.js";
+
+export const sendPksDocumentEmail = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    // Cek apakah PKS ada
+    const pks = await PKS.findById(id);
+
+    if (!pks) {
+      const error = new Error("PKS tidak ditemukan");
+      error.statusCode = 404;
+      throw error;
+    }
+
+    // Kirim email notifikasi
+    const emailResult = await sendPksNotificationEmail(id);
+
+    res.status(200).json({
+      success: true,
+      message: "Email berhasil dikirim",
+      data: {
+        pksId: id,
+        email: pks.properties.email,
+        emailResult,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
 // memunculkan semua PKS
 export const getAllPKS = async (req, res, next) => {
@@ -53,6 +84,18 @@ export const updatePKS = async (req, res, next) => {
     const { id } = req.params;
     const updateData = req.body;
 
+    const existingPKS = await PKS.findById(id);
+
+    if (!existingPKS) {
+      const error = new Error("PKS not found");
+      error.statusCode = 404;
+      throw error;
+    }
+
+    if (!updateData.content) {
+      updateData.content = {};
+    }
+    updateData.content.nomor = existingPKS.content.nomor;
     // Add who updated the document
     if (req.user) {
       updateData.diperbaraiOleh = req.user.name || req.user.id || req.user;
@@ -61,6 +104,7 @@ export const updatePKS = async (req, res, next) => {
     const updatedPKS = await PKS.findByIdAndUpdate(id, updateData, {
       new: true,
       runValidators: true,
+      overwrite: false,
     });
 
     if (!updatedPKS) {
