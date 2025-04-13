@@ -9,7 +9,7 @@ const generateDocumentNumber = async (doc, next) => {
     );
 
     const year = new Date().getFullYear();
-    doc.content.nomor = `(${docNumber.seq}/un62.21/ks.00.00/${year})`;
+    doc.content.nomor = `${docNumber.seq}/un62.21/ks.00.00/${year}`;
     next();
   } catch (err) {
     next(err);
