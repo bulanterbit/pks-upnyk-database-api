@@ -1140,6 +1140,7 @@ const kalimatTanggal = `${namaHari}, tanggal ${tanggalHuruf} bulan ${namaBulan} 
         }),
 
         new Paragraph({ text: "" }), // Spasi tambahan
+        new Paragraph({ text: "" }), // Spasi tambahan
 
         new Table({
           columnWidths: [5000, 5000], // Menyesuaikan ukuran kolom
@@ -1151,7 +1152,7 @@ const kalimatTanggal = `${namaHari}, tanggal ${tanggalHuruf} bulan ${namaBulan} 
                   children: [new Paragraph({
                     style: "Normal",
                     children: [
-                      new TextRun({ text: "PIHAK PERTAMA", bold: true, size: 24 }),
+                      new TextRun({ text: "PIHAK PERTAMA,", bold: false, size: 24 }),
                       new TextRun({ break: 1 }),
                       new TextRun({ break: 1 }),
                       new TextRun({ break: 1 }),
@@ -1167,7 +1168,7 @@ const kalimatTanggal = `${namaHari}, tanggal ${tanggalHuruf} bulan ${namaBulan} 
                   children: [new Paragraph({
                     style: "Normal",
                     children: [
-                      new TextRun({ text: "PIHAK KEDUA", bold: true, size: 24 }),
+                      new TextRun({ text: "PIHAK KEDUA", bold: false, size: 24 }),
                       new TextRun({ break: 1 }),
                       new TextRun({ break: 1 }),
                       new TextRun({ break: 1 }),
