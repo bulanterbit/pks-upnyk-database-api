@@ -80,7 +80,11 @@
                 <div class="cols-3">
                     <div class="form-elem">
                         <label class="form-label">Judul Perjanjian</label>
-                        <input type="text" class="form-control" name="dokumen.judul" placeholder="Judul perjanjian" required>
+                        <input type="text" class="form-control" name="content.judul" placeholder="Judul perjanjian" required>
+                    </div>
+                    <div class="form-elem">
+                        <label class="form-label">Tanggal Perjanjian</label>
+                        <input type="date" class="form-control" name="content.tanggal" required>
                     </div>
                 </div>
             </div>
@@ -96,38 +100,30 @@
                         <input type="text" class="form-control" name="pihakKedua.nama" placeholder="Nama perwakilan" required>
                     </div>
                     <div class="form-elem">
-                        <label class="form-label">Institusi/Perusahaan</label>
-                        <input type="text" class="form-control" name="pihakKedua.institusi" placeholder="Nama institusi mitra" required>
-                    </div>
-                    <div class="form-elem">
-                        <label class="form-label">Alamat</label>
-                        <input type="text" class="form-control" name="pihakKedua.alamat" placeholder="Alamat mitra">
-                    </div>
-                    <div class="form-elem">
                         <label class="form-label">Jabatan</label>
                         <input type="text" class="form-control" name="pihakKedua.jabatan" placeholder="Jabatan perwakilan" required>
                     </div>
                     <div class="form-elem">
-                        <label class="form-label">Nama Kontak</label>
-                        <input type="text" class="form-control" name="pihakKedua.kontakNama" placeholder="Nama kontak mitra">
+                        <label class="form-label">Alamat</label>
+                        <input type="text" class="form-control" name="pihakKedua.alamat" placeholder="Alamat mitra" required>
+                    </div>
+                    <div class="form-elem">
+                        <label class="form-label">Nomor</label>
+                        <input type="text" class="form-control" name="pihakKedua.nomor" placeholder="Nomor referensi (opsional)">
                     </div>
                     <div class="form-elem">
                         <label class="form-label">Email Kontak</label>
-                        <input type="email" class="form-control" name="pihakKedua.kontakEmail" placeholder="Email mitra" required>
-                    </div>
-                    <div class="form-elem">
-                        <label class="form-label">Telepon Kontak</label>
-                        <input type="tel" class="form-control" name="pihakKedua.kontakTelp" placeholder="Telepon mitra">
+                        <input type="email" class="form-control" name="properties.email" placeholder="Email kontak" required>
                     </div>
                     <div class="form-elem">
                         <label class="form-label">Logo Mitra</label>
-                        <input type="file" class="form-control" name="pihakKedua.fileLogo" accept="image/*">
+                        <input type="file" class="form-control" name="logo" accept="image/*" id="logoFile">
                     </div>
                 </div>
             </div>
 
             <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
-                <button type="button" class="btn btn-secondary me-md-2 btn-sm">Batal</button>
+                <button type="button" class="btn btn-secondary me-md-2 btn-sm" id="cancelButton">Batal</button>
                 <button type="submit" class="btn btn-primary btn-sm">Simpan Perjanjian</button>
             </div>
         </form>
@@ -142,29 +138,39 @@
             try {
                 // Collect form data
                 const formData = new FormData(this);
-                const data = {};
+                const data = {
+                    content: {},
+                    pihakKedua: {},
+                    properties: {
+                        status: "draft",
+                        uploadDate: new Date().toISOString()
+                    },
+                    fileUpload: {}
+                };
                 
-                // Convert FormData to object
+                // Convert FormData to object with the expected structure
                 formData.forEach((value, key) => {
                     // Handle nested objects
                     const keys = key.split('.');
-                    let current = data;
                     
-                    for (let i = 0; i < keys.length - 1; i++) {
-                        if (!current[keys[i]]) {
-                            current[keys[i]] = {};
+                    if (keys.length > 1) {
+                        if (!data[keys[0]]) {
+                            data[keys[0]] = {};
                         }
-                        current = current[keys[i]];
+                        
+                        data[keys[0]][keys[1]] = value;
+                    } else if (key !== 'logo') { // Skip file inputs for now
+                        data[key] = value;
                     }
-                    
-                    current[keys[keys.length - 1]] = value;
                 });
                 
-                // Add current user as creator
-                data.dibuatOleh = "admin"; // Replace with actual user from your auth system
+                // Convert tanggal to Date object
+                if (data.content.tanggal) {
+                    data.content.tanggal = new Date(data.content.tanggal).toISOString();
+                }
                 
                 // Send data to backend API
-                const response = await fetch('http//localhost:3000/api/pks', {
+                const response = await fetch('http://localhost:3000/api/pks', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -178,12 +184,35 @@
                 
                 const result = await response.json();
                 
+                // Handle logo upload if a file was selected
+                const logoFile = document.getElementById('logoFile').files[0];
+                if (logoFile && result.data._id) {
+                    const logoFormData = new FormData();
+                    logoFormData.append('logo', logoFile);
+                    
+                    const logoResponse = await fetch(`http://localhost:3000/api/upload/logo/${result.data._id}`, {
+                        method: 'POST',
+                        body: logoFormData
+                    });
+                    
+                    if (!logoResponse.ok) {
+                        console.warn('Logo berhasil diupload tetapi gagal menyimpan logo');
+                    }
+                }
+                
                 alert('Data perjanjian berhasil disimpan!');
-                this.reset();
+                window.location.href = 'index.html'; // Redirect to index page
                 
             } catch (error) {
                 console.error('Error:', error);
                 alert('Terjadi kesalahan saat menyimpan data: ' + error.message);
+            }
+        });
+        
+        // Cancel button functionality
+        document.getElementById('cancelButton').addEventListener('click', function() {
+            if (confirm('Apakah Anda yakin ingin membatalkan pengisian form?')) {
+                window.location.href = 'index.html';
             }
         });
     </script>

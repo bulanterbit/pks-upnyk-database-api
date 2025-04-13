@@ -7,6 +7,46 @@
   <title>Detail PKS - UPNYK</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <style>
+    .detail-card {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .detail-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: #2e7d32;
+      margin-bottom: 15px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #eee;
+    }
+    .detail-row {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      margin-bottom: 10px;
+    }
+    .detail-label {
+      font-weight: 500;
+      color: #555;
+    }
+    .detail-value {
+      color: #333;
+    }
+    .file-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
+    }
+    .file-actions {
+      display: flex;
+      gap: 10px;
+    }
+  </style>
 </head>
 
 <body class="bg-gray-50">
@@ -30,46 +70,239 @@
     </div>
 
     <!-- PKS Details -->
-    <div class="bg-white rounded-lg shadow-md p-6">
-      <h2 class="text-2xl font-bold text-gray-800 mb-4" id="pksTitle">
-        Detail PKS
-      </h2>
+    <div class="detail-card">
+      <h2 class="detail-title">Informasi Dokumen</h2>
+      <div class="detail-row">
+        <span class="detail-label">Nomor Dokumen:</span>
+        <span class="detail-value" id="docNumber"></span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Judul Perjanjian:</span>
+        <span class="detail-value" id="docTitle"></span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Tanggal:</span>
+        <span class="detail-value" id="docDate"></span>
+      </div>
+    </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-        <div>
-          <p class="text-gray-600 mb-1">Nama PKS:</p>
-          <p class="font-medium text-gray-800 mb-4" id="pksNama"></p>
+    <!-- Pihak Kedua -->
+    <div class="detail-card">
+      <h2 class="detail-title">Pihak Kedua (Mitra)</h2>
+      <div class="detail-row">
+        <span class="detail-label">Nama:</span>
+        <span class="detail-value" id="secondPartyName"></span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Jabatan:</span>
+        <span class="detail-value" id="secondPartyPosition"></span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Alamat:</span>
+        <span class="detail-value" id="secondPartyAddress"></span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Nomor Kontak:</span>
+        <span class="detail-value" id="secondPartyPhone"></span>
+      </div>
+    </div>
 
-          <p class="text-gray-600 mb-1">Fakultas:</p>
-          <p class="font-medium text-gray-800 mb-4" id="pksFakultas"></p>
+    <!-- Properties -->
+    <div class="detail-card">
+      <h2 class="detail-title">Status dan Informasi</h2>
+      <div class="detail-row">
+        <span class="detail-label">Status:</span>
+        <span class="detail-value" id="docStatus"></span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Email:</span>
+        <span class="detail-value" id="docEmail"></span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Komentar:</span>
+        <span class="detail-value" id="docComment"></span>
+      </div>
+    </div>
 
-          <p class="text-gray-600 mb-1">Tanggal:</p>
-          <p class="font-medium text-gray-800 mb-4" id="pksTanggal"></p>
-
-          <p class="text-gray-600 mb-1">Status:</p>
-          <p class="font-medium text-gray-800" id="pksStatus"></p>
-
-          <p class="font-medium text-gray-800" id="pksStatus"></p>
-        </div>
-
-        <div>
-          <h3 class="text-lg font-semibold mb-3">Dokumen PKS</h3>
-          <div id="filesList" class="mb-4">
-            <p id="noFiles" class="text-gray-500 italic">Belum ada dokumen</p>
-          </div>
-          <form id="uploadForm" class="flex flex-col space-y-3">
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Upload Dokumen PKS</label>
-              <input type="file" id="pksFile" name="file" class="w-full p-2 border border-gray-300 rounded-lg" />
-            </div>
-            <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
-              <i class="fas fa-upload mr-2"></i> Upload
+    <!-- File Upload Section -->
+    <div class="detail-card">
+      <h2 class="detail-title">Dokumen dan File</h2>
+      
+      <!-- Document File -->
+      <div id="documentFileSection">
+        <h3 class="font-medium text-gray-700 mb-2">Dokumen PKS</h3>
+        <div id="documentFileInfo" class="file-item">
+          <span id="documentFileName" class="text-gray-600 italic">Belum ada dokumen</span>
+          <div class="file-actions">
+            <button id="downloadDocBtn" class="text-blue-600 hover:text-blue-800 disabled:opacity-50" disabled>
+              <i class="fas fa-download mr-1"></i> Download
             </button>
-          </form>
+            <button id="deleteDocBtn" class="text-red-600 hover:text-red-800 disabled:opacity-50" disabled>
+              <i class="fas fa-trash mr-1"></i> Hapus
+            </button>
+          </div>
         </div>
+      </div>
+      
+      <!-- Logo File -->
+      <div id="logoFileSection" class="mt-4">
+        <h3 class="font-medium text-gray-700 mb-2">Logo Mitra</h3>
+        <div id="logoFileInfo" class="file-item">
+          <span id="logoFileName" class="text-gray-600 italic">Belum ada logo</span>
+          <div class="file-actions">
+            <button id="downloadLogoBtn" class="text-blue-600 hover:text-blue-800 disabled:opacity-50" disabled>
+              <i class="fas fa-download mr-1"></i> Download
+            </button>
+            <button id="deleteLogoBtn" class="text-red-600 hover:text-red-800 disabled:opacity-50" disabled>
+              <i class="fas fa-trash mr-1"></i> Hapus
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Download Form Button -->
+      <div class="mt-6">
+        <button id="downloadFormBtn" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+          <i class="fas fa-file-word mr-2"></i> Download Form PKS (.docx)
+        </button>
+        <p class="text-sm text-gray-500 mt-2">Unduh template dokumen PKS untuk diisi manual</p>
+      </div>
+      
+      <!-- Upload Form Section -->
+      <div class="mt-6">
+        <h3 class="font-medium text-gray-700 mb-2">Upload Dokumen yang Sudah Diisi</h3>
+        <form id="uploadForm" class="space-y-3">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Dokumen PKS (PDF/DOCX)</label>
+            <input type="file" id="filledPksFile" name="filledPksFile" class="w-full p-2 border border-gray-300 rounded-lg" accept=".pdf,.docx" />
+          </div>
+          <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+            <i class="fas fa-upload mr-2"></i> Upload Dokumen
+          </button>
+        </form>
       </div>
     </div>
   </main>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      // Get the ID from URL parameters
+      const urlParams = new URLSearchParams(window.location.search);
+      const pksId = urlParams.get('id');
+
+      if (pksId) {
+        // Fetch the PKS data when page loads
+        fetchPKSData(pksId);
+      }
+
+      // Setup download form button (placeholder)
+      $('#downloadFormBtn').click(function() {
+        alert('Fitur download form akan mengunduh template dokumen PKS dalam format .docx');
+        // In a real implementation, this would call an API endpoint to generate/download the docx
+      });
+
+      // Setup upload form (placeholder)
+      $('#uploadForm').submit(function(e) {
+        e.preventDefault();
+        alert('Fitur upload akan mengunggah dokumen PKS yang sudah diisi manual');
+        // In a real implementation, this would upload the file to the server
+      });
+
+      // Setup download document button (placeholder)
+      $('#downloadDocBtn').click(function() {
+        alert('Fitur download akan mengunduh dokumen PKS');
+      });
+
+      // Setup delete document button (placeholder)
+      $('#deleteDocBtn').click(function() {
+        if(confirm('Apakah Anda yakin ingin menghapus dokumen ini?')) {
+          alert('Dokumen akan dihapus');
+        }
+      });
+
+      // Setup download logo button (placeholder)
+      $('#downloadLogoBtn').click(function() {
+        alert('Fitur download akan mengunduh logo mitra');
+      });
+
+      // Setup delete logo button (placeholder)
+      $('#deleteLogoBtn').click(function() {
+        if(confirm('Apakah Anda yakin ingin menghapus logo ini?')) {
+          alert('Logo akan dihapus');
+        }
+      });
+    });
+
+    async function fetchPKSData(id) {
+      try {
+        const response = await fetch(`http://localhost:3000/api/pks/${id}`);
+        
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+
+        if (data.success && data.data) {
+          displayPKSData(data.data);
+        }
+      } catch (error) {
+        console.error('Error fetching PKS data:', error);
+        alert('Error loading PKS data: ' + error.message);
+      }
+    }
+
+    function displayPKSData(pksData) {
+      // Format date for display
+      function formatDate(dateString) {
+        if (!dateString) return '-';
+        const date = new Date(dateString);
+        return date.toLocaleDateString('id-ID', {
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric'
+        });
+      }
+
+      // Content section
+      if (pksData.content) {
+        $('#docNumber').text(pksData.content.nomor || '-');
+        $('#docTitle').text(pksData.content.judul || '-');
+        $('#docDate').text(formatDate(pksData.content.tanggal));
+      }
+
+      // Pihak Kedua section
+      if (pksData.pihakKedua) {
+        $('#secondPartyName').text(pksData.pihakKedua.nama || '-');
+        $('#secondPartyPosition').text(pksData.pihakKedua.jabatan || '-');
+        $('#secondPartyAddress').text(pksData.pihakKedua.alamat || '-');
+        $('#secondPartyPhone').text(pksData.pihakKedua.nomor || '-');
+      }
+
+      // Properties section
+      if (pksData.properties) {
+        $('#docStatus').text(pksData.properties.status || '-');
+        $('#docEmail').text(pksData.properties.email || '-');
+        $('#docComment').text(pksData.properties.comment || '-');
+      }
+
+      // File Upload section
+      if (pksData.fileUpload) {
+        // Document file
+        if (pksData.fileUpload.docName) {
+          $('#documentFileName').text(pksData.fileUpload.docName).removeClass('italic text-gray-600').addClass('text-gray-800');
+          $('#downloadDocBtn, #deleteDocBtn').prop('disabled', false);
+        }
+
+        // Logo file
+        if (pksData.fileUpload.logoName) {
+          $('#logoFileName').text(pksData.fileUpload.logoName).removeClass('italic text-gray-600').addClass('text-gray-800');
+          $('#downloadLogoBtn, #deleteLogoBtn').prop('disabled', false);
+        }
+      }
+    }
+  </script>
 </body>
 
 </html>
