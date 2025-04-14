@@ -18,8 +18,9 @@ export const sendPksNotificationEmail = async (pksId) => {
       instansi: pksData.pihakKedua.nama,
       // URL untuk mengakses dokumen PKS
       link: `${
-        process.env.BASE_URL || "http://localhost:3000"
-      }/api/file/pks/${pksId}`,
+        process.env.BASE_URL ||
+        "http://127.0.0.1:5500/frontend/detailadmin.html?id="
+      }${pksId}`,
       subject: `Dokumen Perjanjian Kerjasama - ${pksData.content.judul}`,
     };
 

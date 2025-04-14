@@ -106,3 +106,5 @@ export const getImagePath = (id, extension) => {
   }
   return path.join(imageUploadDir, id + extension);
 };
+
+export { pdfUploadDir };

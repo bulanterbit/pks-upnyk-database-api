@@ -9,7 +9,7 @@ const pksSchema = new mongoose.Schema({
   content: {
     nomor: {
       type: String,
-      required: [true, "Nomor is required"],
+      // required: [true, "Nomor is required"],
       unique: true,
       imutable: true,
     },
@@ -87,18 +87,22 @@ const pksSchema = new mongoose.Schema({
     docName: {
       type: String,
       trim: true,
+      default: "",
     },
     docPath: {
       type: String,
       trim: true,
+      default: "",
     },
     logoName: {
       type: String,
       trim: true,
+      default: "",
     },
     logoPath: {
       type: String,
       trim: true,
+      default: "",
     },
   },
 });

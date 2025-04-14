@@ -16,7 +16,7 @@ export const generateEmailTemplate = (
           <p>Kemudian scan dokumen dan upload pada tautan berikut:</p>
           
           <div style="text-align: center; margin: 25px 0;">
-            <a href="${link}" style="background-color: #00529b; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">Akses Dokumen Perjanjian</a>
+            <a href="${link}" style="background-color: #00529b; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">Submit Dokumen</a>
           </div>
           
           <p>Apabila ada pertanyaan atau kendala teknis dalam proses pencetakan atau pengunggahan dokumen, silakan menghubungi kami melalui:</p>

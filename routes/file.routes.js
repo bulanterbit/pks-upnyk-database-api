@@ -9,12 +9,12 @@ import { checkFileExists } from "../middleware/file.middleware.js";
 const fileRouter = express.Router();
 
 // Route untuk download file
-fileRouter.get("/download/:filename", checkFileExists, downloadFile);
+fileRouter.get("/:filename", checkFileExists, downloadFile);
 
 // Route untuk melihat daftar file
 fileRouter.get("/", viewFiles);
 
 // Route untuk menghapus file
-fileRouter.delete("/delete/:filename", checkFileExists, deleteFile);
+fileRouter.delete("/:filename", checkFileExists, deleteFile);
 
 export default fileRouter;
