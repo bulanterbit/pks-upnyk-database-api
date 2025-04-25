@@ -811,7 +811,7 @@
       row.innerHTML = `
  <td>${pks.content?.judul || "-"}</td>
  <td>UPN "Veteran" Yogyakarta</td>
- <td>${pks.pihakKedua?.nama || "-"}</td>
+ <td>${pks.pihakKedua?.instansi || "-"}</td>
  <td>${tanggal}</td>
  <td><span class="status-container ${statusClass}">${statusText}</span></td>
 `;
@@ -835,8 +835,8 @@
             valueB = 'UPN "Veteran" Yogyakarta';
             break;
           case "pihakKedua":
-            valueA = a.pihakKedua?.nama || "";
-            valueB = b.pihakKedua?.nama || "";
+            valueA = a.pihakKedua?.instansi || "";
+            valueB = b.pihakKedua?.instansi || "";
             break;
           case "tanggal":
             // Sort by date numerically

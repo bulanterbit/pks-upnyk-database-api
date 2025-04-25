@@ -26,6 +26,11 @@ const pksSchema = new mongoose.Schema({
   },
 
   pihakKedua: {
+    instansi: {
+      type: String,
+      required: [true, "Instansi is required"],
+      trim: true,
+    },
     nama: {
       type: String,
       required: [true, "Nama is required"],

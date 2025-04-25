@@ -113,7 +113,11 @@
     <div class="detail-card">
       <h2 class="detail-title">Pihak Kedua (Mitra)</h2>
       <div class="detail-row">
-        <span class="detail-label">Nama:</span>
+        <span class="detail-label">Nama Instansi:</span>
+        <span class="detail-value" id="secondParty"></span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Nama Perwakilan:</span>
         <span class="detail-value" id="secondPartyName"></span>
       </div>
       <div class="detail-row">
@@ -426,6 +430,7 @@
 
       // Pihak Kedua section
       if (pksData.pihakKedua) {
+        $("#secondParty").text(pksData.pihakKedua.instansi || "-");
         $("#secondPartyName").text(pksData.pihakKedua.nama || "-");
         $("#secondPartyPosition").text(pksData.pihakKedua.jabatan || "-");
         $("#secondPartyAddress").text(pksData.pihakKedua.alamat || "-");

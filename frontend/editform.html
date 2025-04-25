@@ -143,12 +143,17 @@
         </div>
         <div class="cols-3">
           <div class="form-elem">
+            <label class="form-label">Instansi</label>
+            <input type="text" class="form-control" name="pihakKedua.instansi" placeholder="Nama instansi" required />
+          </div>
+          <div class="form-elem">
             <label class="form-label">Nama</label>
             <input type="text" class="form-control" name="pihakKedua.nama" placeholder="Nama perwakilan" required />
           </div>
           <div class="form-elem">
             <label class="form-label">Jabatan</label>
-            <input type="text" class="form-control" name="pihakKedua.jabatan" placeholder="Jabatan perwakilan" required />
+            <input type="text" class="form-control" name="pihakKedua.jabatan" placeholder="Jabatan perwakilan"
+              required />
           </div>
           <div class="form-elem">
             <label class="form-label">Alamat</label>
@@ -247,20 +252,20 @@
       // Handle form submission
       $("#perjanjianForm").submit(function (e) {
         e.preventDefault();
-        
+
         // Prepare the form data
         const formData = {};
         $(this).serializeArray().forEach(item => {
           // Handle nested properties
           const keys = item.name.split('.');
           let current = formData;
-          
+
           for (let i = 0; i < keys.length - 1; i++) {
             const key = keys[i];
             current[key] = current[key] || {};
             current = current[key];
           }
-          
+
           current[keys[keys.length - 1]] = item.value;
         });
 
@@ -273,7 +278,7 @@
           if (docFile) fileData.append('docFile', docFile);
           if (logoFile) fileData.append('logoFile', logoFile);
           fileData.append('jsonData', JSON.stringify(formData));
-          
+
           updatePKSWithFiles(pksId, fileData);
         } else {
           updatePKS(pksId, formData);
@@ -284,7 +289,7 @@
     async function fetchPKSData(id) {
       try {
         const response = await fetch(`http://localhost:3000/api/pks/${id}`);
-        
+
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
@@ -324,6 +329,7 @@
 
       // Pihak Kedua
       if (pksData.pihakKedua) {
+        setValue('pihakKedua.instansi', pksData.pihakKedua.instansi);
         setValue('pihakKedua.nama', pksData.pihakKedua.nama);
         setValue('pihakKedua.jabatan', pksData.pihakKedua.jabatan);
         setValue('pihakKedua.alamat', pksData.pihakKedua.alamat);

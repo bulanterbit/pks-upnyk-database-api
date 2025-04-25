@@ -473,7 +473,7 @@
             <thead>
               <tr>
                 <th data-sort="judul">Judul <i class="fas fa-sort sort-icon"></i></th>
-                <th data-sort="nomorInternal">Nomor Internal <i class="fas fa-sort sort-icon"></i></th>
+                <th data-sort="nomorInternal">Nomor Pihak Kedua <i class="fas fa-sort sort-icon"></i></th>
                 <th data-sort="pihakKesatu">Pihak Kesatu <i class="fas fa-sort sort-icon"></i></th>
                 <th data-sort="pihakKedua">Pihak Kedua <i class="fas fa-sort sort-icon"></i></th>
                 <th data-sort="tanggal">Tanggal TTD <i class="fas fa-sort sort-icon"></i></th>
@@ -636,13 +636,13 @@
       row.setAttribute("data-id", pks._id);
 
       // Format date
-      const tanggalTtd = pks.dokumen?.tanggalTtd
-        ? new Date(pks.dokumen.tanggalTtd).toLocaleDateString("id-ID")
+      const tanggal = pks.content?.tanggal
+        ? new Date(pks.content.tanggal).toLocaleDateString("id-ID")
         : "-";
 
       // Store raw date for sorting
-      if (pks.dokumen?.tanggalTtd) {
-        row.setAttribute("data-date", new Date(pks.dokumen.tanggalTtd).getTime());
+      if (pks.content?.tanggal) {
+        row.setAttribute("data-date", new Date(pks.content.tanggal).getTime());
       } else {
         row.setAttribute("data-date", 0);
       }
@@ -678,10 +678,10 @@
       // Create table cells
       row.innerHTML = `
         <td data-sort="judul">${pks.content?.judul || "-"}</td>
-        <td data-sort="nomorInternal">${pks.dokumen?.nomorInternal || "-"}</td>
+        <td data-sort="nomorInternal">${pks.pihakKedua?.nomor || "-"}</td>
         <td data-sort="pihakKesatu">UPN "Veteran" Yogyakarta</td>
-        <td data-sort="pihakKedua">${pks.pihakKedua?.nama || "-"}</td>
-        <td data-sort="tanggal">${tanggalTtd}</td>
+        <td data-sort="pihakKedua">${pks.pihakKedua?.instansi || "-"}</td>
+        <td data-sort="tanggal">${tanggal}</td>
         <td data-sort="status"><span class="status-container ${statusClass}">${statusText}</span></td>
         <td>
           <div class="action-buttons">
@@ -757,21 +757,21 @@
             valueB = b.content?.judul || "";
             break;
           case "nomorInternal":
-            valueA = a.dokumen?.nomorInternal || "";
-            valueB = b.dokumen?.nomorInternal || "";
+            valueA = a.pihakKedua?.nomor || "";
+            valueB = b.pihakKedua?.nomor || "";
             break;
           case "pihakKesatu":
             valueA = 'UPN "Veteran" Yogyakarta'; // Fixed value for first party
             valueB = 'UPN "Veteran" Yogyakarta';
             break;
           case "pihakKedua":
-            valueA = a.pihakKedua?.nama || "";
-            valueB = b.pihakKedua?.nama || "";
+            valueA = a.pihakKedua?.instansi || "";
+            valueB = b.pihakKedua?.instansi || "";
             break;
           case "tanggal":
             // Sort by date numerically
-            valueA = a.dokumen?.tanggalTtd ? new Date(a.dokumen.tanggalTtd).getTime() : 0;
-            valueB = b.dokumen?.tanggalTtd ? new Date(b.dokumen.tanggalTtd).getTime() : 0;
+            valueA = a.content?.tanggal ? new Date(a.content.tanggal).getTime() : 0;
+            valueB = b.content?.tanggal ? new Date(b.content.tanggal).getTime() : 0;
             break;
           case "status":
             // Sort by status priority
