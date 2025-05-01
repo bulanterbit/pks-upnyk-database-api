@@ -23,6 +23,10 @@ const pksSchema = new mongoose.Schema({
       type: Date,
       required: [true, "Tanggal is required"],
     },
+    // Batas kadaluarsa (1 tahun setelah tanggal dokumen)
+    tanggalKadaluarsa: {
+      type: Date,
+    },
   },
 
   pihakKedua: {
@@ -56,6 +60,7 @@ const pksSchema = new mongoose.Schema({
   properties: {
     uploadDate: {
       type: Date,
+      default: Date.now,
     },
     status: {
       type: String,
@@ -85,6 +90,17 @@ const pksSchema = new mongoose.Schema({
         message: (props) => `${props.value} bukan format email yang valid!`,
       },
     },
+    // Batas waktu reminder (4 minggu setelah upload)
+    reminderDate: {
+      type: Date,
+    },
+    notificationsSent: {
+      type: Number,
+      default: 0, // Jumlah notifikasi yang sudah dikirim
+    },
+    lastNotificationDate: {
+      type: Date, // Tanggal terakhir notifikasi dikirim
+    },
   },
 
   fileUpload: {
@@ -110,6 +126,28 @@ const pksSchema = new mongoose.Schema({
       default: "",
     },
   },
+});
+
+// Calculate reminder and expiration dates before saving
+pksSchema.pre("save", function (next) {
+  // Set upload date if not already set
+  if (!this.properties.uploadDate) {
+    this.properties.uploadDate = new Date();
+  }
+
+  // Calculate reminder date (4 weeks after upload)
+  const reminderDate = new Date(this.properties.uploadDate);
+  reminderDate.setDate(reminderDate.getDate() + 28); // 4 weeks = 28 days
+  this.properties.reminderDate = reminderDate;
+
+  // Calculate expiration date (1 year after document date)
+  if (this.content.tanggal) {
+    const expirationDate = new Date(this.content.tanggal);
+    expirationDate.setFullYear(expirationDate.getFullYear() + 1);
+    this.content.tanggalKadaluarsa = expirationDate;
+  }
+
+  next();
 });
 
 pksSchema.pre("save", function (next) {

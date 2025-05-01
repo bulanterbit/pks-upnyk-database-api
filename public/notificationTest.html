@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitoring Notifikasi PKS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container mt-4">
+        <h1>Monitoring Notifikasi PKS</h1>
+        <div class="row mb-4">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Ringkasan</h5>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="border p-3 text-center rounded">
+                                    <h3 id="total-pks">0</h3>
+                                    <p>Total PKS Menunggu</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="border p-3 text-center rounded">
+                                    <h3 id="notif-0">0</h3>
+                                    <p>Belum Dinotifikasi</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="border p-3 text-center rounded">
+                                    <h3 id="notif-progress">0</h3>
+                                    <p>Dalam Proses (1-3)</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="border p-3 text-center rounded">
+                                    <h3 id="notif-max">0</h3>
+                                    <p>Maksimal (4)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Daftar PKS Menunggu Dokumen</h5>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>No.</th>
+                                <th>Nomor PKS</th>
+                                <th>Judul</th>
+                                <th>Pihak Kedua</th>
+                                <th>Email</th>
+                                <th>Tanggal Upload</th>
+                                <th>Notifikasi Terkirim</th>
+                                <th>Terakhir Dikirim</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="notification-table">
+                            <!-- Data akan diisi melalui JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal konfirmasi -->
+    <div class="modal fade" id="confirmModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmModalTitle">Konfirmasi</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="confirmModalBody">
+                    Apakah Anda yakin?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary" id="confirmButton">Ya</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Ambil data notifikasi dari API
+        async function fetchNotifications() {
+            try {
+                const response = await fetch('/api/notifications');
+                const data = await response.json();
+
+                if (data.success) {
+                    renderNotifications(data.data);
+                    updateSummary(data.data);
+                }
+            } catch (error) {
+                console.error('Error fetching notifications:', error);
+                alert('Gagal memuat data notifikasi');
+            }
+        }
+
+        // Render tabel notifikasi
+        function renderNotifications(notifications) {
+            const tableBody = document.getElementById('notification-table');
+            tableBody.innerHTML = '';
+
+            if (notifications.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="9" class="text-center">Tidak ada data notifikasi</td>
+                    </tr>
+                `;
+                return;
+            }
+
+            notifications.forEach((item, index) => {
+                const uploadDate = new Date(item.properties.uploadDate).toLocaleDateString('id-ID');
+                const lastSentDate = item.properties.lastNotificationDate ?
+                    new Date(item.properties.lastNotificationDate).toLocaleDateString('id-ID') + ' ' +
+                    new Date(item.properties.lastNotificationDate).toLocaleTimeString('id-ID') :
+                    '-';
+
+                const notifCount = item.properties.notificationsSent || 0;
+                const maxReached = notifCount >= 4;
+
+                tableBody.innerHTML += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${item.content.nomor || '-'}</td>
+                        <td>${item.content.judul}</td>
+                        <td>${item.pihakKedua.instansi} (${item.pihakKedua.nama})</td>
+                        <td>${item.properties.email}</td>
+                        <td>${uploadDate}</td>
+                        <td>
+                            <span class="badge bg-${getBadgeColor(notifCount)}">${notifCount} dari 4</span>
+                        </td>
+                        <td>${lastSentDate}</td>
+                        <td>
+                            <button class="btn btn-sm btn-primary ${maxReached ? 'disabled' : ''}" 
+                                onclick="confirmSendReminder('${item._id}')" 
+                                ${maxReached ? 'disabled' : ''}>
+                                Kirim Pengingat
+                            </button>
+                            <button class="btn btn-sm btn-warning" onclick="confirmResetCount('${item._id}')">
+                                Reset
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        // Update ringkasan
+        function updateSummary(notifications) {
+            const totalPks = notifications.length;
+            let notif0 = 0;
+            let notifProgress = 0;
+            let notifMax = 0;
+
+            notifications.forEach(item => {
+                const count = item.properties.notificationsSent || 0;
+                if (count === 0) notif0++;
+                else if (count < 4) notifProgress++;
+                else notifMax++;
+            });
+
+            document.getElementById('total-pks').textContent = totalPks;
+            document.getElementById('notif-0').textContent = notif0;
+            document.getElementById('notif-progress').textContent = notifProgress;
+            document.getElementById('notif-max').textContent = notifMax;
+        }
+
+        // Warna badge berdasarkan jumlah notifikasi
+        function getBadgeColor(count) {
+            if (count === 0) return 'secondary';
+            if (count < 2) return 'info';
+            if (count < 3) return 'warning';
+            if (count < 4) return 'danger';
+            return 'dark';
+        }
+
+        // Konfirmasi kirim pengingat
+        function confirmSendReminder(id) {
+            const modal = new bootstrap.Modal(document.getElementById('confirmModal'));
+            document.getElementById('confirmModalTitle').textContent = 'Kirim Pengingat';
+            document.getElementById('confirmModalBody').textContent = 'Apakah Anda yakin ingin mengirim pengingat untuk PKS ini?';
+
+            document.getElementById('confirmButton').onclick = async () => {
+                modal.hide();
+                await sendReminder(id);
+            };
+
+            modal.show();
+        }
+
+        // Konfirmasi reset counter
+        function confirmResetCount(id) {
+            const modal = new bootstrap.Modal(document.getElementById('confirmModal'));
+            document.getElementById('confirmModalTitle').textContent = 'Reset Jumlah Notifikasi';
+            document.getElementById('confirmModalBody').textContent = 'Apakah Anda yakin ingin mereset jumlah notifikasi untuk PKS ini?';
+
+            document.getElementById('confirmButton').onclick = async () => {
+                modal.hide();
+                await resetCounter(id);
+            };
+
+            modal.show();
+        }
+
+        // Kirim pengingat manual
+        async function sendReminder(id) {
+            try {
+                const response = await fetch(`/api/notifications/${id}/send`, {
+                    method: 'POST'
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert('Pengingat berhasil dikirim');
+                    fetchNotifications();
+                } else {
+                    alert(`Gagal mengirim pengingat: ${data.message}`);
+                }
+            } catch (error) {
+                console.error('Error sending reminder:', error);
+                alert('Gagal mengirim pengingat');
+            }
+        }
+
+        // Reset counter
+        async function resetCounter(id) {
+            try {
+                const response = await fetch(`/api/notifications/${id}/reset`, {
+                    method: 'POST'
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert('Jumlah notifikasi berhasil di-reset');
+                    fetchNotifications();
+                } else {
+                    alert(`Gagal reset jumlah notifikasi: ${data.message}`);
+                }
+            } catch (error) {
+                console.error('Error resetting counter:', error);
+                alert('Gagal reset jumlah notifikasi');
+            }
+        }
+
+        // Load data saat halaman dimuat
+        document.addEventListener('DOMContentLoaded', fetchNotifications);
+    </script>
+</body>
+
+</html>

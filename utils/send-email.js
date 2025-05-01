@@ -21,17 +21,17 @@ export const sendPksNotificationEmail = async (pksId) => {
         process.env.BASE_URL ||
         "http://127.0.0.1:5500/frontend/detailadmin.html?id="
       }${pksId}`,
-      subject: `Dokumen Perjanjian Kerjasama - ${pksData.content.judul}`,
+      subject: `Pengingat: Dokumen Perjanjian Kerjasama - ${pksData.content.judul}`,
     };
+
+    // Tambahkan informasi pengingat ke-berapa
+    const reminderNumber = (pksData.properties.notificationsSent || 0) + 1;
+    if (reminderNumber > 1) {
+      emailData.subject = `Pengingat #${reminderNumber}: Dokumen Perjanjian Kerjasama - ${pksData.content.judul}`;
+    }
 
     // Kirim email
     const result = await sendPksEmail(emailData);
-
-    // Update status PKS
-    await PKS.findByIdAndUpdate(pksId, {
-      "properties.status": "menunggu dokumen",
-      "properties.emailSentAt": new Date(),
-    });
 
     return result;
   } catch (error) {
