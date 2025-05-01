@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,21 +13,25 @@
             background-color: #2e7d32;
             padding: 15px 0;
         }
+
         .navbar-brand {
             color: white !important;
             font-weight: bold;
             margin-left: 20px;
             font-size: 24px;
         }
+
         body {
             font-size: 14px;
         }
+
         .form-section {
             margin-bottom: 20px;
             padding: 15px;
             border: 1px solid #ddd;
             border-radius: 5px;
         }
+
         .section-title {
             background-color: #f8f9fa;
             padding: 8px;
@@ -34,19 +39,25 @@
             border-radius: 5px;
             font-size: 16px;
         }
+
         .form-label {
             font-size: 14px;
             margin-bottom: 5px;
         }
-        .form-control, .form-select, .btn {
+
+        .form-control,
+        .form-select,
+        .btn {
             font-size: 14px;
             padding: 6px 12px;
         }
+
         .cols-3 {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 15px;
         }
+
         @media (max-width: 768px) {
             .cols-3 {
                 grid-template-columns: 1fr;
@@ -54,25 +65,26 @@
         }
     </style>
 </head>
+
 <body>
-  <header class="bg-green-700 text-white shadow-md">
-    <div class="container mx-auto flex justify-between items-center px-6 py-4">
-      <div class="flex items-center">
-        <img src="img/logo_upn.png" alt="Logo" class="h-12 mr-4" />
-        <h1 class="text-2xl font-bold">Form Kerjasama</h1>
-      </div>
+    <header class="bg-green-700 text-white shadow-md">
+        <div class="container mx-auto flex justify-between items-center px-6 py-4">
+            <div class="flex items-center">
+                <img src="img/logo_upn.png" alt="Logo" class="h-12 mr-4" />
+                <h1 class="text-2xl font-bold">Form Kerjasama</h1>
+            </div>
+        </div>
+    </header>
+
+    <div class="container mx-auto px-6 py-8">
+        <a href="index.html" class="text-green-600 hover:text-green-800 flex items-center">
+            <i class="fas fa-arrow-left mr-2"></i> Kembali ke Daftar PKS
+        </a>
     </div>
-  </header>
 
-  <div class="container mx-auto px-6 py-8">
-    <a href="index.html" class="text-green-600 hover:text-green-800 flex items-center">
-      <i class="fas fa-arrow-left mr-2"></i> Kembali ke Daftar PKS
-    </a>
-  </div>
-
-    <div class="container  mb-4">
+    <div class="container mb-4">
         <form id="perjanjianForm">
-            <!-- Informasi Dokumen - Only keep Judul Perjanjian -->
+            <!-- Informasi Dokumen -->
             <div class="form-section">
                 <div class="section-title">
                     <h2 style="font-size: 16px;">Informasi Dokumen</h2>
@@ -80,7 +92,12 @@
                 <div class="cols-3">
                     <div class="form-elem">
                         <label class="form-label">Judul Perjanjian</label>
-                        <input type="text" class="form-control" name="dokumen.judul" placeholder="Judul perjanjian" required>
+                        <input type="text" class="form-control" name="content.judul" placeholder="Judul perjanjian"
+                            required>
+                    </div>
+                    <div class="form-elem">
+                        <label class="form-label">Tanggal Perjanjian</label>
+                        <input type="date" class="form-control" name="content.tanggal" required>
                     </div>
                 </div>
             </div>
@@ -92,43 +109,45 @@
                 </div>
                 <div class="cols-3">
                     <div class="form-elem">
+                        <label class="form-label">Nama Instansi</label>
+                        <input type="text" class="form-control" name="pihakKedua.instansi" placeholder="Nama Instansi"
+                            required>
+                    </div>
+                    <div class="form-elem">
                         <label class="form-label">Nama Perwakilan</label>
-                        <input type="text" class="form-control" name="pihakKedua.nama" placeholder="Nama perwakilan" required>
-                    </div>
-                    <div class="form-elem">
-                        <label class="form-label">Institusi/Perusahaan</label>
-                        <input type="text" class="form-control" name="pihakKedua.institusi" placeholder="Nama institusi mitra" required>
-                    </div>
-                    <div class="form-elem">
-                        <label class="form-label">Alamat</label>
-                        <input type="text" class="form-control" name="pihakKedua.alamat" placeholder="Alamat mitra">
+                        <input type="text" class="form-control" name="pihakKedua.nama" placeholder="Nama perwakilan"
+                            required>
                     </div>
                     <div class="form-elem">
                         <label class="form-label">Jabatan</label>
-                        <input type="text" class="form-control" name="pihakKedua.jabatan" placeholder="Jabatan perwakilan" required>
+                        <input type="text" class="form-control" name="pihakKedua.jabatan"
+                            placeholder="Jabatan perwakilan" required>
                     </div>
                     <div class="form-elem">
-                        <label class="form-label">Nama Kontak</label>
-                        <input type="text" class="form-control" name="pihakKedua.kontakNama" placeholder="Nama kontak mitra">
+                        <label class="form-label">Alamat</label>
+                        <input type="text" class="form-control" name="pihakKedua.alamat" placeholder="Alamat mitra"
+                            required>
+                    </div>
+                    <div class="form-elem">
+                        <label class="form-label">Nomor Pihak Kedua</label>
+                        <input type="text" class="form-control" name="pihakKedua.nomor"
+                            placeholder="Nomor pihak kedua (opsional)">
                     </div>
                     <div class="form-elem">
                         <label class="form-label">Email Kontak</label>
-                        <input type="email" class="form-control" name="pihakKedua.kontakEmail" placeholder="Email mitra" required>
-                    </div>
-                    <div class="form-elem">
-                        <label class="form-label">Telepon Kontak</label>
-                        <input type="tel" class="form-control" name="pihakKedua.kontakTelp" placeholder="Telepon mitra">
+                        <input type="email" class="form-control" name="properties.email" placeholder="Email kontak"
+                            required>
                     </div>
                     <div class="form-elem">
                         <label class="form-label">Logo Mitra</label>
-                        <input type="file" class="form-control" name="pihakKedua.fileLogo" accept="image/*">
+                        <input type="file" class="form-control" name="logo" accept="image/*" id="logoFile">
                     </div>
                 </div>
             </div>
 
             <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
-                <button type="button" class="btn btn-secondary me-md-2 btn-sm">Batal</button>
-                <button type="submit" class="btn btn-primary btn-sm">Simpan Perjanjian</button>
+                <button type="button" class="btn btn-secondary me-md-2 btn-sm" id="cancelButton">Batal</button>
+                <button type="submit" class="btn btn-primary btn-sm">Simpan dan Kirim Email</button>
             </div>
         </form>
     </div>
@@ -136,56 +155,101 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // Form submission - Save data to backend API
-        document.getElementById('perjanjianForm').addEventListener('submit', async function(e) {
+        document.getElementById('perjanjianForm').addEventListener('submit', async function (e) {
             e.preventDefault();
-            
+
             try {
                 // Collect form data
                 const formData = new FormData(this);
-                const data = {};
-                
-                // Convert FormData to object
+                const data = {
+                    content: {},
+                    pihakKedua: {},
+                    properties: {
+                        status: "draft",
+                        uploadDate: new Date().toISOString()
+                    }
+                };
+
+                // Convert FormData to object with the expected structure
                 formData.forEach((value, key) => {
                     // Handle nested objects
                     const keys = key.split('.');
-                    let current = data;
-                    
-                    for (let i = 0; i < keys.length - 1; i++) {
-                        if (!current[keys[i]]) {
-                            current[keys[i]] = {};
+
+                    if (keys.length > 1) {
+                        if (!data[keys[0]]) {
+                            data[keys[0]] = {};
                         }
-                        current = current[keys[i]];
+                        data[keys[0]][keys[1]] = value;
+                    } else if (key !== 'logo') { // Skip file inputs for now
+                        data[key] = value;
                     }
-                    
-                    current[keys[keys.length - 1]] = value;
                 });
-                
-                // Add current user as creator
-                data.dibuatOleh = "admin"; // Replace with actual user from your auth system
-                
-                // Send data to backend API
-                const response = await fetch('http//localhost:3000/api/pks', {
+
+                // Convert tanggal to Date object
+                if (data.content.tanggal) {
+                    data.content.tanggal = new Date(data.content.tanggal).toISOString();
+                }
+
+                // Send data to backend API to create PKS
+                const response = await fetch('http://localhost:3000/api/pks', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify(data)
                 });
-                
+
                 if (!response.ok) {
                     throw new Error('Gagal menyimpan data');
                 }
-                
+
                 const result = await response.json();
-                
-                alert('Data perjanjian berhasil disimpan!');
-                this.reset();
-                
+                const pksId = result.data._id;
+
+                // Handle logo upload if a file was selected
+                const logoFile = document.getElementById('logoFile').files[0];
+                if (logoFile && pksId) {
+                    const logoFormData = new FormData();
+                    logoFormData.append('logo', logoFile);
+
+                    const logoResponse = await fetch(`http://localhost:3000/api/upload/logo/${pksId}`, {
+                        method: 'POST',
+                        body: logoFormData
+                    });
+
+                    if (!logoResponse.ok) {
+                        console.warn('Logo berhasil diupload tetapi gagal menyimpan logo');
+                    }
+                }
+
+                // Generate and send document via email
+                const emailResponse = await fetch(`http://localhost:3000/api/pks/${pksId}/send-email`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+
+                if (!emailResponse.ok) {
+                    throw new Error('Gagal mengirim email');
+                }
+
+                alert('Data perjanjian berhasil disimpan dan email telah dikirim!');
+                window.location.href = 'index.html'; // Redirect to index page
+
             } catch (error) {
                 console.error('Error:', error);
-                alert('Terjadi kesalahan saat menyimpan data: ' + error.message);
+                alert('Terjadi kesalahan: ' + error.message);
+            }
+        });
+
+        // Cancel button functionality
+        document.getElementById('cancelButton').addEventListener('click', function () {
+            if (confirm('Apakah Anda yakin ingin membatalkan pengisian form?')) {
+                window.location.href = 'index.html';
             }
         });
     </script>
 </body>
+
 </html>

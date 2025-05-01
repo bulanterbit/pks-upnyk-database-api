@@ -13,7 +13,13 @@ const transporter = nodemailer.createTransport({
 });
 
 // Fungsi untuk mengirim email PKS
-export const sendPksEmail = async ({ to, instansi, link, subject }) => {
+export const sendPksEmail = async ({
+  to,
+  instansi,
+  link,
+  subject,
+  reminderNumber = 1,
+}) => {
   try {
     if (!to) throw new Error("Email penerima (to) diperlukan");
     if (!instansi) throw new Error("Nama instansi diperlukan");
@@ -24,8 +30,8 @@ export const sendPksEmail = async ({ to, instansi, link, subject }) => {
       to: to,
       subject:
         subject ||
-        "Perlengkapan Dokumen Perjanjian Kerjasama - LPPM UPN Veteran Yogyakarta",
-      html: generateEmailTemplate(instansi, link),
+        `Pengingat Dokumen Perjanjian Kerjasama - LPPM UPN Veteran Yogyakarta`,
+      html: generateEmailTemplate(instansi, link, reminderNumber),
     };
 
     const info = await transporter.sendMail(mailOptions);

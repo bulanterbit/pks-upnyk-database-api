@@ -122,28 +122,16 @@
         </div>
         <div class="cols-3">
           <div class="form-elem">
-            <label class="form-label">Nomor Internal</label>
-            <input type="text" class="form-control" name="dokumen.nomorInternal" placeholder="UN62/..." />
-          </div>
-          <div class="form-elem">
-            <label class="form-label">Nomor Mitra</label>
-            <input type="text" class="form-control" name="dokumen.nomorMitra" placeholder="Nomor dari mitra" />
+            <label class="form-label">Nomor Dokumen</label>
+            <input type="text" class="form-control" name="content.nomor" placeholder="Nomor dokumen" readonly />
           </div>
           <div class="form-elem">
             <label class="form-label">Judul Perjanjian</label>
-            <input type="text" class="form-control" name="dokumen.judul" placeholder="Judul perjanjian" required />
+            <input type="text" class="form-control" name="content.judul" placeholder="Judul perjanjian" required />
           </div>
           <div class="form-elem">
-            <label class="form-label">Tanggal Tanda Tangan</label>
-            <input type="date" class="form-control" name="dokumen.tanggalTtd" required />
-          </div>
-          <div class="form-elem">
-            <label class="form-label">Tempat Tanda Tangan</label>
-            <input type="text" class="form-control" name="dokumen.tempatTtd" placeholder="Kota penandatanganan" />
-          </div>
-          <div class="form-elem">
-            <label class="form-label">Upload Dokumen</label>
-            <input type="file" class="form-control" name="dokumen.fileUpload" accept=".pdf,.docx" />
+            <label class="form-label">Tanggal</label>
+            <input type="date" class="form-control" name="content.tanggal" required />
           </div>
         </div>
       </div>
@@ -155,17 +143,12 @@
         </div>
         <div class="cols-3">
           <div class="form-elem">
-            <label class="form-label">Nama Perwakilan</label>
+            <label class="form-label">Instansi</label>
+            <input type="text" class="form-control" name="pihakKedua.instansi" placeholder="Nama instansi" required />
+          </div>
+          <div class="form-elem">
+            <label class="form-label">Nama</label>
             <input type="text" class="form-control" name="pihakKedua.nama" placeholder="Nama perwakilan" required />
-          </div>
-          <div class="form-elem">
-            <label class="form-label">Institusi/Perusahaan</label>
-            <input type="text" class="form-control" name="pihakKedua.institusi" placeholder="Nama institusi mitra"
-              required />
-          </div>
-          <div class="form-elem">
-            <label class="form-label">Alamat</label>
-            <input type="text" class="form-control" name="pihakKedua.alamat" placeholder="Alamat mitra" />
           </div>
           <div class="form-elem">
             <label class="form-label">Jabatan</label>
@@ -173,48 +156,82 @@
               required />
           </div>
           <div class="form-elem">
-            <label class="form-label">Nama Kontak</label>
-            <input type="text" class="form-control" name="pihakKedua.kontakNama" placeholder="Nama kontak mitra" />
+            <label class="form-label">Alamat</label>
+            <input type="text" class="form-control" name="pihakKedua.alamat" placeholder="Alamat mitra" required />
           </div>
           <div class="form-elem">
-            <label class="form-label">Email Kontak</label>
-            <input type="email" class="form-control" name="pihakKedua.kontakEmail" placeholder="Email mitra" required />
-          </div>
-          <div class="form-elem">
-            <label class="form-label">Telepon Kontak</label>
-            <input type="tel" class="form-control" name="pihakKedua.kontakTelp" placeholder="Telepon mitra" />
-          </div>
-          <div class="form-elem">
-            <label class="form-label">Logo Mitra</label>
-            <input type="file" class="form-control" name="pihakKedua.fileLogo" accept="image/*" />
+            <label class="form-label">Nomor</label>
+            <input type="text" class="form-control" name="pihakKedua.nomor" placeholder="Nomor kontak" />
           </div>
         </div>
       </div>
 
-      <!-- Status Perjanjian -->
+      <!-- Properties -->
       <div class="form-section">
         <div class="section-title">
-          <h2 style="font-size: 16px">Status Perjanjian</h2>
+          <h2 style="font-size: 16px">Properties</h2>
         </div>
         <div class="cols-3">
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="status.aktif" id="statusAktif" checked />
-            <label class="form-check-label" for="statusAktif">Aktif</label>
+          <div class="form-elem">
+            <label class="form-label">Status</label>
+            <select class="form-select" name="properties.status" required>
+              <option value="draft">Draft</option>
+              <option value="menunggu dokumen">Menunggu Dokumen</option>
+              <option value="menunggu review">Menunggu Review</option>
+              <option value="approved">Approved</option>
+              <option value="rejected">Rejected</option>
+            </select>
           </div>
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="status.dibatalkan" id="statusDibatalkan" />
-            <label class="form-check-label" for="statusDibatalkan">Dibatalkan</label>
+          <div class="form-elem">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-control" name="properties.email" placeholder="Email kontak" required />
           </div>
-          <div class="form-elem" id="pembatalanFields" style="display: none">
-            <label class="form-label">Alasan Pembatalan</label>
-            <input type="text" class="form-control" name="status.alasanPembatalan" placeholder="Alasan pembatalan" />
+          <div class="form-elem">
+            <label class="form-label">Komentar</label>
+            <input type="text" class="form-control" name="properties.comment" placeholder="Komentar" />
+          </div>
+        </div>
+      </div>
+
+      <!-- File Upload -->
+      <div class="form-section">
+        <div class="section-title">
+          <h2 style="font-size: 16px">File Upload</h2>
+        </div>
+        <div class="cols-3">
+          <div class="form-elem">
+            <label class="form-label">Nama Dokumen</label>
+            <input type="text" class="form-control" name="fileUpload.docName" placeholder="Nama file dokumen" />
+          </div>
+          <div class="form-elem">
+            <label class="form-label">Path Dokumen</label>
+            <input type="text" class="form-control" name="fileUpload.docPath" placeholder="Path file dokumen" />
+          </div>
+          <div class="form-elem">
+            <label class="form-label">Nama Logo</label>
+            <input type="text" class="form-control" name="fileUpload.logoName" placeholder="Nama file logo" />
+          </div>
+          <div class="form-elem">
+            <label class="form-label">Path Logo</label>
+            <input type="text" class="form-control" name="fileUpload.logoPath" placeholder="Path file logo" />
+          </div>
+          <div class="form-elem">
+            <label class="form-label">Upload Dokumen Baru</label>
+            <input type="file" class="form-control" name="newDocUpload" accept=".pdf" />
+          </div>
+          <div class="form-elem">
+            <label class="form-label">Upload Logo Baru</label>
+            <input type="file" class="form-control" name="newLogoUpload" accept="image/*" />
           </div>
         </div>
       </div>
 
       <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+        <button type="button" class="btn btn-secondary me-md-2 btn-sm">
+          Batal
+        </button>
         <button type="submit" class="btn btn-primary btn-sm">
-          Simpan Perjanjian
+          Simpan Perubahan
         </button>
       </div>
     </form>
@@ -223,11 +240,6 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
     $(document).ready(function () {
-      // Toggle pembatalan fields
-      $('input[name="status.dibatalkan"]').change(function () {
-        $("#pembatalanFields").toggle(this.checked);
-      });
-
       // Get the ID from URL parameters
       const urlParams = new URLSearchParams(window.location.search);
       const pksId = urlParams.get('id');
@@ -237,44 +249,40 @@
         fetchPKSData(pksId);
       }
 
-      // Form submission handler
+      // Handle form submission
       $("#perjanjianForm").submit(function (e) {
         e.preventDefault();
 
-        const jsonData = {};
-
-        // Convert FormData to JSON
-        const formData = new FormData(this);
-        formData.forEach((value, key) => {
+        // Prepare the form data
+        const formData = {};
+        $(this).serializeArray().forEach(item => {
           // Handle nested properties
-          const keys = key.split('.');
-          let current = jsonData;
+          const keys = item.name.split('.');
+          let current = formData;
 
           for (let i = 0; i < keys.length - 1; i++) {
-            const k = keys[i];
-            current[k] = current[k] || {};
-            current = current[k];
+            const key = keys[i];
+            current[key] = current[key] || {};
+            current = current[key];
           }
 
-          const lastKey = keys[keys.length - 1];
-
-          // Convert checkbox values to boolean
-          if (lastKey === 'aktif' || lastKey === 'dibatalkan') {
-            current[lastKey] = value === 'on';
-          } else {
-            current[lastKey] = value;
-          }
+          current[keys[keys.length - 1]] = item.value;
         });
 
-        // Add updated by info
-        jsonData.diperbaraiOleh = "admin";
-        jsonData.diperbaraiPada = new Date();
+        // Handle file uploads
+        const docFile = $('input[name="newDocUpload"]')[0].files[0];
+        const logoFile = $('input[name="newLogoUpload"]')[0].files[0];
 
-        // Debug: lihat data yang akan dikirim
-        console.log("Data yang akan dikirim:", jsonData);
+        if (docFile || logoFile) {
+          const fileData = new FormData();
+          if (docFile) fileData.append('docFile', docFile);
+          if (logoFile) fileData.append('logoFile', logoFile);
+          fileData.append('jsonData', JSON.stringify(formData));
 
-        // Kirim data ke server
-        updatePKS(pksId, jsonData);
+          updatePKSWithFiles(pksId, fileData);
+        } else {
+          updatePKS(pksId, formData);
+        }
       });
     });
 
@@ -289,7 +297,6 @@
         const data = await response.json();
 
         if (data.success && data.data) {
-          // Populate form fields with the retrieved data
           populateForm(data.data);
         }
       } catch (error) {
@@ -313,41 +320,44 @@
         }
       }
 
-      // Populate document information
-      if (pksData.dokumen) {
-        setValue('dokumen.nomorInternal', pksData.dokumen.nomorInternal);
-        setValue('dokumen.nomorMitra', pksData.dokumen.nomorMitra);
-        setValue('dokumen.judul', pksData.dokumen.judul);
-        setValue('dokumen.tanggalTtd', pksData.dokumen.tanggalTtd ? new Date(pksData.dokumen.tanggalTtd) : null);
-        setValue('dokumen.tempatTtd', pksData.dokumen.tempatTtd);
+      // Content
+      if (pksData.content) {
+        setValue('content.nomor', pksData.content.nomor);
+        setValue('content.judul', pksData.content.judul);
+        setValue('content.tanggal', pksData.content.tanggal ? new Date(pksData.content.tanggal) : null);
       }
 
-      // Populate party information
+      // Pihak Kedua
       if (pksData.pihakKedua) {
+        setValue('pihakKedua.instansi', pksData.pihakKedua.instansi);
         setValue('pihakKedua.nama', pksData.pihakKedua.nama);
-        setValue('pihakKedua.institusi', pksData.pihakKedua.institusi);
-        setValue('pihakKedua.alamat', pksData.pihakKedua.alamat);
         setValue('pihakKedua.jabatan', pksData.pihakKedua.jabatan);
-        setValue('pihakKedua.kontakNama', pksData.pihakKedua.kontakNama);
-        setValue('pihakKedua.kontakEmail', pksData.pihakKedua.kontakEmail);
-        setValue('pihakKedua.kontakTelp', pksData.pihakKedua.kontakTelp);
+        setValue('pihakKedua.alamat', pksData.pihakKedua.alamat);
+        setValue('pihakKedua.nomor', pksData.pihakKedua.nomor);
       }
 
-      // Populate status
-      if (pksData.status) {
-        setValue('status.aktif', pksData.status.aktif);
-        setValue('status.dibatalkan', pksData.status.dibatalkan);
-        setValue('status.alasanPembatalan', pksData.status.alasanPembatalan);
+      // Properties
+      if (pksData.properties) {
+        setValue('properties.status', pksData.properties.status);
+        setValue('properties.email', pksData.properties.email);
+        setValue('properties.comment', pksData.properties.comment);
+      }
 
-        // Show pembatalan fields if dibatalkan is true
-        if (pksData.status.dibatalkan) {
-          document.getElementById('pembatalanFields').style.display = 'block';
-        }
+      // File Upload
+      if (pksData.fileUpload) {
+        setValue('fileUpload.docName', pksData.fileUpload.docName);
+        setValue('fileUpload.docPath', pksData.fileUpload.docPath);
+        setValue('fileUpload.logoName', pksData.fileUpload.logoName);
+        setValue('fileUpload.logoPath', pksData.fileUpload.logoPath);
       }
     }
 
     async function updatePKS(id, data) {
       try {
+        // Add updated by and timestamp
+        data.diperbaraiOleh = "admin"; // Replace with actual user
+        data.diperbaraiPada = new Date();
+
         const response = await fetch(`http://localhost:3000/api/pks/${id}`, {
           method: 'PUT',
           headers: {
@@ -368,6 +378,32 @@
           window.location.href = 'adminview.html';
         } else {
           throw new Error(result.message || 'Gagal memperbarui PKS');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Error: ' + error.message);
+      }
+    }
+
+    async function updatePKSWithFiles(id, formData) {
+      try {
+        const response = await fetch(`http://localhost:3000/api/pks/${id}/upload`, {
+          method: 'PUT',
+          body: formData,
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || 'Failed to update PKS with files');
+        }
+
+        const result = await response.json();
+
+        if (result.success) {
+          alert('PKS dan file berhasil diperbarui!');
+          window.location.href = 'adminview.html';
+        } else {
+          throw new Error(result.message || 'Gagal memperbarui PKS dengan file');
         }
       } catch (error) {
         console.error('Error:', error);

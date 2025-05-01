@@ -3,12 +3,15 @@ import {
   uploadPdf,
   uploadImage,
   deleteFile,
+  pdfUploadDir,
+  getImagePath,
 } from "../middleware/upload.middleware.js";
 import PKS from "../models/pks.model.js";
 import path from "path";
 import fs from "fs";
 
 // Handler untuk upload dokumen PDF
+// Handler untuk upload dokumen PDF yang sudah disesuaikan
 export const handlePdfUpload = (req, res) => {
   const uploadSingle = uploadPdf.single("file");
   const pksId = req.params.id;
@@ -34,17 +37,21 @@ export const handlePdfUpload = (req, res) => {
     }
 
     try {
+      // Nama file sudah diformat ${id}.pdf oleh middleware upload
+      // Path akan terlihat seperti C:\Users\Jaconiah\Documents\Projek\pks-upnyk-database-api\uploadedFile\pdf\{id}.pdf
+      const fileName = `${pksId}.pdf`;
+      const fullPath = path.join(pdfUploadDir, fileName);
+
+      const docPath = fullPath.toString();
+      console.log("Saving path to database:", docPath);
+
       const updatedPKS = await PKS.findByIdAndUpdate(
         pksId,
         {
-          "dokumen.fileUpload": {
-            nama: req.file.originalname,
-            tipe: req.file.mimetype,
-            path: req.file.path,
-          },
-          ...(req.user && {
-            diperbaraiOleh: req.user.name || req.user.id || req.user,
-          }),
+          "fileUpload.docName": fileName,
+          "fileUpload.docPath": docPath,
+          // Status update: jika sudah upload dokumen, status berubah sesuai logic di model
+          "properties.uploadDate": new Date(),
         },
         { new: true, runValidators: true }
       );
@@ -58,11 +65,15 @@ export const handlePdfUpload = (req, res) => {
       res.status(200).json({
         message: "PDF uploaded successfully and PKS updated",
         filename: req.file.filename,
-        path: req.file.path,
+        path: fullPath,
         pks: updatedPKS,
       });
     } catch (error) {
       console.error("Database update error:", error);
+      // Hapus file jika update database gagal
+      await deleteFile(req.file.path).catch((err) =>
+        console.error("Error deleting file:", err)
+      );
       return res.status(500).json({
         message: "File uploaded but failed to update database",
         error: error.message,
@@ -71,7 +82,7 @@ export const handlePdfUpload = (req, res) => {
   });
 };
 
-// Handler untuk upload logo mitra (gambar)
+// Handler untuk upload logo (gambar) yang sudah disesuaikan
 export const handleLogoUpload = (req, res) => {
   const uploadSingle = uploadImage.single("logo");
   const pksId = req.params.id;
@@ -97,17 +108,14 @@ export const handleLogoUpload = (req, res) => {
     }
 
     try {
+      const extension = path.extname(req.file.originalname);
+      const fullPath = getImagePath(pksId, extension);
+      // Format nama file logo sudah dihandle oleh middleware upload
       const updatedPKS = await PKS.findByIdAndUpdate(
         pksId,
         {
-          "pihakKedua.fileLogo": {
-            nama: req.file.originalname,
-            tipe: req.file.mimetype,
-            path: req.file.path,
-          },
-          ...(req.user && {
-            diperbaraiOleh: req.user.name || req.user.id || req.user,
-          }),
+          "fileUpload.logoName": `${pksId}${extension}`,
+          "fileUpload.logoPath": fullPath,
         },
         { new: true, runValidators: true }
       );
@@ -126,6 +134,10 @@ export const handleLogoUpload = (req, res) => {
       });
     } catch (error) {
       console.error("Database update error:", error);
+      // Hapus file jika update database gagal
+      await deleteFile(req.file.path).catch((err) =>
+        console.error("Error deleting file:", err)
+      );
       return res.status(500).json({
         message: "Logo uploaded but failed to update database",
         error: error.message,
@@ -134,19 +146,20 @@ export const handleLogoUpload = (req, res) => {
   });
 };
 
-// Handler untuk mendapatkan logo
+// Method untuk mendapatkan logo juga perlu diperbarui
+// Method untuk mendapatkan logo yang diperbarui
 export const getLogo = (req, res) => {
   const pksId = req.params.id;
 
   try {
-    // Cari PKS berdasarkan ID untuk mendapatkan informasi path file logo
+    // Cari PKS berdasarkan ID
     PKS.findById(pksId)
       .then((pks) => {
-        if (!pks || !pks.pihakKedua.fileLogo || !pks.pihakKedua.fileLogo.path) {
+        if (!pks || !pks.fileUpload || !pks.fileUpload.logoPath) {
           return res.status(404).json({ message: "Logo not found" });
         }
 
-        const logoPath = pks.pihakKedua.fileLogo.path;
+        const logoPath = pks.fileUpload.logoPath;
 
         // Verifikasi file ada
         if (!fs.existsSync(logoPath)) {
@@ -174,23 +187,22 @@ export const getLogo = (req, res) => {
   }
 };
 
-// Handler untuk menghapus logo
+// Method untuk menghapus logo yang diperbarui
 export const deleteLogo = async (req, res) => {
   const pksId = req.params.id;
 
   try {
-    // Cari PKS untuk mendapatkan informasi path file logo
+    // Cari PKS
     const pks = await PKS.findById(pksId);
 
-    if (!pks || !pks.pihakKedua.fileLogo || !pks.pihakKedua.fileLogo.path) {
+    if (!pks || !pks.fileUpload || !pks.fileUpload.logoPath) {
       return res.status(404).json({ message: "Logo not found" });
     }
 
-    const logoPath = pks.pihakKedua.fileLogo.path;
+    const logoPath = pks.fileUpload.logoPath;
 
     // Verifikasi file ada
     if (!fs.existsSync(logoPath)) {
-      // Tetap update database meskipun file tidak ada
       console.warn("Logo file not found on server:", logoPath);
     } else {
       // Hapus file jika ada
@@ -201,10 +213,10 @@ export const deleteLogo = async (req, res) => {
     const updatedPKS = await PKS.findByIdAndUpdate(
       pksId,
       {
-        $unset: { "pihakKedua.fileLogo": "" },
-        ...(req.user && {
-          diperbaraiOleh: req.user.name || req.user.id || req.user,
-        }),
+        $unset: {
+          "fileUpload.logoName": "",
+          "fileUpload.logoPath": "",
+        },
       },
       { new: true }
     );

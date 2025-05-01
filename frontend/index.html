@@ -6,8 +6,498 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pengajuan PKS</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-  <link rel="stylesheet" href="./style/index.css">
+  <style>
+    :root {
+      --primary-color: #2e7d32;
+      --primary-dark: #1b5e20;
+      --primary-light: #4caf50;
+      --secondary-color: #f9f9f9;
+      --text-color: #333;
+      --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      --border-radius: 0.5rem;
+      --transition: all 0.3s ease;
+    }
 
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--text-color);
+      background-color: #f5f5f5;
+      min-height: 100vh;
+    }
+
+    /* Navbar */
+    header {
+      background-color: var(--primary-color);
+      color: white;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+    }
+
+    .navbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .navbar-brand h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+
+    .navbar-logo {
+      height: 3rem;
+    }
+
+    .login-button {
+      background-color: white;
+      color: var(--primary-color);
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: var(--border-radius);
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .login-button:hover {
+      background-color: #f1f1f1;
+      transform: translateY(-2px);
+    }
+
+    /* Main Content */
+    .main-content {
+      padding: 2rem 0;
+    }
+
+    .content-container {
+      background-color: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    /* Action Container */
+    .action-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .search-box {
+      display: flex;
+      flex: 1;
+      min-width: 250px;
+      max-width: 500px;
+    }
+
+    .search-box input {
+      flex: 1;
+      padding: 0.8rem 1rem;
+      border: 1px solid #ddd;
+      border-radius: var(--border-radius) 0 0 var(--border-radius);
+      outline: none;
+      transition: var(--transition);
+      font-size: 0.9rem;
+    }
+
+    .search-box input:focus {
+      border-color: var(--primary-color);
+    }
+
+    .search-button {
+      padding: 0 1.2rem;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 0 var(--border-radius) var(--border-radius) 0;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .search-button:hover {
+      background-color: var(--primary-dark);
+    }
+
+    .add-button {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      transition: var(--transition);
+      text-decoration: none;
+      font-weight: 500;
+      gap: 0.5rem;
+    }
+
+    .add-button:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    /* Table Styling */
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+      margin-bottom: 1rem;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: auto;
+      min-width: 800px;
+    }
+
+    th,
+    td {
+      padding: 1rem;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    th {
+      background-color: #f2f2f2;
+      font-weight: 600;
+      cursor: pointer;
+      position: relative;
+      transition: var(--transition);
+    }
+
+    th:hover {
+      background-color: #e6e6e6;
+    }
+
+    th .sort-icon {
+      margin-left: 0.5rem;
+      font-size: 0.8rem;
+    }
+
+    tr {
+      border-bottom: 1px solid #eee;
+      transition: var(--transition);
+    }
+
+    tr:last-child {
+      border-bottom: none;
+    }
+
+    tr:hover {
+      background-color: rgba(0, 0, 0, 0.02);
+    }
+
+    /* Status Containers */
+    .status-container {
+      display: inline-block;
+      padding: 0.4rem 1rem;
+      border-radius: 2rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+      text-align: center;
+      min-width: 100px;
+    }
+
+    .status-menunggu {
+      background-color: #beb9ee;
+      color: #2e357d;
+    }
+
+    .status-disetujui {
+      background-color: #e8f5e9;
+      color: #2e7d32;
+    }
+
+    .status-review {
+      background-color: #fff8e1;
+      color: #ff8f00;
+    }
+
+    .status-draft {
+      background-color: #eceff1;
+      color: #546e7a;
+    }
+
+    .status-ditolak {
+      background-color: #ffebee;
+      color: #c62828;
+    }
+
+    /* Login Modal */
+    .login-modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    .modal-content {
+      background-color: white;
+      margin: 15% auto;
+      padding: 2rem;
+      border-radius: var(--border-radius);
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      animation: slideIn 0.4s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateY(-50px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .modal-header h2 {
+      color: var(--primary-color);
+      font-weight: 600;
+      font-size: 1.5rem;
+    }
+
+    .close-btn {
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .close-btn:hover {
+      color: var(--primary-color);
+    }
+
+    .form-group {
+      margin-bottom: 1.2rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 0.8rem;
+      border: 1px solid #ddd;
+      border-radius: var(--border-radius);
+      transition: var(--transition);
+    }
+
+    .form-group input:focus {
+      border-color: var(--primary-color);
+      outline: none;
+    }
+
+    .login-submit {
+      width: 100%;
+      padding: 0.8rem;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      font-weight: 600;
+      transition: var(--transition);
+      margin-top: 0.5rem;
+    }
+
+    .login-submit:hover {
+      background-color: var(--primary-dark);
+    }
+
+    .error-message {
+      color: #f44336;
+      font-size: 0.9rem;
+      margin-top: 1rem;
+      padding: 0.8rem;
+      background-color: #ffebee;
+      border-radius: var(--border-radius);
+      display: none;
+    }
+
+    /* Loading indicator */
+    .loading {
+      text-align: center;
+      padding: 2rem;
+      color: var(--primary-color);
+      display: none;
+    }
+
+    .loading i {
+      animation: spin 1s infinite linear;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Error message */
+    .error-container {
+      text-align: center;
+      padding: 1rem;
+      color: white;
+      background-color: #f44336;
+      border-radius: var(--border-radius);
+      margin-top: 1rem;
+      display: none;
+    }
+
+    /* No results */
+    .no-results {
+      text-align: center;
+      padding: 2rem;
+      font-style: italic;
+      color: #666;
+      display: none;
+      background-color: #f9f9f9;
+      border-radius: var(--border-radius);
+      margin-top: 1rem;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 1200px) {
+      .content-container {
+        margin: 0 2rem 2rem;
+      }
+    }
+
+    @media (max-width: 992px) {
+      .content-container {
+        margin: 0 1rem 2rem;
+      }
+
+      th,
+      td {
+        padding: 0.8rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .navbar-brand h1 {
+        font-size: 1.2rem;
+      }
+
+      .navbar-logo {
+        height: 2.5rem;
+      }
+
+      .action-container {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .search-box {
+        max-width: 100%;
+      }
+
+      .content-container {
+        padding: 1.5rem;
+      }
+
+      th,
+      td {
+        padding: 0.7rem 0.5rem;
+        font-size: 0.9rem;
+      }
+
+      .status-container {
+        min-width: 80px;
+        font-size: 0.75rem;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .navbar {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+      }
+
+      .login-button {
+        align-self: flex-end;
+      }
+
+      .content-container {
+        padding: 1rem;
+        margin: 0 0.5rem 1rem;
+      }
+
+      table {
+        font-size: 0.85rem;
+      }
+
+      th,
+      td {
+        padding: 0.6rem 0.4rem;
+      }
+    }
+  </style>
 </head>
 
 <body>
@@ -100,7 +590,341 @@
     </div>
   </div>
 
-  <script src="./script/index.js"></script>
+  <script>
+    // Global variables to store data and sorting state
+    let pksData = [];
+    let currentSortColumn = null;
+    let isAscending = true;
+
+    document.addEventListener("DOMContentLoaded", () => {
+      // Login Modal Functionality
+      const loginBtn = document.getElementById("loginBtn");
+      const loginModal = document.getElementById("loginModal");
+      const closeBtn = document.querySelector(".close-btn");
+      const loginForm = document.getElementById("loginForm");
+      const errorMessage = document.getElementById("errorMessage");
+
+      // Show modal when login button is clicked
+      loginBtn.addEventListener("click", () => {
+        loginModal.style.display = "block";
+      });
+
+      // Close modal when X is clicked
+      closeBtn.addEventListener("click", () => {
+        loginModal.style.display = "none";
+        errorMessage.style.display = "none";
+      });
+
+      // Close modal when clicking outside of it
+      window.addEventListener("click", (event) => {
+        if (event.target === loginModal) {
+          loginModal.style.display = "none";
+          errorMessage.style.display = "none";
+        }
+      });
+
+      // Handle form submission
+      loginForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+
+        // Static credentials (username: admin, password: admin123)
+        if (username === "admin" && password === "admin123") {
+          // Redirect to adminview.html if login is successful
+          window.location.href = "adminview.html";
+        } else {
+          // Show error message
+          errorMessage.style.display = "block";
+        }
+      });
+
+      // Load PKS data when page loads
+      fetchPKSData();
+
+      // Search functionality
+      const searchInput = document.getElementById("searchInput");
+      const searchButton = document.getElementById("searchButton");
+
+      // Search when button is clicked
+      searchButton.addEventListener("click", performSearch);
+
+      // Search when typing
+      searchInput.addEventListener("input", performSearch);
+
+      // Search when Enter key is pressed
+      searchInput.addEventListener("keyup", (event) => {
+        if (event.key === "Enter") {
+          performSearch();
+        }
+      });
+
+      // Add sorting functionality to table headers
+      setupSorting();
+    });
+
+    // Set up sorting on table headers
+    function setupSorting() {
+      const headers = document.querySelectorAll("th[data-sort]");
+
+      headers.forEach((header) => {
+        header.addEventListener("click", () => {
+          const sortKey = header.getAttribute("data-sort");
+
+          // If clicking the same column, toggle sort direction
+          if (currentSortColumn === sortKey) {
+            isAscending = !isAscending;
+          } else {
+            currentSortColumn = sortKey;
+            isAscending = true;
+          }
+
+          // Update header styling
+          updateSortHeaderStyles(header);
+
+          // Sort and display data
+          sortData(sortKey, isAscending);
+        });
+      });
+    }
+
+    // Update header styles to show sort direction
+    function updateSortHeaderStyles(clickedHeader) {
+      // Remove all existing sort classes
+      document.querySelectorAll("th .sort-icon").forEach((icon) => {
+        icon.className = "fas fa-sort sort-icon";
+      });
+
+      // Add appropriate class to the clicked header
+      const sortIcon = clickedHeader.querySelector(".sort-icon");
+      if (isAscending) {
+        sortIcon.className = "fas fa-sort-up sort-icon";
+      } else {
+        sortIcon.className = "fas fa-sort-down sort-icon";
+      }
+    }
+
+    // Fetch PKS data from API
+    async function fetchPKSData() {
+      const tableBody = document.getElementById("tableBody");
+      const loading = document.getElementById("loading");
+      const errorContainer = document.getElementById("errorContainer");
+
+      // Show loading indicator
+      loading.style.display = "block";
+      errorContainer.style.display = "none";
+
+      try {
+        const response = await fetch("http://localhost:3000/api/pks");
+
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        const data = await response.json();
+
+        // Hide loading indicator
+        loading.style.display = "none";
+
+        // Check if data exists and is an array
+        if (data.success && Array.isArray(data.data)) {
+          // Store data globally
+          pksData = data.data;
+
+          // Display the data
+          displayTableData(pksData);
+
+          // Initial search to handle any existing search term
+          performSearch();
+        } else {
+          document.getElementById("noResults").style.display = "block";
+        }
+      } catch (error) {
+        console.error("Error fetching PKS data:", error);
+        loading.style.display = "none";
+        errorContainer.textContent = "Error: " + error.message;
+        errorContainer.style.display = "block";
+      }
+    }
+
+    // Display the table data
+    function displayTableData(data) {
+      const tableBody = document.getElementById("tableBody");
+
+      // Clear existing data
+      tableBody.innerHTML = "";
+
+      // Add the rows
+      data.forEach((pks) => {
+        const row = createTableRow(pks);
+        tableBody.appendChild(row);
+      });
+    }
+
+    // Create table row for a PKS item
+    function createTableRow(pks) {
+      const row = document.createElement("tr");
+      row.setAttribute("data-id", pks._id);
+
+      // Format date
+      const tanggal = pks.content?.tanggal
+        ? new Date(pks.content.tanggal).toLocaleDateString("id-ID")
+        : "-";
+
+      // Store raw date for sorting
+      if (pks.content?.tanggal) {
+        row.setAttribute("data-date", new Date(pks.content.tanggal).getTime());
+      } else {
+        row.setAttribute("data-date", 0);
+      }
+
+      // Map the API status to our UI status
+      let statusClass = "status-draft";
+      let statusText = "Draft";
+
+      if (pks.properties?.status) {
+        switch (pks.properties.status) {
+          case "approved":
+            statusClass = "status-disetujui";
+            statusText = "Disetujui";
+            break;
+          case "menunggu review":
+            statusClass = "status-review";
+            statusText = "Menunggu Review";
+            break;
+          case "rejected":
+            statusClass = "status-ditolak";
+            statusText = "Ditolak";
+            break;
+          case "menunggu dokumen":
+            statusClass = "status-menunggu";
+            statusText = "Menunggu Dokumen";
+            break;
+          default:
+            statusClass = "status-draft";
+            statusText = "Draft";
+        }
+      }
+
+      // Create table cells based on updated schema
+      row.innerHTML = `
+ <td>${pks.content?.judul || "-"}</td>
+ <td>UPN "Veteran" Yogyakarta</td>
+ <td>${pks.pihakKedua?.instansi || "-"}</td>
+ <td>${tanggal}</td>
+ <td><span class="status-container ${statusClass}">${statusText}</span></td>
+`;
+
+      return row;
+    }
+
+    // Sort data based on column and direction
+    function sortData(sortKey, ascending) {
+      const sortedData = [...pksData].sort((a, b) => {
+        let valueA, valueB;
+
+        // Extract values based on sort key with updated schema
+        switch (sortKey) {
+          case "judul":
+            valueA = a.content?.judul || "";
+            valueB = b.content?.judul || "";
+            break;
+          case "pihakKesatu":
+            valueA = 'UPN "Veteran" Yogyakarta'; // Fixed value for first party
+            valueB = 'UPN "Veteran" Yogyakarta';
+            break;
+          case "pihakKedua":
+            valueA = a.pihakKedua?.instansi || "";
+            valueB = b.pihakKedua?.instansi || "";
+            break;
+          case "tanggal":
+            // Sort by date numerically
+            valueA = a.content?.tanggal ? new Date(a.content.tanggal).getTime() : 0;
+            valueB = b.content?.tanggal ? new Date(b.content.tanggal).getTime() : 0;
+            break;
+          case "status":
+            // Sort by status priority
+            const statusOrder = {
+              approved: 1,
+              "menunggu review": 2,
+              "menunggu dokumen": 3,
+              draft: 4,
+              rejected: 5,
+            };
+
+            valueA = statusOrder[a.properties?.status || "draft"];
+            valueB = statusOrder[b.properties?.status || "draft"];
+            break;
+          default:
+            valueA = "";
+            valueB = "";
+        }
+
+        // Compare values based on type
+        if (typeof valueA === "number" && typeof valueB === "number") {
+          return ascending ? valueA - valueB : valueB - valueA;
+        } else {
+          // String comparison
+          valueA = String(valueA).toLowerCase();
+          valueB = String(valueB).toLowerCase();
+          return ascending
+            ? valueA.localeCompare(valueB, "id")
+            : valueB.localeCompare(valueA, "id");
+        }
+      });
+
+      // Display the sorted data
+      displayTableData(sortedData);
+
+      // Reapply search filtering
+      performSearch();
+    }
+
+    // Perform search on table
+    function performSearch() {
+      const searchTerm = document
+        .getElementById("searchInput")
+        .value.toLowerCase()
+        .trim();
+      const tableBody = document.getElementById("tableBody");
+      const rows = tableBody.getElementsByTagName("tr");
+      const noResults = document.getElementById("noResults");
+
+      let hasResults = false;
+
+      for (let i = 0; i < rows.length; i++) {
+        const row = rows[i];
+        const cells = row.getElementsByTagName("td");
+        let rowMatches = false;
+
+        // Search in all cells
+        for (let j = 0; j < cells.length; j++) {
+          const cellText = cells[j].textContent.toLowerCase();
+          if (cellText.includes(searchTerm)) {
+            rowMatches = true;
+            break;
+          }
+        }
+
+        if (rowMatches) {
+          row.style.display = "";
+          hasResults = true;
+        } else {
+          row.style.display = "none";
+        }
+      }
+
+      // Show no results message if no matches found
+      noResults.style.display = hasResults || searchTerm === "" ? "none" : "block";
+
+      // Visual feedback
+      const searchInput = document.getElementById("searchInput");
+      searchInput.style.borderColor =
+        searchTerm === "" ? "#ddd" : hasResults ? "#4CAF50" : "#F44336";
+    }
+
+  </script>
 </body>
 
 </html>

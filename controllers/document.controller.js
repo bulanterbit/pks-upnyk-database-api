@@ -120,14 +120,18 @@ export const generateDocument = async (req, res, next) => {
               }),
               new TextRun({ break: 1 }),
               new TextRun({
-                text: `UNIVERSITAS PENDIDIKAN NASIONAL "VETERAN" YOGYAKARTA`,
+                text: `UNIVERSITAS PEMBANGUNAN NASIONAL "VETERAN" YOGYAKARTA`,
                 bold: true,
                 size: 24,
               }),
               new TextRun({ break: 1 }),
               new TextRun({ text: `DAN`, bold: true, size: 24 }),
               new TextRun({ break: 1 }),
-              new TextRun({ text: `${pihakKedua.nama}`, bold: true, size: 24 }),
+              new TextRun({
+                text: `${pihakKedua.instansi}`,
+                bold: true,
+                size: 24,
+              }),
             ],
             alignment: AlignmentType.CENTER,
           }),
@@ -215,7 +219,7 @@ export const generateDocument = async (req, res, next) => {
                         style: "Normal",
                         children: [
                           new TextRun({
-                            text: `${pihakKedua.nomor}`,
+                            text: "......................",
                             size: 24,
                             bold: true,
                           }),
@@ -885,7 +889,7 @@ export const generateDocument = async (req, res, next) => {
                         style: "Normal",
                         children: [
                           new TextRun({
-                            text: `Kegiatan pengabdian dengan ${content.judul}.`,
+                            text: `Kegiatan pengabdian dalam rangka ${content.judul}.`,
                             bold: false,
                             size: 24,
                           }),
