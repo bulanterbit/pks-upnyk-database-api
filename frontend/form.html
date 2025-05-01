@@ -191,7 +191,7 @@
                 }
 
                 // Send data to backend API to create PKS
-                const response = await fetch('http://localhost:3000/api/pks', {
+                const response = await fetch(`${BASE_URL}/api/pks`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -212,7 +212,7 @@
                     const logoFormData = new FormData();
                     logoFormData.append('logo', logoFile);
 
-                    const logoResponse = await fetch(`http://localhost:3000/api/upload/logo/${pksId}`, {
+                    const logoResponse = await fetch(`${BASE_URL}/api/upload/logo/${pksId}`, {
                         method: 'POST',
                         body: logoFormData
                     });
@@ -223,7 +223,7 @@
                 }
 
                 // Generate and send document via email
-                const emailResponse = await fetch(`http://localhost:3000/api/pks/${pksId}/send-email`, {
+                const emailResponse = await fetch(`${BASE_URL}/api/pks/${pksId}/send-email`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -250,6 +250,7 @@
             }
         });
     </script>
+    <script src="utils.js"></script>
 </body>
 
 </html>

@@ -716,7 +716,7 @@
       errorContainer.style.display = "none";
 
       try {
-        const response = await fetch("http://localhost:3000/api/pks");
+        const response = await fetch(`${BASE_URL}/api/pks`);
 
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -925,6 +925,7 @@
     }
 
   </script>
+  <script src="utils.js"></script>
 </body>
 
 </html>

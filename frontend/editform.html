@@ -358,7 +358,7 @@
         data.diperbaraiOleh = "admin"; // Replace with actual user
         data.diperbaraiPada = new Date();
 
-        const response = await fetch(`http://localhost:3000/api/pks/${id}`, {
+        const response = await fetch(`${BASE_URL}/api/pks/${id}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -387,7 +387,7 @@
 
     async function updatePKSWithFiles(id, formData) {
       try {
-        const response = await fetch(`http://localhost:3000/api/pks/${id}/upload`, {
+        const response = await fetch(`${BASE_URL}/api/pks/${id}/upload`, {
           method: 'PUT',
           body: formData,
         });
@@ -411,6 +411,7 @@
       }
     }
   </script>
+  <script src="utils.js"></script>
 </body>
 
 </html>

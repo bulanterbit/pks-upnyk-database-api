@@ -581,7 +581,7 @@
       errorContainer.style.display = "none";
 
       try {
-        const response = await fetch("http://localhost:3000/api/pks");
+        const response = await fetch(`${BASE_URL}/api/pks`);
 
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -713,7 +713,7 @@
       const errorContainer = document.getElementById("errorContainer");
 
       try {
-        const response = await fetch(`http://localhost:3000/api/pks/${id}`, {
+        const response = await fetch(`${BASE_URL}/api/pks/${id}`, {
           method: "DELETE",
         });
 
@@ -863,6 +863,7 @@
       document.getElementById("noResults").style.display = visibleRows.length === 0 ? "block" : "none";
     }
   </script>
+  <script src="utils.js"></script>
 </body>
 
 </html>

@@ -255,8 +255,7 @@
       $('#downloadFormBtn').click(function () {
         const urlParams = new URLSearchParams(window.location.search);
         const pksId = urlParams.get('id');
-        const serverUrl = 'http://localhost:3000';
-        const templateUrl = `${serverUrl}/api/document/${pksId}`;
+        const templateUrl = `${BASE_URL}/api/document/${pksId}`;
 
         $('#downloadFormDocx').attr('action', templateUrl);
         $('#downloadFormDocx').submit();
@@ -277,7 +276,7 @@
         formData.append('file', file);
 
         try {
-          const response = await fetch(`http://localhost:3000/api/upload/pdf/${pksId}`, {
+          const response = await fetch(`${BASE_URL}/api/upload/pdf/${pksId}`, {
             method: 'POST',
             body: formData
           });
@@ -310,7 +309,7 @@
         formData.append('logo', file);
 
         try {
-          const response = await fetch(`http://localhost:3000/api/upload/logo/${pksId}`, {
+          const response = await fetch(`${BASE_URL}/api/upload/logo/${pksId}`, {
             method: 'POST',
             body: formData
           });
@@ -332,7 +331,7 @@
       $("#deleteDocBtn").click(async function () {
         if (confirm("Apakah Anda yakin ingin menghapus dokumen ini?")) {
           try {
-            const response = await fetch(`http://localhost:3000/api/file/${pksId}.pdf`, {
+            const response = await fetch(`${BASE_URL}/api/file/${pksId}.pdf`, {
               method: 'DELETE'
             });
 
@@ -353,7 +352,7 @@
       $("#deleteLogoBtn").click(async function () {
         if (confirm("Apakah Anda yakin ingin menghapus logo ini?")) {
           try {
-            const response = await fetch(`http://localhost:3000/api/pks/${pksId}/logo`, {
+            const response = await fetch(`${BASE_URL}/api/pks/${pksId}/logo`, {
               method: 'DELETE'
             });
 
@@ -372,12 +371,12 @@
 
       // Setup download document button
       $("#downloadDocBtn").click(function () {
-        window.open(`http://localhost:3000/api/file/${pksId}.pdf`, '_blank');
+        window.open(`${BASE_URL}/api/file/${pksId}.pdf`, '_blank');
       });
 
       // Setup download logo button
       $("#downloadLogoBtn").click(function () {
-        window.open(`http://localhost:3000/api/download/${pksId}/logo`, '_blank');
+        window.open(`${BASE_URL}/api/download/${pksId}/logo`, '_blank');
       });
     });
 
@@ -392,7 +391,7 @@
 
     async function fetchPKSData(id) {
       try {
-        const response = await fetch(`http://localhost:3000/api/pks/${id}`);
+        const response = await fetch(`${BASE_URL}/api/pks/${id}`);
 
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -468,6 +467,7 @@
       }
     }
   </script>
+  <script src="utils.js"></script>
 </body>
 
 </html>
