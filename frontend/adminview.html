@@ -289,6 +289,11 @@
       color: white;
     }
 
+    .upload-button {
+      background-color: #4CAF50;
+      color: white;
+    }
+
     .action-button:hover {
       opacity: 0.9;
     }
@@ -333,6 +338,17 @@
       padding: 1rem;
       color: white;
       background-color: #f44336;
+      border-radius: var(--border-radius);
+      margin-top: 1rem;
+      display: none;
+    }
+
+    /* Success message */
+    .success-container {
+      text-align: center;
+      padding: 1rem;
+      color: white;
+      background-color: #4CAF50;
       border-radius: var(--border-radius);
       margin-top: 1rem;
       display: none;
@@ -452,7 +468,7 @@
               <i class="fas fa-search"></i>
             </button>
           </div>
-          <a href="form.html" class="add-button">
+          <a href="formAdmin.html" class="add-button">
             <i class="fas fa-plus"></i>
             <span>Buat PKS Baru</span>
           </a>
@@ -467,6 +483,9 @@
         <!-- Error message container -->
         <div id="errorContainer" class="error-container"></div>
 
+        <!-- Success message container -->
+        <div id="successContainer" class="success-container"></div>
+
         <!-- Table Section -->
         <div class="table-responsive">
           <table id="pksTable">
@@ -476,7 +495,7 @@
                 <th data-sort="nomorInternal">Nomor Pihak Kedua <i class="fas fa-sort sort-icon"></i></th>
                 <th data-sort="pihakKesatu">Pihak Kesatu <i class="fas fa-sort sort-icon"></i></th>
                 <th data-sort="pihakKedua">Pihak Kedua <i class="fas fa-sort sort-icon"></i></th>
-                <th data-sort="tanggal">Tanggal TTD <i class="fas fa-sort sort-icon"></i></th>
+                <th data-sort="tanggal">Tanggal <i class="fas fa-sort sort-icon"></i></th>
                 <th data-sort="status">Status <i class="fas fa-sort sort-icon"></i></th>
                 <th>Action</th>
               </tr>
@@ -626,8 +645,9 @@
         tableBody.appendChild(row);
       });
 
-      // Add event listeners to the delete buttons
+      // Add event listeners to the buttons
       setupDeleteButtons();
+      setupUploadButtons();
     }
 
     // Create table row for a PKS item
@@ -648,32 +668,36 @@
       }
 
       // Determine status class and text
-      let statusClass = "status-draft";
-      let statusText = "Draft";
+      let statusClass = "draft";
+      let statusText = "draft";
 
       if (pks.properties?.status) {
         switch (pks.properties.status) {
           case "approved":
-            statusClass = "status-aktif";
-            statusText = "Disetujui";
+            statusClass = "approved";
+            statusText = "approved";
             break;
+
           case "menunggu review":
-            statusClass = "status-review";
-            statusText = "Menunggu Review";
+            statusClass = "menunggu review";
+            statusText = "menunggu review";
             break;
           case "rejected":
-            statusClass = "status-dibatalkan";
-            statusText = "Ditolak";
+            statusClass = "rejected";
+            statusText = "rejected";
             break;
           case "menunggu dokumen":
-            statusClass = "status-menunggu";
-            statusText = "Menunggu Dokumen";
+            statusClass = "menunggu dokumen";
+            statusText = "menunggu dokumen";
             break;
           default:
-            statusClass = "status-draft";
-            statusText = "Draft";
+            statusClass = "draft";
+            statusText = "draft";
         }
       }
+
+      // Store the current status for upload button display logic
+      row.setAttribute("data-status", pks.properties?.status || "draft");
 
       // Create table cells
       row.innerHTML = `
@@ -688,6 +712,10 @@
             <a href="detailadmin.html?id=${pks._id}" class="action-button detail-button">Detail</a>
             <a href="editform.html?id=${pks._id}" class="action-button edit-button">Edit</a>
             <button class="action-button delete-button" data-id="${pks._id}">Hapus</button>
+            ${pks.properties?.status === "draft" ?
+          `<button class="action-button upload-button" data-id="${pks._id}">
+                <i class="fas fa-upload"></i> Upload Dokumen
+              </button>` : ''}
           </div>
         </td>
       `;
@@ -706,6 +734,96 @@
           }
         });
       });
+    }
+
+    // Add event listeners to upload buttons
+    function setupUploadButtons() {
+      document.querySelectorAll(".upload-button").forEach((button) => {
+        button.addEventListener("click", function () {
+          const id = this.getAttribute("data-id");
+
+          if (confirm("Apakah Anda yakin ingin mengubah status menjadi menunggu review?")) {
+            updateStatusToReview(id);
+          }
+        });
+      });
+    }
+
+    // Update status to "menunggu review"
+    async function updateStatusToReview(id) {
+      const errorContainer = document.getElementById("errorContainer");
+      const successContainer = document.getElementById("successContainer");
+
+      // Hide previous messages
+      errorContainer.style.display = "none";
+      successContainer.style.display = "none";
+
+      try {
+        // Send update to backend
+        const response = await fetch(`${BASE_URL}/api/pks/${id}/status`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            status: "menunggu review"
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        const data = await response.json();
+
+        if (data.success) {
+          // Get the row and update the status cell
+          const row = document.querySelector(`tr[data-id="${id}"]`);
+          if (row) {
+            // Update status cell
+            const statusCell = row.querySelector('td[data-sort="status"]');
+            statusCell.innerHTML = '<span class="status-container status-review">menunggu review</span>';
+
+            // Update row data attribute
+            row.setAttribute("data-status", "menunggu review");
+
+            // Remove the upload button since it's no longer needed
+            const uploadButton = row.querySelector('.upload-button');
+            if (uploadButton) {
+              uploadButton.remove();
+            }
+
+            // Show success message
+            successContainer.textContent = "Status berhasil diubah menjadi Menunggu Review";
+            successContainer.style.display = "block";
+
+            // Update the data in our local array
+            const pksIndex = pksData.findIndex(pks => pks._id === id);
+            if (pksIndex !== -1) {
+              if (!pksData[pksIndex].properties) {
+                pksData[pksIndex].properties = {};
+              }
+              pksData[pksIndex].properties.status = "menunggu review";
+            }
+
+            // Hide success message after 3 seconds
+            setTimeout(() => {
+              successContainer.style.display = "none";
+            }, 3000);
+          }
+        } else {
+          throw new Error(data.message || "Failed to update status");
+        }
+      } catch (error) {
+        console.error("Error updating status:", error);
+        errorContainer.textContent = "Error: " + error.message;
+        errorContainer.style.display = "block";
+
+        // Hide error after 5 seconds
+        setTimeout(() => {
+          errorContainer.style.display = "none";
+        }, 5000);
+      }
     }
 
     // Delete PKS
@@ -730,6 +848,9 @@
             row.remove();
             checkTableEmpty();
           }
+
+          // Update the data in our local array
+          pksData = pksData.filter(pks => pks._id !== id);
         } else {
           throw new Error(data.message || "Failed to delete PKS");
         }

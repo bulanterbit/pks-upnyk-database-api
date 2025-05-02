@@ -18,11 +18,11 @@ const sendWeeklyReminders = async () => {
       "properties.status": "menunggu dokumen",
       "properties.notificationsSent": { $lt: 4 },
       $or: [
-        //{ "properties.lastNotificationDate": { $lte: sixDaysAgo } },
-        //{ "properties.lastNotificationDate": { $exists: false } },
-
+        { "properties.lastNotificationDate": { $lte: sixDaysAgo } },
         { "properties.lastNotificationDate": { $exists: false } },
-        { "properties.lastNotificationDate": { $exists: true } },
+
+        //{ "properties.lastNotificationDate": { $exists: false } },
+        //{ "properties.lastNotificationDate": { $exists: true } },
       ],
     });
 
@@ -57,8 +57,8 @@ const sendWeeklyReminders = async () => {
 // Jadwalkan cronjob untuk berjalan setiap minggu (Senin jam 9 pagi)
 // '0 9 * * 1' artinya: jam 9:00 setiap hari Senin
 const initCronJobs = () => {
-  //cron.schedule("0 9 * * 1", sendWeeklyReminders);
-  cron.schedule("*/1 * * * *", sendWeeklyReminders);
+  cron.schedule("0 9 * * 1", sendWeeklyReminders);
+  //cron.schedule("*/1 * * * *", sendWeeklyReminders);
   console.log("Weekly reminder cron job scheduled");
 
   // Untuk testing bisa gunakan interval yang lebih pendek

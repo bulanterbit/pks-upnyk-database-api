@@ -50,7 +50,8 @@ export const handlePdfUpload = (req, res) => {
         {
           "fileUpload.docName": fileName,
           "fileUpload.docPath": docPath,
-          // Status update: jika sudah upload dokumen, status berubah sesuai logic di model
+          // Update status to "menunggu review" after successful document upload
+          "properties.status": "menunggu review",
           "properties.uploadDate": new Date(),
         },
         { new: true, runValidators: true }

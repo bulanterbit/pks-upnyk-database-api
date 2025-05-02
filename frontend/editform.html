@@ -9,6 +9,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
   <style>
+    /* All previous styles remain the same */
     .navbar-custom {
       background-color: #2e7d32;
       padding: 15px 0;
@@ -30,6 +31,7 @@
       padding: 15px;
       border: 1px solid #ddd;
       border-radius: 5px;
+      position: relative;
     }
 
     .section-title {
@@ -52,37 +54,6 @@
       padding: 6px 12px;
     }
 
-    .array-item {
-      border: 1px solid #eee;
-      padding: 10px;
-      margin-bottom: 10px;
-      border-radius: 4px;
-      position: relative;
-    }
-
-    .input-group {
-      display: flex;
-      align-items: center;
-    }
-
-    .input-group .form-control {
-      border-radius: 4px 0 0 4px !important;
-    }
-
-    .remove-btn {
-      border-radius: 0 4px 4px 0 !important;
-      padding: 6px 12px;
-      height: 100%;
-      margin-left: -1px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    textarea.form-control {
-      min-height: 80px;
-    }
-
     .cols-3 {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -93,6 +64,168 @@
       .cols-3 {
         grid-template-columns: 1fr;
       }
+    }
+
+    /* Hint styles */
+    .hint-container {
+      position: relative;
+    }
+
+    .hint {
+      background-color: #f0f9ff;
+      border-left: 4px solid #2196f3;
+      padding: 10px 15px;
+      margin-bottom: 15px;
+      border-radius: 4px;
+      font-size: 13px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      position: relative;
+      cursor: pointer;
+    }
+
+    .hint-close {
+      position: absolute;
+      top: 5px;
+      right: 10px;
+      color: #666;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .hint-text {
+      margin-right: 20px;
+    }
+
+    /* Hint banner at the top */
+    .hint-banner {
+      background-color: #e8f5e9;
+      border-bottom: 1px solid #c8e6c9;
+      padding: 10px 0;
+      text-align: center;
+      position: relative;
+    }
+
+    .hint-banner-content {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 0 40px;
+    }
+
+    .hint-actions {
+      display: flex;
+      gap: 10px;
+      margin-left: 15px;
+    }
+
+    .hint-button {
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .hint-skip {
+      background-color: #f5f5f5;
+      color: #333;
+    }
+
+    .form-elem {
+      position: relative;
+      margin-bottom: 15px;
+    }
+
+    .field-hint {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      background-color: #e3f2fd;
+      padding: 8px;
+      border-radius: 4px;
+      margin-top: 5px;
+      font-size: 12px;
+      z-index: 10;
+      border-left: 3px solid #2196f3;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .help-icon {
+      color: #2196f3;
+      margin-left: 5px;
+      cursor: pointer;
+    }
+
+    /* Document upload styles */
+    .file-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px;
+      border-radius: 6px;
+      margin-bottom: 10px;
+    }
+
+    .file-item-pending {
+      background-color: #fff9c4;
+      border: 1px dashed #fbc02d;
+    }
+
+    .file-item-uploaded {
+      background-color: #e8f5e9;
+      border: 1px solid #81c784;
+    }
+
+    .file-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .document-alert {
+      display: flex;
+      align-items: center;
+      padding: 10px 15px;
+      border-radius: 6px;
+      margin-bottom: 15px;
+    }
+
+    .document-pending {
+      background-color: #fff9c4;
+      border-left: 4px solid #fbc02d;
+      color: #f57f17;
+    }
+
+    .document-uploaded {
+      background-color: #e8f5e9;
+      border-left: 4px solid #4caf50;
+      color: #2e7d32;
+    }
+
+    .status-message {
+      padding: 8px;
+      border-radius: 4px;
+      margin-top: 10px;
+      display: none;
+    }
+
+    .status-success {
+      background-color: #d1fae5;
+      color: #065f46;
+    }
+
+    .status-error {
+      background-color: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
     }
   </style>
 </head>
@@ -107,73 +240,149 @@
     </div>
   </header>
 
+  <!-- Hint Banner -->
+  <div id="hintBanner" class="hint-banner">
+    <div class="hint-banner-content">
+      <div>
+        <i class="fas fa-lightbulb text-yellow-500 mr-2"></i>
+        <span>Bantuan tersedia untuk memandu Anda dalam mengedit formulir ini</span>
+      </div>
+      <div class="hint-actions">
+        <button id="enableHints" class="hint-button">Aktifkan Bantuan</button>
+        <button id="skipHints" class="hint-button hint-skip">Lewati</button>
+      </div>
+    </div>
+  </div>
+
   <div class="container mx-auto px-6 py-8">
     <a href="adminview.html" class="text-green-600 hover:text-green-800 flex items-center">
       <i class="fas fa-arrow-left mr-2"></i> Kembali ke Daftar PKS
     </a>
   </div>
 
-  <div class="container mt-3 mb-4">
+  <div class="container mb-4">
     <form id="perjanjianForm">
       <!-- Informasi Dokumen -->
       <div class="form-section">
+        <div id="docHint" class="hint" style="display: none;">
+          <span class="hint-text">
+            <strong>Informasi Dokumen:</strong> Bagian ini untuk mengedit detail utama perjanjian kerjasama
+            Anda, termasuk judul dan tanggal efektif perjanjian.
+          </span>
+          <span class="hint-close"><i class="fas fa-times"></i></span>
+        </div>
         <div class="section-title">
           <h2 style="font-size: 16px">Informasi Dokumen</h2>
         </div>
         <div class="cols-3">
           <div class="form-elem">
-            <label class="form-label">Nomor Dokumen</label>
+            <label class="form-label">
+              Nomor Dokumen
+              <i class="fas fa-question-circle help-icon"
+                data-hint="Nomor dokumen yang telah ditetapkan secara otomatis oleh sistem"></i>
+            </label>
             <input type="text" class="form-control" name="content.nomor" placeholder="Nomor dokumen" readonly />
+            <div class="field-hint">Nomor dokumen yang telah ditetapkan secara otomatis oleh sistem</div>
           </div>
           <div class="form-elem">
-            <label class="form-label">Judul Perjanjian</label>
+            <label class="form-label">
+              Judul Perjanjian
+              <i class="fas fa-question-circle help-icon"
+                data-hint="Masukkan judul lengkap perjanjian kerja sama yang mencerminkan tujuan utama kerjasama"></i>
+            </label>
             <input type="text" class="form-control" name="content.judul" placeholder="Judul perjanjian" required />
+            <div class="field-hint">Masukkan judul lengkap perjanjian kerja sama yang mencerminkan tujuan utama
+              kerjasama</div>
           </div>
           <div class="form-elem">
-            <label class="form-label">Tanggal</label>
+            <label class="form-label">
+              Tanggal
+              <i class="fas fa-question-circle help-icon"
+                data-hint="Pilih tanggal saat perjanjian ini akan mulai berlaku"></i>
+            </label>
             <input type="date" class="form-control" name="content.tanggal" required />
+            <div class="field-hint">Pilih tanggal saat perjanjian ini akan mulai berlaku</div>
           </div>
         </div>
       </div>
 
       <!-- Pihak Kedua (Mitra) -->
       <div class="form-section">
+        <div id="mitraHint" class="hint" style="display: none;">
+          <span class="hint-text">
+            <strong>Pihak Kedua (Mitra):</strong> Isi informasi lengkap tentang mitra kerjasama Anda,
+            termasuk data kontak untuk komunikasi lebih lanjut.
+          </span>
+          <span class="hint-close"><i class="fas fa-times"></i></span>
+        </div>
         <div class="section-title">
           <h2 style="font-size: 16px">Pihak Kedua (Mitra)</h2>
         </div>
         <div class="cols-3">
           <div class="form-elem">
-            <label class="form-label">Instansi</label>
+            <label class="form-label">
+              Instansi
+              <i class="fas fa-question-circle help-icon" data-hint="Masukkan nama resmi instansi/perusahaan mitra"></i>
+            </label>
             <input type="text" class="form-control" name="pihakKedua.instansi" placeholder="Nama instansi" required />
+            <div class="field-hint">Masukkan nama resmi instansi/perusahaan mitra</div>
           </div>
           <div class="form-elem">
-            <label class="form-label">Nama</label>
+            <label class="form-label">
+              Nama
+              <i class="fas fa-question-circle help-icon"
+                data-hint="Masukkan nama lengkap orang yang mewakili mitra untuk menandatangani perjanjian"></i>
+            </label>
             <input type="text" class="form-control" name="pihakKedua.nama" placeholder="Nama perwakilan" required />
+            <div class="field-hint">Masukkan nama lengkap orang yang mewakili mitra untuk menandatangani perjanjian
+            </div>
           </div>
           <div class="form-elem">
-            <label class="form-label">Jabatan</label>
+            <label class="form-label">
+              Jabatan
+              <i class="fas fa-question-circle help-icon"
+                data-hint="Masukkan jabatan resmi perwakilan di instansi/perusahaan mitra"></i>
+            </label>
             <input type="text" class="form-control" name="pihakKedua.jabatan" placeholder="Jabatan perwakilan"
               required />
+            <div class="field-hint">Masukkan jabatan resmi perwakilan di instansi/perusahaan mitra</div>
           </div>
           <div class="form-elem">
-            <label class="form-label">Alamat</label>
+            <label class="form-label">
+              Alamat
+              <i class="fas fa-question-circle help-icon" data-hint="Masukkan alamat lengkap kantor mitra"></i>
+            </label>
             <input type="text" class="form-control" name="pihakKedua.alamat" placeholder="Alamat mitra" required />
+            <div class="field-hint">Masukkan alamat lengkap kantor mitra</div>
           </div>
           <div class="form-elem">
-            <label class="form-label">Nomor</label>
+            <label class="form-label">
+              Nomor Kontak
+              <i class="fas fa-question-circle help-icon" data-hint="Masukkan nomor telepon yang dapat dihubungi"></i>
+            </label>
             <input type="text" class="form-control" name="pihakKedua.nomor" placeholder="Nomor kontak" />
+            <div class="field-hint">Masukkan nomor telepon yang dapat dihubungi</div>
           </div>
         </div>
       </div>
 
       <!-- Properties -->
       <div class="form-section">
+        <div id="propertyHint" class="hint" style="display: none;">
+          <span class="hint-text">
+            <strong>Properties:</strong> Bagian ini untuk mengatur status dokumen PKS dan informasi tambahan.
+          </span>
+          <span class="hint-close"><i class="fas fa-times"></i></span>
+        </div>
         <div class="section-title">
           <h2 style="font-size: 16px">Properties</h2>
         </div>
         <div class="cols-3">
           <div class="form-elem">
-            <label class="form-label">Status</label>
+            <label class="form-label">
+              Status
+              <i class="fas fa-question-circle help-icon" data-hint="Pilih status terkini dari dokumen PKS"></i>
+            </label>
             <select class="form-select" name="properties.status" required>
               <option value="draft">Draft</option>
               <option value="menunggu dokumen">Menunggu Dokumen</option>
@@ -181,56 +390,99 @@
               <option value="approved">Approved</option>
               <option value="rejected">Rejected</option>
             </select>
+            <div class="field-hint">Pilih status terkini dari dokumen PKS</div>
           </div>
           <div class="form-elem">
-            <label class="form-label">Email</label>
+            <label class="form-label">
+              Email
+              <i class="fas fa-question-circle help-icon"
+                data-hint="Masukkan alamat email resmi untuk komunikasi terkait perjanjian ini"></i>
+            </label>
             <input type="email" class="form-control" name="properties.email" placeholder="Email kontak" required />
+            <div class="field-hint">Masukkan alamat email resmi untuk komunikasi terkait perjanjian ini</div>
           </div>
           <div class="form-elem">
-            <label class="form-label">Komentar</label>
+            <label class="form-label">
+              Komentar
+              <i class="fas fa-question-circle help-icon"
+                data-hint="Tambahkan catatan atau komentar terkait dokumen PKS ini"></i>
+            </label>
             <input type="text" class="form-control" name="properties.comment" placeholder="Komentar" />
+            <div class="field-hint">Tambahkan catatan atau komentar terkait dokumen PKS ini</div>
           </div>
         </div>
       </div>
 
-      <!-- File Upload -->
+      <!-- File Upload Section -->
       <div class="form-section">
-        <div class="section-title">
-          <h2 style="font-size: 16px">File Upload</h2>
+        <div id="fileHint" class="hint" style="display: none;">
+          <span class="hint-text">
+            <strong>Dokumen PKS:</strong> Bagian ini untuk mengunggah dokumen PKS yang sudah ditandatangani.
+          </span>
+          <span class="hint-close"><i class="fas fa-times"></i></span>
         </div>
-        <div class="cols-3">
-          <div class="form-elem">
-            <label class="form-label">Nama Dokumen</label>
-            <input type="text" class="form-control" name="fileUpload.docName" placeholder="Nama file dokumen" />
+        <div class="section-title">
+          <h2 style="font-size: 16px">Dokumen PKS</h2>
+        </div>
+
+        <!-- Document Status Alert -->
+        <div id="documentAlert" class="document-alert document-pending">
+          <i class="fas fa-exclamation-triangle mr-3"></i>
+          <span id="documentAlertText">Dokumen PKS belum diunggah. Silakan unggah dokumen yang sudah
+            ditandatangani.</span>
+        </div>
+
+        <!-- Current Document -->
+        <div id="documentFileSection">
+          <div id="documentFileInfo" class="file-item file-item-pending">
+            <div>
+              <span id="documentFileName" class="text-gray-600 italic">Belum ada dokumen</span>
+              <div id="uploadDate" class="text-xs text-gray-500 mt-1"></div>
+            </div>
+            <div class="file-actions">
+              <button id="downloadDocBtn" class="text-blue-600 hover:text-blue-800 disabled:opacity-50" disabled>
+                <i class="fas fa-download mr-1"></i> Download
+              </button>
+              <button id="deleteDocBtn" class="text-red-600 hover:text-red-800 disabled:opacity-50" disabled>
+                <i class="fas fa-trash mr-1"></i> Hapus
+              </button>
+            </div>
           </div>
-          <div class="form-elem">
-            <label class="form-label">Path Dokumen</label>
-            <input type="text" class="form-control" name="fileUpload.docPath" placeholder="Path file dokumen" />
-          </div>
-          <div class="form-elem">
-            <label class="form-label">Nama Logo</label>
-            <input type="text" class="form-control" name="fileUpload.logoName" placeholder="Nama file logo" />
-          </div>
-          <div class="form-elem">
-            <label class="form-label">Path Logo</label>
-            <input type="text" class="form-control" name="fileUpload.logoPath" placeholder="Path file logo" />
-          </div>
-          <div class="form-elem">
-            <label class="form-label">Upload Dokumen Baru</label>
-            <input type="file" class="form-control" name="newDocUpload" accept=".pdf" />
-          </div>
-          <div class="form-elem">
-            <label class="form-label">Upload Logo Baru</label>
-            <input type="file" class="form-control" name="newLogoUpload" accept="image/*" />
+        </div>
+
+        <!-- Upload Section -->
+        <div class="mt-6">
+          <h3 class="font-medium text-gray-700 mb-2">
+            Upload Dokumen PKS yang Sudah Ditandatangani
+          </h3>
+          <div id="uploadSection" class="space-y-3">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">
+                Dokumen PKS (PDF)
+              </label>
+              <input type="file" id="filledPksFile" name="filledPksFile"
+                class="w-full p-2 border border-gray-300 rounded-lg" accept=".pdf,.docx" />
+            </div>
+            <div class="action-buttons">
+              <button id="uploadDocBtn" type="button"
+                class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+                <i class="fas fa-upload mr-2"></i> Upload Dokumen
+              </button>
+              <button id="downloadTemplateBtn" type="button"
+                class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                <i class="fas fa-file-download mr-2"></i> Download Template
+              </button>
+            </div>
+            <div id="uploadStatus" class="status-message"></div>
           </div>
         </div>
       </div>
 
       <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
-        <button type="button" class="btn btn-secondary me-md-2 btn-sm">
+        <button type="button" class="btn btn-secondary me-md-2 btn-sm" id="cancelButton">
           Batal
         </button>
-        <button type="submit" class="btn btn-primary btn-sm">
+        <button type="submit" class="btn btn-primary btn-sm" id="submitButton">
           Simpan Perubahan
         </button>
       </div>
@@ -239,7 +491,117 @@
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
+    // Base URL for API
+    const BASE_URL = 'http://localhost:3000';
+
     $(document).ready(function () {
+      // Handle hints system
+      const hintBanner = document.getElementById('hintBanner');
+      const enableHints = document.getElementById('enableHints');
+      const skipHints = document.getElementById('skipHints');
+      const sectionHints = document.querySelectorAll('.hint');
+      const helpIcons = document.querySelectorAll('.help-icon');
+      const fieldHints = document.querySelectorAll('.field-hint');
+
+      // Set hint preferences in local storage
+      let hintsEnabled = localStorage.getItem('hintsEnabled') === 'true';
+
+      // Function to show all hints
+      function showAllHints() {
+        sectionHints.forEach(hint => {
+          hint.style.display = 'block';
+        });
+        helpIcons.forEach(icon => {
+          icon.style.display = 'inline-block';
+        });
+        localStorage.setItem('hintsEnabled', 'true');
+        hintsEnabled = true;
+      }
+
+      // Function to hide all hints
+      function hideAllHints() {
+        sectionHints.forEach(hint => {
+          hint.style.display = 'none';
+        });
+        helpIcons.forEach(icon => {
+          icon.style.display = 'none';
+        });
+        fieldHints.forEach(hint => {
+          hint.style.display = 'none';
+        });
+        localStorage.setItem('hintsEnabled', 'false');
+        hintsEnabled = false;
+      }
+
+      // Check saved preference
+      if (hintsEnabled === true) {
+        showAllHints();
+        hintBanner.style.display = 'none';
+      }
+
+      // Banner buttons
+      enableHints.addEventListener('click', function () {
+        showAllHints();
+        hintBanner.style.display = 'none';
+      });
+
+      skipHints.addEventListener('click', function () {
+        hideAllHints();
+        hintBanner.style.display = 'none';
+      });
+
+      // Close individual hints
+      document.querySelectorAll('.hint-close').forEach(close => {
+        close.addEventListener('click', function (e) {
+          e.stopPropagation();
+          this.parentElement.style.display = 'none';
+        });
+      });
+
+      // Show field hints on help icon hover
+      helpIcons.forEach(icon => {
+        icon.addEventListener('mouseenter', function () {
+          if (hintsEnabled) {
+            const hintText = this.getAttribute('data-hint');
+            const parent = this.closest('.form-elem');
+            const fieldHint = parent.querySelector('.field-hint');
+            fieldHint.textContent = hintText;
+            fieldHint.style.display = 'block';
+          }
+        });
+
+        icon.addEventListener('mouseleave', function () {
+          const parent = this.closest('.form-elem');
+          const fieldHint = parent.querySelector('.field-hint');
+          fieldHint.style.display = 'none';
+        });
+
+        // Also handle click for mobile devices
+        icon.addEventListener('click', function (e) {
+          if (hintsEnabled) {
+            e.preventDefault();
+            const parent = this.closest('.form-elem');
+            const fieldHint = parent.querySelector('.field-hint');
+
+            // Toggle the hint visibility
+            if (fieldHint.style.display === 'block') {
+              fieldHint.style.display = 'none';
+            } else {
+              // Hide all other hints first
+              fieldHints.forEach(h => h.style.display = 'none');
+              fieldHint.style.display = 'block';
+            }
+          }
+        });
+      });
+
+      // Initial state of help icons based on hint preference
+      if (!hintsEnabled) {
+        helpIcons.forEach(icon => {
+          icon.style.display = 'none';
+        });
+      }
+
       // Get the ID from URL parameters
       const urlParams = new URLSearchParams(window.location.search);
       const pksId = urlParams.get('id');
@@ -249,8 +611,113 @@
         fetchPKSData(pksId);
       }
 
-      // Handle form submission
-      $("#perjanjianForm").submit(function (e) {
+      // Cancel button functionality
+      document.getElementById('cancelButton').addEventListener('click', function () {
+        if (confirm('Apakah Anda yakin ingin membatalkan perubahan?')) {
+          window.location.href = 'adminview.html';
+        }
+      });
+
+      // Handle document upload
+      $("#uploadDocBtn").click(async function () {
+        const fileInput = document.getElementById('filledPksFile');
+        const file = fileInput.files[0];
+
+        if (!file) {
+          showStatusMessage('uploadStatus', 'Pilih file terlebih dahulu', 'error');
+          return;
+        }
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+          // Show loading state
+          const originalText = $(this).html();
+          $(this).html('<i class="fas fa-spinner fa-spin mr-2"></i> Uploading...');
+          $(this).prop('disabled', true);
+
+          const response = await fetch(`${BASE_URL}/api/upload/pdf/${pksId}`, {
+            method: 'POST',
+            body: formData
+          });
+
+          if (!response.ok) {
+            throw new Error(await response.text());
+          }
+
+          const result = await response.json();
+
+          // Update status to "Menunggu Review"
+          await fetch(`${BASE_URL}/api/pks/${pksId}/status`, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ status: "menunggu review" })
+          });
+
+          showStatusMessage('uploadStatus', 'Dokumen berhasil diunggah! Status berubah menjadi Menunggu Review', 'success');
+
+          // Reset button state
+          $(this).html(originalText);
+          $(this).prop('disabled', false);
+
+          // Clear file input
+          fileInput.value = '';
+
+          fetchPKSData(pksId); // Refresh data
+        } catch (error) {
+          console.error('Upload error:', error);
+          showStatusMessage('uploadStatus', `Gagal upload: ${error.message}`, 'error');
+          $(this).html('<i class="fas fa-upload mr-2"></i> Upload Dokumen');
+          $(this).prop('disabled', false);
+        }
+      });
+
+      // Setup delete document button
+      $("#deleteDocBtn").click(async function () {
+        if (confirm("Apakah Anda yakin ingin menghapus dokumen ini?")) {
+          try {
+            const response = await fetch(`${BASE_URL}/api/file/${pksId}.pdf`, {
+              method: 'DELETE'
+            });
+
+            if (!response.ok) {
+              throw new Error('Gagal menghapus dokumen');
+            }
+
+            // Update status back to "Draft"
+            await fetch(`${BASE_URL}/api/pks/${pksId}/status`, {
+              method: 'PATCH',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ status: "draft" })
+            });
+
+            showStatusMessage('uploadStatus', 'Dokumen berhasil dihapus. Status kembali ke Draft', 'success');
+            fetchPKSData(pksId); // Refresh data
+          } catch (error) {
+            console.error('Delete error:', error);
+            showStatusMessage('uploadStatus', `Gagal menghapus dokumen: ${error.message}`, 'error');
+          }
+        }
+      });
+
+      // Setup download document button
+      $("#downloadDocBtn").click(function () {
+        window.open(`${BASE_URL}/api/file/${pksId}.pdf`, '_blank');
+      });
+
+      // Setup download template button
+      $('#downloadTemplateBtn').click(function () {
+        const templateUrl = `${BASE_URL}/api/document/${pksId}`;
+        window.open(templateUrl, '_blank');
+      });
+
+      // Handle main form submission
+      $("#perjanjianForm").submit(async function (e) {
         e.preventDefault();
 
         // Prepare the form data
@@ -269,26 +736,50 @@
           current[keys[keys.length - 1]] = item.value;
         });
 
-        // Handle file uploads
-        const docFile = $('input[name="newDocUpload"]')[0].files[0];
-        const logoFile = $('input[name="newLogoUpload"]')[0].files[0];
+        // Handle document file upload
+        const docFile = $('#filledPksFile')[0].files[0];
 
-        if (docFile || logoFile) {
-          const fileData = new FormData();
-          if (docFile) fileData.append('docFile', docFile);
-          if (logoFile) fileData.append('logoFile', logoFile);
-          fileData.append('jsonData', JSON.stringify(formData));
+        try {
+          // Show loading state
+          const submitBtn = $("#submitButton");
+          const originalText = submitBtn.html();
+          submitBtn.html('<i class="fas fa-spinner fa-spin mr-2"></i> Menyimpan...');
+          submitBtn.prop('disabled', true);
 
-          updatePKSWithFiles(pksId, fileData);
-        } else {
-          updatePKS(pksId, formData);
+          if (docFile) {
+            const fileData = new FormData();
+            fileData.append('docFile', docFile);
+            fileData.append('jsonData', JSON.stringify(formData));
+
+            await updatePKSWithFiles(pksId, fileData);
+          } else {
+            await updatePKS(pksId, formData);
+          }
+
+          // Reset button state
+          submitBtn.html(originalText);
+          submitBtn.prop('disabled', false);
+        } catch (error) {
+          console.error('Error:', error);
+          alert('Error: ' + error.message);
+          $("#submitButton").html('Simpan Perubahan');
+          $("#submitButton").prop('disabled', false);
         }
       });
     });
 
+    function showStatusMessage(elementId, message, type) {
+      const element = $(`#${elementId}`);
+      element.text(message);
+      element.removeClass('status-success status-error');
+      element.addClass(type === 'success' ? 'status-success' : 'status-error');
+      element.show();
+      setTimeout(() => element.fadeOut(), 5000);
+    }
+
     async function fetchPKSData(id) {
       try {
-        const response = await fetch(`http://localhost:3000/api/pks/${id}`);
+        const response = await fetch(`${BASE_URL}/api/pks/${id}`);
 
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -298,6 +789,7 @@
 
         if (data.success && data.data) {
           populateForm(data.data);
+          updateDocumentDisplay(data.data);
         }
       } catch (error) {
         console.error('Error fetching PKS data:', error);
@@ -342,13 +834,44 @@
         setValue('properties.email', pksData.properties.email);
         setValue('properties.comment', pksData.properties.comment);
       }
+    }
 
-      // File Upload
-      if (pksData.fileUpload) {
-        setValue('fileUpload.docName', pksData.fileUpload.docName);
-        setValue('fileUpload.docPath', pksData.fileUpload.docPath);
-        setValue('fileUpload.logoName', pksData.fileUpload.logoName);
-        setValue('fileUpload.logoPath', pksData.fileUpload.logoPath);
+    function updateDocumentDisplay(pksData) {
+      // Format date time for upload date
+      function formatDateTime(dateString) {
+        if (!dateString) return "";
+        const date = new Date(dateString);
+        return `Diunggah pada: ${date.toLocaleDateString("id-ID")} ${date.toLocaleTimeString("id-ID")}`;
+      }
+
+      // File Upload section
+      if (pksData?.fileUpload) {
+        // Document file
+        if (pksData.fileUpload.docName) {
+          $("#documentFileName")
+            .text(pksData.fileUpload.docName)
+            .removeClass("italic text-gray-600")
+            .addClass("text-gray-800");
+          $("#uploadDate").text(formatDateTime(pksData.fileUpload.uploadDate));
+          $("#downloadDocBtn, #deleteDocBtn").prop("disabled", false);
+
+          // Update document alert
+          $("#documentAlert").removeClass("document-pending").addClass("document-uploaded");
+          $("#documentAlertText").html('<strong>Dokumen PKS telah diunggah.</strong>');
+          $("#documentFileInfo").removeClass("file-item-pending").addClass("file-item-uploaded");
+        } else {
+          $("#documentFileName")
+            .text("Belum ada dokumen")
+            .addClass("italic text-gray-600")
+            .removeClass("text-gray-800");
+          $("#uploadDate").text("");
+          $("#downloadDocBtn, #deleteDocBtn").prop("disabled", true);
+
+          // Update document alert
+          $("#documentAlert").removeClass("document-uploaded").addClass("document-pending");
+          $("#documentAlertText").html('<strong>Dokumen PKS belum diunggah.</strong> Silakan unggah dokumen yang sudah ditandatangani.');
+          $("#documentFileInfo").removeClass("file-item-uploaded").addClass("file-item-pending");
+        }
       }
     }
 

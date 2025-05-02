@@ -54,16 +54,8 @@
       padding: 12px;
       border-radius: 6px;
       margin-bottom: 10px;
-    }
-
-    .file-item-pending {
-      background-color: #fff9c4;
-      border: 1px dashed #fbc02d;
-    }
-
-    .file-item-uploaded {
-      background-color: #e8f5e9;
-      border: 1px solid #81c784;
+      background-color: #f8f9fa;
+      border: 1px solid #dee2e6;
     }
 
     .file-actions {
@@ -191,26 +183,6 @@
       align-items: center;
       gap: 8px;
     }
-
-    .document-alert {
-      display: flex;
-      align-items: center;
-      padding: 10px 15px;
-      border-radius: 6px;
-      margin-bottom: 15px;
-    }
-
-    .document-pending {
-      background-color: #fff9c4;
-      border-left: 4px solid #fbc02d;
-      color: #f57f17;
-    }
-
-    .document-uploaded {
-      background-color: #e8f5e9;
-      border-left: 4px solid #4caf50;
-      color: #2e7d32;
-    }
   </style>
 </head>
 
@@ -337,16 +309,9 @@
       </div>
       <h2 class="detail-title">Dokumen PKS</h2>
 
-      <!-- Document Status Alert -->
-      <div id="documentAlert" class="document-alert document-pending">
-        <i class="fas fa-exclamation-triangle mr-3"></i>
-        <span id="documentAlertText">Dokumen PKS belum diunggah. Silakan unggah dokumen yang sudah
-          ditandatangani.</span>
-      </div>
-
       <!-- Current Document -->
       <div id="documentFileSection">
-        <div id="documentFileInfo" class="file-item file-item-pending">
+        <div id="documentFileInfo" class="file-item">
           <div>
             <span id="documentFileName" class="text-gray-600 italic">Belum ada dokumen</span>
             <div id="uploadDate" class="text-xs text-gray-500 mt-1"></div>
@@ -483,7 +448,7 @@
 
       // Setup download template button
       $('#downloadTemplateBtn').click(function () {
-        const templateUrl = `${BASE_URL}/api/document/template`;
+        const templateUrl = `${BASE_URL}/api/document/${pksId}`;
         window.open(templateUrl, '_blank');
       });
 
@@ -525,7 +490,7 @@
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ status: "status-review" })
+            body: JSON.stringify({ status: "menunggu review" })
           });
 
           showStatusMessage('uploadStatus', 'Dokumen berhasil diunggah! Status berubah menjadi Menunggu Review', 'success');
@@ -562,7 +527,7 @@
               headers: {
                 'Content-Type': 'application/json',
               },
-              body: JSON.stringify({ status: "Draft" })
+              body: JSON.stringify({ status: "draft" })
             });
 
             showStatusMessage('uploadStatus', 'Dokumen berhasil dihapus. Status kembali ke Draft', 'success');
@@ -596,7 +561,7 @@
                 'Content-Type': 'application/json',
               },
               body: JSON.stringify({
-                status: "Disetujui",
+                status: "approved",
                 comment: comment || null
               })
             });
@@ -639,7 +604,7 @@
                 'Content-Type': 'application/json',
               },
               body: JSON.stringify({
-                status: "Ditolak",
+                status: "rejected",
                 comment: comment
               })
             });
@@ -716,57 +681,32 @@
 
         let statusText = "";
         let badgeClass = "";
-        let docAlert = $("#documentAlert");
         let docFileInfo = $("#documentFileInfo");
 
         switch (status) {
           case "Draft":
-            statusText = "Draft";
+            statusText = "draft";
             badgeClass = "status-draft";
             $("#docStatusMessage").text("Dokumen belum diunggah");
             $("#adminActions").hide();
-
-            // Update document alert
-            docAlert.removeClass("document-uploaded").addClass("document-pending");
-            $("#documentAlertText").html('<strong>Dokumen PKS belum diunggah.</strong> Silakan unggah dokumen yang sudah ditandatangani.');
-            docFileInfo.removeClass("file-item-uploaded").addClass("file-item-pending");
-
             break;
           case "Menunggu Review":
-            statusText = "Menunggu Review";
+            statusText = "menunggu review";
             badgeClass = "status-review";
             $("#docStatusMessage").text("Dokumen telah diunggah dan menunggu verifikasi");
             $("#adminActions").show();
-
-            // Update document alert
-            docAlert.removeClass("document-pending").addClass("document-uploaded");
-            $("#documentAlertText").html('<strong>Dokumen PKS telah diunggah.</strong> Menunggu verifikasi admin.');
-            docFileInfo.removeClass("file-item-pending").addClass("file-item-uploaded");
-
             break;
           case "Disetujui":
-            statusText = "Disetujui";
+            statusText = "approved";
             badgeClass = "status-approved";
             $("#docStatusMessage").text("Dokumen telah disetujui");
             $("#adminActions").hide();
-
-            // Update document alert
-            docAlert.removeClass("document-pending").addClass("document-uploaded");
-            $("#documentAlertText").html('<strong>Dokumen PKS telah disetujui.</strong> Perjanjian kerjasama ini telah aktif.');
-            docFileInfo.removeClass("file-item-pending").addClass("file-item-uploaded");
-
             break;
           case "Ditolak":
-            statusText = "Ditolak";
+            statusText = "rejected";
             badgeClass = "status-rejected";
             $("#docStatusMessage").text("Dokumen memerlukan perbaikan");
             $("#adminActions").hide();
-
-            // Update document alert
-            docAlert.removeClass("document-uploaded").addClass("document-pending");
-            $("#documentAlertText").html('<strong>Dokumen PKS ditolak.</strong> Silakan periksa komentar dan unggah ulang dokumen yang diperbaiki.');
-            docFileInfo.removeClass("file-item-uploaded").addClass("file-item-pending");
-
             break;
           default:
             statusText = status;
@@ -795,7 +735,7 @@
       // Properties section
       if (pksData.properties) {
         $("#docEmail").text(pksData.properties.email || "-");
-        updateStatusDisplay(pksData.properties.status || "Draft");
+        updateStatusDisplay(pksData.properties.status || "draft");
 
         // Show comment if exists
         if (pksData.properties.comment) {
