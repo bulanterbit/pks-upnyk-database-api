@@ -1,5 +1,5 @@
 runtime: nodejs20
-service: pks-app # boleh diganti sesuai kebutuhan
+service: default # <--- ubah ini
 instance_class: F1
 
 handlers:
