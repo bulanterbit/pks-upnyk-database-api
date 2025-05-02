@@ -30,6 +30,7 @@
             padding: 15px;
             border: 1px solid #ddd;
             border-radius: 5px;
+            position: relative;
         }
 
         .section-title {
@@ -63,6 +64,100 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* Hint styles */
+        .hint-container {
+            position: relative;
+        }
+
+        .hint {
+            background-color: #f0f9ff;
+            border-left: 4px solid #2196f3;
+            padding: 10px 15px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            font-size: 13px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            cursor: pointer;
+        }
+
+        .hint-close {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            color: #666;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .hint-text {
+            margin-right: 20px;
+        }
+
+        /* Hint banner at the top */
+        .hint-banner {
+            background-color: #e8f5e9;
+            border-bottom: 1px solid #c8e6c9;
+            padding: 10px 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .hint-banner-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0 40px;
+        }
+
+        .hint-actions {
+            display: flex;
+            gap: 10px;
+            margin-left: 15px;
+        }
+
+        .hint-button {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .hint-skip {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .form-elem {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .field-hint {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background-color: #e3f2fd;
+            padding: 8px;
+            border-radius: 4px;
+            margin-top: 5px;
+            font-size: 12px;
+            z-index: 10;
+            border-left: 3px solid #2196f3;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .help-icon {
+            color: #2196f3;
+            margin-left: 5px;
+            cursor: pointer;
+        }
     </style>
 </head>
 
@@ -76,6 +171,20 @@
         </div>
     </header>
 
+    <!-- Hint Banner -->
+    <div id="hintBanner" class="hint-banner">
+        <div class="hint-banner-content">
+            <div>
+                <i class="fas fa-lightbulb text-yellow-500 mr-2"></i>
+                <span>Bantuan tersedia untuk memandu Anda dalam mengisi formulir ini</span>
+            </div>
+            <div class="hint-actions">
+                <button id="enableHints" class="hint-button">Aktifkan Bantuan</button>
+                <button id="skipHints" class="hint-button hint-skip">Lewati</button>
+            </div>
+        </div>
+    </div>
+
     <div class="container mx-auto px-6 py-8">
         <a href="index.html" class="text-green-600 hover:text-green-800 flex items-center">
             <i class="fas fa-arrow-left mr-2"></i> Kembali ke Daftar PKS
@@ -86,62 +195,122 @@
         <form id="perjanjianForm">
             <!-- Informasi Dokumen -->
             <div class="form-section">
+                <div id="docHint" class="hint" style="display: none;">
+                    <span class="hint-text">
+                        <strong>Informasi Dokumen:</strong> Bagian ini untuk mengisi detail utama perjanjian kerjasama
+                        Anda, termasuk judul dan tanggal efektif perjanjian.
+                    </span>
+                    <span class="hint-close"><i class="fas fa-times"></i></span>
+                </div>
                 <div class="section-title">
                     <h2 style="font-size: 16px;">Informasi Dokumen</h2>
                 </div>
                 <div class="cols-3">
                     <div class="form-elem">
-                        <label class="form-label">Judul Perjanjian</label>
+                        <label class="form-label">
+                            Judul Perjanjian
+                            <i class="fas fa-question-circle help-icon"
+                                data-hint="Masukkan judul lengkap perjanjian kerja sama yang mencerminkan tujuan utama kerjasama"></i>
+                        </label>
                         <input type="text" class="form-control" name="content.judul" placeholder="Judul perjanjian"
                             required>
+                        <div class="field-hint">Masukkan judul lengkap perjanjian kerja sama yang mencerminkan tujuan
+                            utama kerjasama</div>
                     </div>
                     <div class="form-elem">
-                        <label class="form-label">Tanggal Perjanjian</label>
+                        <label class="form-label">
+                            Tanggal Perjanjian
+                            <i class="fas fa-question-circle help-icon"
+                                data-hint="Pilih tanggal saat perjanjian ini akan mulai berlaku"></i>
+                        </label>
                         <input type="date" class="form-control" name="content.tanggal" required>
+                        <div class="field-hint">Pilih tanggal saat perjanjian ini akan mulai berlaku</div>
                     </div>
                 </div>
             </div>
 
             <!-- Pihak Kedua (Mitra) -->
             <div class="form-section">
+                <div id="mitraHint" class="hint" style="display: none;">
+                    <span class="hint-text">
+                        <strong>Pihak Kedua (Mitra):</strong> Isi informasi lengkap tentang mitra kerjasama Anda,
+                        termasuk data kontak untuk komunikasi lebih lanjut.
+                    </span>
+                    <span class="hint-close"><i class="fas fa-times"></i></span>
+                </div>
                 <div class="section-title">
                     <h2 style="font-size: 16px;">Pihak Kedua (Mitra)</h2>
                 </div>
                 <div class="cols-3">
                     <div class="form-elem">
-                        <label class="form-label">Nama Instansi</label>
+                        <label class="form-label">
+                            Nama Instansi
+                            <i class="fas fa-question-circle help-icon"
+                                data-hint="Masukkan nama resmi instansi/perusahaan mitra"></i>
+                        </label>
                         <input type="text" class="form-control" name="pihakKedua.instansi" placeholder="Nama Instansi"
                             required>
+                        <div class="field-hint">Masukkan nama resmi instansi/perusahaan mitra</div>
                     </div>
                     <div class="form-elem">
-                        <label class="form-label">Nama Perwakilan</label>
+                        <label class="form-label">
+                            Nama Perwakilan
+                            <i class="fas fa-question-circle help-icon"
+                                data-hint="Masukkan nama lengkap orang yang mewakili mitra untuk menandatangani perjanjian"></i>
+                        </label>
                         <input type="text" class="form-control" name="pihakKedua.nama" placeholder="Nama perwakilan"
                             required>
+                        <div class="field-hint">Masukkan nama lengkap orang yang mewakili mitra untuk menandatangani
+                            perjanjian</div>
                     </div>
                     <div class="form-elem">
-                        <label class="form-label">Jabatan</label>
+                        <label class="form-label">
+                            Jabatan
+                            <i class="fas fa-question-circle help-icon"
+                                data-hint="Masukkan jabatan resmi perwakilan di instansi/perusahaan mitra"></i>
+                        </label>
                         <input type="text" class="form-control" name="pihakKedua.jabatan"
                             placeholder="Jabatan perwakilan" required>
+                        <div class="field-hint">Masukkan jabatan resmi perwakilan di instansi/perusahaan mitra</div>
                     </div>
                     <div class="form-elem">
-                        <label class="form-label">Alamat</label>
+                        <label class="form-label">
+                            Alamat
+                            <i class="fas fa-question-circle help-icon"
+                                data-hint="Masukkan alamat lengkap kantor mitra"></i>
+                        </label>
                         <input type="text" class="form-control" name="pihakKedua.alamat" placeholder="Alamat mitra"
                             required>
+                        <div class="field-hint">Masukkan alamat lengkap kantor mitra</div>
                     </div>
                     <div class="form-elem">
-                        <label class="form-label">Nomor Pihak Kedua</label>
-                        <input type="text" class="form-control" name="pihakKedua.nomor"
-                            placeholder="Nomor pihak kedua (opsional)">
+                        <label class="form-label">
+                            Nomor Pihak Kedua
+                            <i class="fas fa-question-circle help-icon"
+                                data-hint="Masukkan nomor telepon yang dapat dihubungi"></i>
+                        </label>
+                        <input type="text" class="form-control" name="pihakKedua.nomor" placeholder="Nomor pihak kedua"
+                            required>
+                        <div class="field-hint">Masukkan nomor telepon yang dapat dihubungi</div>
                     </div>
                     <div class="form-elem">
-                        <label class="form-label">Email Kontak</label>
+                        <label class="form-label">
+                            Email Kontak
+                            <i class="fas fa-question-circle help-icon"
+                                data-hint="Masukkan alamat email resmi untuk komunikasi terkait perjanjian ini"></i>
+                        </label>
                         <input type="email" class="form-control" name="properties.email" placeholder="Email kontak"
                             required>
+                        <div class="field-hint">Masukkan alamat email resmi untuk komunikasi terkait perjanjian ini
+                        </div>
                     </div>
-                    <div class="form-elem">
-                        <label class="form-label">Logo Mitra</label>
-                        <input type="file" class="form-control" name="logo" accept="image/*" id="logoFile">
-                    </div>
+                </div>
+                <div id="mitraHint" class="hint" style="display: none;">
+                    <span class="hint-text">
+                        <strong>Kelanjutan:</strong> Setelah anda mengajukan PKS, kami akan mengirimkan dokumen untuk
+                        email yang tertera. Harap untuk diperiksa!
+                    </span>
+                    <span class="hint-close"><i class="fas fa-times"></i></span>
                 </div>
             </div>
 
@@ -154,99 +323,192 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Form submission - Save data to backend API
-        document.getElementById('perjanjianForm').addEventListener('submit', async function (e) {
-            e.preventDefault();
+        // Initialize hint system
+        document.addEventListener('DOMContentLoaded', function () {
+            const hintBanner = document.getElementById('hintBanner');
+            const enableHints = document.getElementById('enableHints');
+            const skipHints = document.getElementById('skipHints');
+            const sectionHints = document.querySelectorAll('.hint');
+            const helpIcons = document.querySelectorAll('.help-icon');
+            const fieldHints = document.querySelectorAll('.field-hint');
 
-            try {
-                // Collect form data
-                const formData = new FormData(this);
-                const data = {
-                    content: {},
-                    pihakKedua: {},
-                    properties: {
-                        status: "draft",
-                        uploadDate: new Date().toISOString()
+            // Set hint preferences in local storage
+            let hintsEnabled = localStorage.getItem('hintsEnabled') === 'true';
+
+            // Function to show all hints
+            function showAllHints() {
+                sectionHints.forEach(hint => {
+                    hint.style.display = 'block';
+                });
+                helpIcons.forEach(icon => {
+                    icon.style.display = 'inline-block';
+                });
+                localStorage.setItem('hintsEnabled', 'true');
+                hintsEnabled = true;
+            }
+
+            // Function to hide all hints
+            function hideAllHints() {
+                sectionHints.forEach(hint => {
+                    hint.style.display = 'none';
+                });
+                helpIcons.forEach(icon => {
+                    icon.style.display = 'none';
+                });
+                fieldHints.forEach(hint => {
+                    hint.style.display = 'none';
+                });
+                localStorage.setItem('hintsEnabled', 'false');
+                hintsEnabled = false;
+            }
+
+            // Check saved preference
+            if (hintsEnabled === true) {
+                showAllHints();
+                hintBanner.style.display = 'none';
+            }
+
+            // Banner buttons
+            enableHints.addEventListener('click', function () {
+                showAllHints();
+                hintBanner.style.display = 'none';
+            });
+
+            skipHints.addEventListener('click', function () {
+                hideAllHints();
+                hintBanner.style.display = 'none';
+            });
+
+            // Close individual hints
+            document.querySelectorAll('.hint-close').forEach(close => {
+                close.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    this.parentElement.style.display = 'none';
+                });
+            });
+
+            // Show field hints on help icon hover
+            helpIcons.forEach(icon => {
+                icon.addEventListener('mouseenter', function () {
+                    if (hintsEnabled) {
+                        const hintText = this.getAttribute('data-hint');
+                        const parent = this.closest('.form-elem');
+                        const fieldHint = parent.querySelector('.field-hint');
+                        fieldHint.textContent = hintText;
+                        fieldHint.style.display = 'block';
                     }
-                };
+                });
 
-                // Convert FormData to object with the expected structure
-                formData.forEach((value, key) => {
-                    // Handle nested objects
-                    const keys = key.split('.');
+                icon.addEventListener('mouseleave', function () {
+                    const parent = this.closest('.form-elem');
+                    const fieldHint = parent.querySelector('.field-hint');
+                    fieldHint.style.display = 'none';
+                });
 
-                    if (keys.length > 1) {
-                        if (!data[keys[0]]) {
-                            data[keys[0]] = {};
+                // Also handle click for mobile devices
+                icon.addEventListener('click', function (e) {
+                    if (hintsEnabled) {
+                        e.preventDefault();
+                        const parent = this.closest('.form-elem');
+                        const fieldHint = parent.querySelector('.field-hint');
+
+                        // Toggle the hint visibility
+                        if (fieldHint.style.display === 'block') {
+                            fieldHint.style.display = 'none';
+                        } else {
+                            // Hide all other hints first
+                            fieldHints.forEach(h => h.style.display = 'none');
+                            fieldHint.style.display = 'block';
                         }
-                        data[keys[0]][keys[1]] = value;
-                    } else if (key !== 'logo') { // Skip file inputs for now
-                        data[key] = value;
                     }
                 });
+            });
 
-                // Convert tanggal to Date object
-                if (data.content.tanggal) {
-                    data.content.tanggal = new Date(data.content.tanggal).toISOString();
-                }
+            // Form submission - Save data to backend API
+            document.getElementById('perjanjianForm').addEventListener('submit', async function (e) {
+                e.preventDefault();
 
-                // Send data to backend API to create PKS
-                const response = await fetch(`${BASE_URL}/api/pks`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(data)
-                });
+                try {
+                    // Collect form data
+                    const formData = new FormData(this);
+                    const data = {
+                        content: {},
+                        pihakKedua: {},
+                        properties: {
+                            status: "draft",
+                            uploadDate: new Date().toISOString()
+                        }
+                    };
 
-                if (!response.ok) {
-                    throw new Error('Gagal menyimpan data');
-                }
+                    // Convert FormData to object with the expected structure
+                    formData.forEach((value, key) => {
+                        // Handle nested objects
+                        const keys = key.split('.');
 
-                const result = await response.json();
-                const pksId = result.data._id;
-
-                // Handle logo upload if a file was selected
-                const logoFile = document.getElementById('logoFile').files[0];
-                if (logoFile && pksId) {
-                    const logoFormData = new FormData();
-                    logoFormData.append('logo', logoFile);
-
-                    const logoResponse = await fetch(`${BASE_URL}/api/upload/logo/${pksId}`, {
-                        method: 'POST',
-                        body: logoFormData
+                        if (keys.length > 1) {
+                            if (!data[keys[0]]) {
+                                data[keys[0]] = {};
+                            }
+                            data[keys[0]][keys[1]] = value;
+                        } else {
+                            data[key] = value;
+                        }
                     });
 
-                    if (!logoResponse.ok) {
-                        console.warn('Logo berhasil diupload tetapi gagal menyimpan logo');
+                    // Convert tanggal to Date object
+                    if (data.content.tanggal) {
+                        data.content.tanggal = new Date(data.content.tanggal).toISOString();
                     }
-                }
 
-                // Generate and send document via email
-                const emailResponse = await fetch(`${BASE_URL}/api/pks/${pksId}/send-email`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
+                    // Send data to backend API to create PKS
+                    const response = await fetch(`${BASE_URL}/api/pks`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(data)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Gagal menyimpan data');
                     }
+
+                    const result = await response.json();
+                    const pksId = result.data._id;
+
+                    // Generate and send document via email
+                    const emailResponse = await fetch(`${BASE_URL}/api/pks/${pksId}/send-email`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    });
+
+                    if (!emailResponse.ok) {
+                        throw new Error('Gagal mengirim email');
+                    }
+
+                    alert('Data perjanjian berhasil disimpan dan email telah dikirim!');
+                    window.location.href = 'index.html'; // Redirect to index page
+
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Terjadi kesalahan: ' + error.message);
+                }
+            });
+
+            // Cancel button functionality
+            document.getElementById('cancelButton').addEventListener('click', function () {
+                if (confirm('Apakah Anda yakin ingin membatalkan pengisian form?')) {
+                    window.location.href = 'index.html';
+                }
+            });
+
+            // Initial state of help icons based on hint preference
+            if (!hintsEnabled) {
+                helpIcons.forEach(icon => {
+                    icon.style.display = 'none';
                 });
-
-                if (!emailResponse.ok) {
-                    throw new Error('Gagal mengirim email');
-                }
-
-                alert('Data perjanjian berhasil disimpan dan email telah dikirim!');
-                window.location.href = 'index.html'; // Redirect to index page
-
-            } catch (error) {
-                console.error('Error:', error);
-                alert('Terjadi kesalahan: ' + error.message);
-            }
-        });
-
-        // Cancel button functionality
-        document.getElementById('cancelButton').addEventListener('click', function () {
-            if (confirm('Apakah Anda yakin ingin membatalkan pengisian form?')) {
-                window.location.href = 'index.html';
             }
         });
     </script>

@@ -5,6 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Detail PKS - UPNYK</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
   <style>
@@ -31,6 +32,12 @@
       margin-bottom: 10px;
     }
 
+    @media (max-width: 768px) {
+      .detail-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
     .detail-label {
       font-weight: 500;
       color: #555;
@@ -44,13 +51,116 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 8px 0;
-      border-bottom: 1px solid #eee;
+      padding: 12px;
+      border-radius: 6px;
+      margin-bottom: 10px;
+    }
+
+    .file-item-pending {
+      background-color: #fff9c4;
+      border: 1px dashed #fbc02d;
+    }
+
+    .file-item-uploaded {
+      background-color: #e8f5e9;
+      border: 1px solid #81c784;
     }
 
     .file-actions {
       display: flex;
       gap: 10px;
+    }
+
+    .status-badge {
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .status-draft {
+      background-color: #e0e0e0;
+      color: #424242;
+    }
+
+    .status-review {
+      background-color: #fff8e1;
+      color: #ff8f00;
+    }
+
+    .status-approved {
+      background-color: #e8f5e9;
+      color: #2e7d32;
+    }
+
+    .status-rejected {
+      background-color: #ffebee;
+      color: #c62828;
+    }
+
+    .hint-container {
+      position: relative;
+    }
+
+    .hint {
+      background-color: #f0f9ff;
+      border-left: 4px solid #2196f3;
+      padding: 10px 15px;
+      margin-bottom: 15px;
+      border-radius: 4px;
+      font-size: 13px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      position: relative;
+      cursor: pointer;
+    }
+
+    .hint-close {
+      position: absolute;
+      top: 5px;
+      right: 10px;
+      color: #666;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .hint-text {
+      margin-right: 20px;
+    }
+
+    .hint-banner {
+      background-color: #e8f5e9;
+      border-bottom: 1px solid #c8e6c9;
+      padding: 10px 0;
+      text-align: center;
+      position: relative;
+    }
+
+    .hint-banner-content {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 0 40px;
+    }
+
+    .hint-actions {
+      display: flex;
+      gap: 10px;
+      margin-left: 15px;
+    }
+
+    .hint-button {
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .hint-skip {
+      background-color: #f5f5f5;
+      color: #333;
     }
 
     .status-message {
@@ -69,6 +179,38 @@
       background-color: #fee2e2;
       color: #b91c1c;
     }
+
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .document-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .document-alert {
+      display: flex;
+      align-items: center;
+      padding: 10px 15px;
+      border-radius: 6px;
+      margin-bottom: 15px;
+    }
+
+    .document-pending {
+      background-color: #fff9c4;
+      border-left: 4px solid #fbc02d;
+      color: #f57f17;
+    }
+
+    .document-uploaded {
+      background-color: #e8f5e9;
+      border-left: 4px solid #4caf50;
+      color: #2e7d32;
+    }
   </style>
 </head>
 
@@ -83,6 +225,20 @@
     </div>
   </header>
 
+  <!-- Hint Banner -->
+  <div id="hintBanner" class="hint-banner">
+    <div class="hint-banner-content">
+      <div>
+        <i class="fas fa-lightbulb text-yellow-500 mr-2"></i>
+        <span>Bantuan tersedia untuk memandu Anda dalam meninjau dokumen PKS ini</span>
+      </div>
+      <div class="hint-actions">
+        <button id="enableHints" class="hint-button">Aktifkan Bantuan</button>
+        <button id="skipHints" class="hint-button hint-skip">Lewati</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Main Content -->
   <main class="container mx-auto px-6 py-8">
     <!-- Back button -->
@@ -92,13 +248,38 @@
       </a>
     </div>
 
+    <!-- Document Status Card -->
+    <div class="detail-card">
+      <div id="statusHint" class="hint" style="display: none;">
+        <span class="hint-text">
+          <strong>Status Dokumen:</strong> Status menunjukkan tahapan proses PKS ini.
+          'Draft' berarti belum diunggah, 'Menunggu Review' berarti sudah diunggah dan menunggu verifikasi,
+          'Disetujui' berarti sudah diverifikasi, dan 'Ditolak' berarti perlu perbaikan.
+        </span>
+        <span class="hint-close"><i class="fas fa-times"></i></span>
+      </div>
+      <div class="flex justify-between items-center">
+        <div>
+          <h2 class="detail-title">Status Dokumen</h2>
+          <div class="document-status">
+            <span id="docStatusBadge" class="status-badge status-draft">Draft</span>
+            <span id="docStatusMessage" class="text-sm text-gray-600"></span>
+          </div>
+        </div>
+        <div id="docNumber" class="text-gray-500 text-sm"></div>
+      </div>
+    </div>
+
     <!-- PKS Details -->
     <div class="detail-card">
-      <h2 class="detail-title">Informasi Dokumen</h2>
-      <div class="detail-row">
-        <span class="detail-label">Nomor Dokumen:</span>
-        <span class="detail-value" id="docNumber"></span>
+      <div id="docInfoHint" class="hint" style="display: none;">
+        <span class="hint-text">
+          <strong>Informasi Dokumen:</strong> Bagian ini berisi detail utama perjanjian kerjasama termasuk judul,
+          tanggal, dan informasi pihak kedua. Pastikan semua informasi sesuai sebelum melanjutkan proses.
+        </span>
+        <span class="hint-close"><i class="fas fa-times"></i></span>
       </div>
+      <h2 class="detail-title">Informasi Dokumen</h2>
       <div class="detail-row">
         <span class="detail-label">Judul Perjanjian:</span>
         <span class="detail-value" id="docTitle"></span>
@@ -111,6 +292,13 @@
 
     <!-- Pihak Kedua -->
     <div class="detail-card">
+      <div id="mitraHint" class="hint" style="display: none;">
+        <span class="hint-text">
+          <strong>Pihak Kedua (Mitra):</strong> Informasi lengkap tentang mitra kerjasama.
+          Verifikasi kebenaran data sebelum melanjutkan proses review.
+        </span>
+        <span class="hint-close"><i class="fas fa-times"></i></span>
+      </div>
       <h2 class="detail-title">Pihak Kedua (Mitra)</h2>
       <div class="detail-row">
         <span class="detail-label">Nama Instansi:</span>
@@ -132,34 +320,37 @@
         <span class="detail-label">Nomor Kontak:</span>
         <span class="detail-value" id="secondPartyPhone"></span>
       </div>
-    </div>
-
-    <!-- Properties -->
-    <div class="detail-card">
-      <h2 class="detail-title">Status dan Informasi</h2>
-      <div class="detail-row">
-        <span class="detail-label">Status:</span>
-        <span class="detail-value" id="docStatus"></span>
-      </div>
       <div class="detail-row">
         <span class="detail-label">Email:</span>
         <span class="detail-value" id="docEmail"></span>
       </div>
-      <div class="detail-row">
-        <span class="detail-label">Komentar:</span>
-        <span class="detail-value" id="docComment"></span>
-      </div>
     </div>
 
-    <!-- File Upload Section -->
+    <!-- Document Upload Section -->
     <div class="detail-card">
-      <h2 class="detail-title">Dokumen dan File</h2>
+      <div id="uploadHint" class="hint" style="display: none;">
+        <span class="hint-text">
+          <strong>Unggah Dokumen:</strong> Mitra dapat mengunggah dokumen PKS yang sudah ditandatangani.
+          Setelah diunggah, status akan berubah menjadi 'Menunggu Review' dan admin akan menerima notifikasi.
+        </span>
+        <span class="hint-close"><i class="fas fa-times"></i></span>
+      </div>
+      <h2 class="detail-title">Dokumen PKS</h2>
 
-      <!-- Document File -->
+      <!-- Document Status Alert -->
+      <div id="documentAlert" class="document-alert document-pending">
+        <i class="fas fa-exclamation-triangle mr-3"></i>
+        <span id="documentAlertText">Dokumen PKS belum diunggah. Silakan unggah dokumen yang sudah
+          ditandatangani.</span>
+      </div>
+
+      <!-- Current Document -->
       <div id="documentFileSection">
-        <h3 class="font-medium text-gray-700 mb-2">Dokumen PKS</h3>
-        <div id="documentFileInfo" class="file-item">
-          <span id="documentFileName" class="text-gray-600 italic">Belum ada dokumen</span>
+        <div id="documentFileInfo" class="file-item file-item-pending">
+          <div>
+            <span id="documentFileName" class="text-gray-600 italic">Belum ada dokumen</span>
+            <div id="uploadDate" class="text-xs text-gray-500 mt-1"></div>
+          </div>
           <div class="file-actions">
             <button id="downloadDocBtn" class="text-blue-600 hover:text-blue-800 disabled:opacity-50" disabled>
               <i class="fas fa-download mr-1"></i> Download
@@ -171,77 +362,116 @@
         </div>
       </div>
 
-      <!-- Logo File -->
-      <div id="logoFileSection" class="mt-4">
-        <h3 class="font-medium text-gray-700 mb-2">Logo Mitra</h3>
-        <div id="logoFileInfo" class="file-item">
-          <span id="logoFileName" class="text-gray-600 italic">Belum ada logo</span>
-          <div class="file-actions">
-            <button id="downloadLogoBtn" class="text-blue-600 hover:text-blue-800 disabled:opacity-50" disabled>
-              <i class="fas fa-download mr-1"></i> Download
-            </button>
-            <button id="deleteLogoBtn" class="text-red-600 hover:text-red-800 disabled:opacity-50" disabled>
-              <i class="fas fa-trash mr-1"></i> Hapus
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Download Form Button -->
-      <div class="mt-6">
-        <!-- Hidden form for docx download -->
-        <form id="downloadFormDocx" method="GET" target="_blank" class="hidden"></form>
-
-        <button id="downloadFormBtn" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
-          <i class="fas fa-file-word mr-2"></i> Download Form PKS (.docx)
-        </button>
-
-        <p class="text-sm text-gray-500 mt-2">
-          Unduh template dokumen PKS untuk diisi manual
-        </p>
-      </div>
-
-      <!-- Upload Form Section -->
+      <!-- Upload Form -->
       <div class="mt-6">
         <h3 class="font-medium text-gray-700 mb-2">
-          Upload Dokumen yang Sudah Diisi
+          Upload Dokumen PKS yang Sudah Ditandatangani
         </h3>
         <form id="uploadForm" class="space-y-3">
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Dokumen PKS (PDF/DOCX)</label>
+            <label class="block text-sm font-medium text-gray-700 mb-1">
+              Dokumen PKS (PDF)
+            </label>
             <input type="file" id="filledPksFile" name="filledPksFile"
               class="w-full p-2 border border-gray-300 rounded-lg" accept=".pdf,.docx" required />
           </div>
-          <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
-            <i class="fas fa-upload mr-2"></i> Upload Dokumen
-          </button>
+          <div class="action-buttons">
+            <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+              <i class="fas fa-upload mr-2"></i> Upload Dokumen
+            </button>
+            <button id="downloadTemplateBtn" type="button"
+              class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+              <i class="fas fa-file-download mr-2"></i> Download Template
+            </button>
+          </div>
           <div id="uploadStatus" class="status-message"></div>
         </form>
       </div>
+    </div>
 
-      <!-- Upload Logo Section -->
-      <div class="mt-6">
-        <h3 class="font-medium text-gray-700 mb-2">
-          Upload Logo Mitra
-        </h3>
-        <form id="uploadLogoForm" class="space-y-3">
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Logo Mitra (JPG/PNG)</label>
-            <input type="file" id="logoFile" name="logo" class="w-full p-2 border border-gray-300 rounded-lg"
-              accept="image/*" required />
-          </div>
-          <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
-            <i class="fas fa-upload mr-2"></i> Upload Logo
-          </button>
-          <div id="logoUploadStatus" class="status-message"></div>
-        </form>
+    <!-- Admin Actions (only visible when status is 'Menunggu Review') -->
+    <div id="adminActions" class="detail-card" style="display: none;">
+      <div id="reviewHint" class="hint" style="display: none;">
+        <span class="hint-text">
+          <strong>Tindakan Admin:</strong> Setelah memeriksa dokumen, Anda dapat menyetujui atau menolak PKS ini.
+          Jika ditolak, berikan komentar untuk perbaikan.
+        </span>
+        <span class="hint-close"><i class="fas fa-times"></i></span>
       </div>
+      <h2 class="detail-title">Tindakan Admin</h2>
+      <form id="reviewForm" class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Komentar (Opsional)</label>
+          <textarea id="adminComment" class="w-full p-2 border border-gray-300 rounded-lg" rows="3"></textarea>
+        </div>
+        <div class="action-buttons">
+          <button id="approveBtn" type="button" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+            <i class="fas fa-check mr-2"></i> Setujui PKS
+          </button>
+          <button id="rejectBtn" type="button" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">
+            <i class="fas fa-times mr-2"></i> Tolak PKS
+          </button>
+        </div>
+      </form>
     </div>
   </main>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
     $(document).ready(function () {
+      // Initialize hint system
+      const hintBanner = document.getElementById('hintBanner');
+      const enableHints = document.getElementById('enableHints');
+      const skipHints = document.getElementById('skipHints');
+      const sectionHints = document.querySelectorAll('.hint');
+
+      // Set hint preferences in local storage
+      let hintsEnabled = localStorage.getItem('hintsEnabled') === 'true';
+
+      // Function to show all hints
+      function showAllHints() {
+        sectionHints.forEach(hint => {
+          hint.style.display = 'block';
+        });
+        localStorage.setItem('hintsEnabled', 'true');
+        hintsEnabled = true;
+      }
+
+      // Function to hide all hints
+      function hideAllHints() {
+        sectionHints.forEach(hint => {
+          hint.style.display = 'none';
+        });
+        localStorage.setItem('hintsEnabled', 'false');
+        hintsEnabled = false;
+      }
+
+      // Check saved preference
+      if (hintsEnabled === true) {
+        showAllHints();
+        hintBanner.style.display = 'none';
+      }
+
+      // Banner buttons
+      enableHints.addEventListener('click', function () {
+        showAllHints();
+        hintBanner.style.display = 'none';
+      });
+
+      skipHints.addEventListener('click', function () {
+        hideAllHints();
+        hintBanner.style.display = 'none';
+      });
+
+      // Close individual hints
+      document.querySelectorAll('.hint-close').forEach(close => {
+        close.addEventListener('click', function (e) {
+          e.stopPropagation();
+          this.parentElement.style.display = 'none';
+        });
+      });
+
       // Get the ID from URL parameters
       const urlParams = new URLSearchParams(window.location.search);
       const pksId = urlParams.get("id");
@@ -251,14 +481,10 @@
         fetchPKSData(pksId);
       }
 
-      // Setup download form button
-      $('#downloadFormBtn').click(function () {
-        const urlParams = new URLSearchParams(window.location.search);
-        const pksId = urlParams.get('id');
-        const templateUrl = `${BASE_URL}/api/document/${pksId}`;
-
-        $('#downloadFormDocx').attr('action', templateUrl);
-        $('#downloadFormDocx').submit();
+      // Setup download template button
+      $('#downloadTemplateBtn').click(function () {
+        const templateUrl = `${BASE_URL}/api/document/template`;
+        window.open(templateUrl, '_blank');
       });
 
       // Setup document upload form
@@ -276,6 +502,12 @@
         formData.append('file', file);
 
         try {
+          // Show loading state
+          const submitBtn = $(this).find('button[type="submit"]');
+          const originalText = submitBtn.html();
+          submitBtn.html('<i class="fas fa-spinner fa-spin mr-2"></i> Uploading...');
+          submitBtn.prop('disabled', true);
+
           const response = await fetch(`${BASE_URL}/api/upload/pdf/${pksId}`, {
             method: 'POST',
             body: formData
@@ -286,44 +518,29 @@
           }
 
           const result = await response.json();
-          showStatusMessage('uploadStatus', 'Dokumen berhasil diupload!', 'success');
+
+          // Update status to "Menunggu Review"
+          await fetch(`${BASE_URL}/api/pks/${pksId}/status`, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ status: "status-review" })
+          });
+
+          showStatusMessage('uploadStatus', 'Dokumen berhasil diunggah! Status berubah menjadi Menunggu Review', 'success');
+
+          // Reset form state
+          submitBtn.html(originalText);
+          submitBtn.prop('disabled', false);
+
+          // Clear file input
+          fileInput.value = '';
+
           fetchPKSData(pksId); // Refresh data
         } catch (error) {
           console.error('Upload error:', error);
           showStatusMessage('uploadStatus', `Gagal upload: ${error.message}`, 'error');
-        }
-      });
-
-      // Setup logo upload form
-      $("#uploadLogoForm").submit(async function (e) {
-        e.preventDefault();
-        const formData = new FormData();
-        const fileInput = document.getElementById('logoFile');
-        const file = fileInput.files[0];
-
-        if (!file) {
-          showStatusMessage('logoUploadStatus', 'Pilih file terlebih dahulu', 'error');
-          return;
-        }
-
-        formData.append('logo', file);
-
-        try {
-          const response = await fetch(`${BASE_URL}/api/upload/logo/${pksId}`, {
-            method: 'POST',
-            body: formData
-          });
-
-          if (!response.ok) {
-            throw new Error(await response.text());
-          }
-
-          const result = await response.json();
-          showStatusMessage('logoUploadStatus', 'Logo berhasil diupload!', 'success');
-          fetchPKSData(pksId); // Refresh data
-        } catch (error) {
-          console.error('Upload error:', error);
-          showStatusMessage('logoUploadStatus', `Gagal upload: ${error.message}`, 'error');
         }
       });
 
@@ -339,32 +556,20 @@
               throw new Error('Gagal menghapus dokumen');
             }
 
-            alert('Dokumen berhasil dihapus');
-            fetchPKSData(pksId); // Refresh data
-          } catch (error) {
-            console.error('Delete error:', error);
-            alert(`Gagal menghapus dokumen: ${error.message}`);
-          }
-        }
-      });
-
-      // Setup delete logo button
-      $("#deleteLogoBtn").click(async function () {
-        if (confirm("Apakah Anda yakin ingin menghapus logo ini?")) {
-          try {
-            const response = await fetch(`${BASE_URL}/api/pks/${pksId}/logo`, {
-              method: 'DELETE'
+            // Update status back to "Draft"
+            await fetch(`${BASE_URL}/api/pks/${pksId}/status`, {
+              method: 'PATCH',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ status: "Draft" })
             });
 
-            if (!response.ok) {
-              throw new Error('Gagal menghapus logo');
-            }
-
-            alert('Logo berhasil dihapus');
+            showStatusMessage('uploadStatus', 'Dokumen berhasil dihapus. Status kembali ke Draft', 'success');
             fetchPKSData(pksId); // Refresh data
           } catch (error) {
             console.error('Delete error:', error);
-            alert(`Gagal menghapus logo: ${error.message}`);
+            showStatusMessage('uploadStatus', `Gagal menghapus dokumen: ${error.message}`, 'error');
           }
         }
       });
@@ -374,9 +579,86 @@
         window.open(`${BASE_URL}/api/file/${pksId}.pdf`, '_blank');
       });
 
-      // Setup download logo button
-      $("#downloadLogoBtn").click(function () {
-        window.open(`${BASE_URL}/api/download/${pksId}/logo`, '_blank');
+      // Setup approve button
+      $("#approveBtn").click(async function () {
+        if (confirm("Apakah Anda yakin ingin menyetujui PKS ini?")) {
+          try {
+            const comment = $("#adminComment").val();
+
+            // Show loading state
+            const originalText = $(this).html();
+            $(this).html('<i class="fas fa-spinner fa-spin mr-2"></i> Memproses...');
+            $(this).prop('disabled', true);
+
+            const response = await fetch(`${BASE_URL}/api/pks/${pksId}/status`, {
+              method: 'PATCH',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                status: "Disetujui",
+                comment: comment || null
+              })
+            });
+
+            if (!response.ok) {
+              throw new Error('Gagal memperbarui status');
+            }
+
+            // Reset button state
+            $(this).html(originalText);
+            $(this).prop('disabled', false);
+
+            alert('PKS telah disetujui');
+            fetchPKSData(pksId); // Refresh data
+          } catch (error) {
+            console.error('Approve error:', error);
+            alert(`Gagal menyetujui PKS: ${error.message}`);
+          }
+        }
+      });
+
+      // Setup reject button
+      $("#rejectBtn").click(async function () {
+        const comment = $("#adminComment").val();
+        if (!comment) {
+          alert('Harap berikan komentar/alasan penolakan');
+          return;
+        }
+
+        if (confirm("Apakah Anda yakin ingin menolak PKS ini?")) {
+          try {
+            // Show loading state
+            const originalText = $(this).html();
+            $(this).html('<i class="fas fa-spinner fa-spin mr-2"></i> Memproses...');
+            $(this).prop('disabled', true);
+
+            const response = await fetch(`${BASE_URL}/api/pks/${pksId}/status`, {
+              method: 'PATCH',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                status: "Ditolak",
+                comment: comment
+              })
+            });
+
+            if (!response.ok) {
+              throw new Error('Gagal memperbarui status');
+            }
+
+            // Reset button state
+            $(this).html(originalText);
+            $(this).prop('disabled', false);
+
+            alert('PKS telah ditolak');
+            fetchPKSData(pksId); // Refresh data
+          } catch (error) {
+            console.error('Reject error:', error);
+            alert(`Gagal menolak PKS: ${error.message}`);
+          }
+        }
       });
     });
 
@@ -386,7 +668,7 @@
       element.removeClass('status-success status-error');
       element.addClass(type === 'success' ? 'status-success' : 'status-error');
       element.show();
-      setTimeout(() => element.fadeOut(), 3000);
+      setTimeout(() => element.fadeOut(), 5000);
     }
 
     async function fetchPKSData(id) {
@@ -420,9 +702,83 @@
         });
       }
 
+      // Format date time for upload date
+      function formatDateTime(dateString) {
+        if (!dateString) return "";
+        const date = new Date(dateString);
+        return `Diunggah pada: ${date.toLocaleDateString("id-ID")} ${date.toLocaleTimeString("id-ID")}`;
+      }
+
+      // Update status display
+      function updateStatusDisplay(status) {
+        const badge = $("#docStatusBadge");
+        badge.removeClass("status-draft status-review status-approved status-rejected");
+
+        let statusText = "";
+        let badgeClass = "";
+        let docAlert = $("#documentAlert");
+        let docFileInfo = $("#documentFileInfo");
+
+        switch (status) {
+          case "Draft":
+            statusText = "Draft";
+            badgeClass = "status-draft";
+            $("#docStatusMessage").text("Dokumen belum diunggah");
+            $("#adminActions").hide();
+
+            // Update document alert
+            docAlert.removeClass("document-uploaded").addClass("document-pending");
+            $("#documentAlertText").html('<strong>Dokumen PKS belum diunggah.</strong> Silakan unggah dokumen yang sudah ditandatangani.');
+            docFileInfo.removeClass("file-item-uploaded").addClass("file-item-pending");
+
+            break;
+          case "Menunggu Review":
+            statusText = "Menunggu Review";
+            badgeClass = "status-review";
+            $("#docStatusMessage").text("Dokumen telah diunggah dan menunggu verifikasi");
+            $("#adminActions").show();
+
+            // Update document alert
+            docAlert.removeClass("document-pending").addClass("document-uploaded");
+            $("#documentAlertText").html('<strong>Dokumen PKS telah diunggah.</strong> Menunggu verifikasi admin.');
+            docFileInfo.removeClass("file-item-pending").addClass("file-item-uploaded");
+
+            break;
+          case "Disetujui":
+            statusText = "Disetujui";
+            badgeClass = "status-approved";
+            $("#docStatusMessage").text("Dokumen telah disetujui");
+            $("#adminActions").hide();
+
+            // Update document alert
+            docAlert.removeClass("document-pending").addClass("document-uploaded");
+            $("#documentAlertText").html('<strong>Dokumen PKS telah disetujui.</strong> Perjanjian kerjasama ini telah aktif.');
+            docFileInfo.removeClass("file-item-pending").addClass("file-item-uploaded");
+
+            break;
+          case "Ditolak":
+            statusText = "Ditolak";
+            badgeClass = "status-rejected";
+            $("#docStatusMessage").text("Dokumen memerlukan perbaikan");
+            $("#adminActions").hide();
+
+            // Update document alert
+            docAlert.removeClass("document-uploaded").addClass("document-pending");
+            $("#documentAlertText").html('<strong>Dokumen PKS ditolak.</strong> Silakan periksa komentar dan unggah ulang dokumen yang diperbaiki.');
+            docFileInfo.removeClass("file-item-uploaded").addClass("file-item-pending");
+
+            break;
+          default:
+            statusText = status;
+            badgeClass = "status-draft";
+        }
+
+        badge.text(statusText).addClass(badgeClass);
+      }
+
       // Content section
       if (pksData.content) {
-        $("#docNumber").text(pksData.content.nomor || "-");
+        $("#docNumber").text(pksData.content.nomor ? `No. Dokumen: ${pksData.content.nomor}` : "");
         $("#docTitle").text(pksData.content.judul || "-");
         $("#docDate").text(formatDate(pksData.content.tanggal));
       }
@@ -438,9 +794,13 @@
 
       // Properties section
       if (pksData.properties) {
-        $("#docStatus").text(pksData.properties.status || "-");
         $("#docEmail").text(pksData.properties.email || "-");
-        $("#docComment").text(pksData.properties.comment || "-");
+        updateStatusDisplay(pksData.properties.status || "Draft");
+
+        // Show comment if exists
+        if (pksData.properties.comment) {
+          $("#docStatusMessage").append(`<div class="mt-1 text-sm">Komentar: ${pksData.properties.comment}</div>`);
+        }
       }
 
       // File Upload section
@@ -451,18 +811,15 @@
             .text(pksData.fileUpload.docName)
             .removeClass("italic text-gray-600")
             .addClass("text-gray-800");
+          $("#uploadDate").text(formatDateTime(pksData.fileUpload.uploadDate));
           $("#downloadDocBtn, #deleteDocBtn").prop("disabled", false);
-        }
-      }
-
-      if (pksData?.fileUpload) {
-        // Logo file
-        if (pksData.fileUpload.logoName) {
-          $("#logoFileName")
-            .text(pksData.fileUpload.logoName)
-            .removeClass("italic text-gray-600")
-            .addClass("text-gray-800");
-          $("#downloadLogoBtn, #deleteLogoBtn").prop("disabled", false);
+        } else {
+          $("#documentFileName")
+            .text("Belum ada dokumen")
+            .addClass("italic text-gray-600")
+            .removeClass("text-gray-800");
+          $("#uploadDate").text("");
+          $("#downloadDocBtn, #deleteDocBtn").prop("disabled", true);
         }
       }
     }
