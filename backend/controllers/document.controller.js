@@ -16,19 +16,11 @@ import {
 import terbilang from "terbilang";
 
 export const generateDocument = async (req, res, next) => {
-  const data = await PKS.findById(req.params.id);
-
   try {
     const data = await PKS.findById(req.params.id);
-
     if (!data) {
-      const error = new Error("PKS not found");
-      error.statusCode = 404;
-      throw error;
+      return res.status(404).send("PKS not found");
     }
-  } catch (error) {
-    next(error);
-  }
 
   // Content
   const content = data.content;
@@ -1395,30 +1387,20 @@ export const generateDocument = async (req, res, next) => {
     ],
   });
 
-  Packer.toBuffer(doc)
-  .then((buffer) => {
-    const id = req.params.id;
-    const filePath = `/tmp/pks-${id}.docx`;
+  const buffer = await Packer.toBuffer(doc);
 
-    fs.writeFile(filePath, buffer, (err) => {
-      if (err) {
-        console.error("Failed to write file:", err);
-        return res.status(500).send("Failed to generate document");
-      }
+    // Set header untuk download langsung
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename="pks-${req.params.id}.docx"`
+    );
+    res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+    
+    // Kirim buffer sebagai response
+    res.end(buffer);
 
-      res.download(filePath, (err) => {
-        if (err) {
-          console.error("Failed to download file:", err);
-          return res.status(500).send("Failed to download document");
-        }
-        fs.unlink(filePath, (err) => {
-          if (err) console.error("Failed to delete file:", err);
-        });
-      });
-    });
-  })
-  .catch((err) => {
-    console.error("Document generation error:", err);
+  } catch (error) {
+    console.error("Error:", error);
     res.status(500).send("Error generating document");
-  });
+  }
 };
