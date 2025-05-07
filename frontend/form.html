@@ -21,6 +21,40 @@
             font-size: 24px;
         }
 
+        /* Loading spinner styles */
+.loading-spinner {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #2e7d32;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Disabled button state */
+.btn-disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
         body {
             font-size: 14px;
         }
@@ -332,6 +366,8 @@
             const sectionHints = document.querySelectorAll('.hint');
             const helpIcons = document.querySelectorAll('.help-icon');
             const fieldHints = document.querySelectorAll('.field-hint');
+            const submitButton = this.querySelector('button[type="submit"]');
+            const loadingSpinner = document.getElementById('loadingSpinner');
 
             // Set hint preferences in local storage
             let hintsEnabled = localStorage.getItem('hintsEnabled') === 'true';
@@ -430,6 +466,11 @@
     e.preventDefault();
 
     try {
+        // Show loading spinner and disable button
+        loadingSpinner.style.display = 'flex';
+        submitButton.disabled = true;
+        submitButton.classList.add('btn-disabled');
+
         // Collect form data
         const formData = new FormData(this);
         const data = {
@@ -501,7 +542,12 @@
                 } catch (error) {
                     console.error('Error:', error);
                     alert('Terjadi kesalahan: ' + error.message);
-                }
+                } finally {
+        // Always hide spinner and re-enable button
+        loadingSpinner.style.display = 'none';
+        submitButton.disabled = false;
+        submitButton.classList.remove('btn-disabled');
+    }
             });
 
             // Cancel button functionality
@@ -520,6 +566,10 @@
         });
     </script>
     <script src="utils.js"></script>
+    <!-- Loading Spinner -->
+<div class="loading-spinner" id="loadingSpinner">
+    <div class="spinner"></div>
+</div>
 </body>
 
 </html>
