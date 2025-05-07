@@ -372,10 +372,29 @@
       }
     }
 
+    .flowchart-button {
+  margin-left: auto;
+  margin-right: 1rem;
+}
+
     @media (max-width: 768px) {
       .navbar-brand h1 {
         font-size: 1.2rem;
       }
+
+      .action-container {
+    flex-direction: column;
+  }
+  
+  .flowchart-button {
+    margin-left: 0;
+    margin-right: 0;
+    order: 2; /* Place between search and create button */
+  }
+
+  .add-button:not(.flowchart-button) {
+    order: 3;
+  }
 
       .navbar-logo {
         height: 2.5rem;
@@ -384,7 +403,10 @@
       .action-container {
         flex-direction: column;
         align-items: stretch;
+        gap: 1rem;
       }
+
+
 
       .search-box {
         max-width: 100%;
@@ -468,9 +490,12 @@
               <i class="fas fa-search"></i>
             </button>
           </div>
+          <a href="flowchartAdmin.html" class="add-button flowchart-button">
+            <span>Alur Pengajuan</span>
+          </a>
           <a href="formAdmin.html" class="add-button">
             <i class="fas fa-plus"></i>
-            <span>Buat PKS Baru</span>
+            <span>Buat PKS</span>
           </a>
         </div>
 
