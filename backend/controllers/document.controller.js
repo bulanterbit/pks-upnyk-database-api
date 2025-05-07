@@ -1,5 +1,4 @@
 import PKS from "../models/pks.model.js";
-import fs from "fs";
 import {
   Document,
   Packer,
@@ -12,50 +11,37 @@ import {
   TableBorders,
   WidthType,
 } from "docx";
-
 import terbilang from "terbilang";
 
 export const generateDocument = async (req, res, next) => {
-  const data = await PKS.findById(req.params.id);
-
   try {
     const data = await PKS.findById(req.params.id);
-
     if (!data) {
-      const error = new Error("PKS not found");
-      error.statusCode = 404;
-      throw error;
+      return res.status(404).json({ message: "Document not found" });
     }
-  } catch (error) {
-    next(error);
-  }
 
-  // Content
-  const content = data.content;
-  const tanggal = content.tanggal;
+    const content = data.content;
+    const tanggal = new Date(content.tanggal);
+    const pihakKedua = data.pihakKedua;
 
-  // Pihak Kedua
-  const pihakKedua = data.pihakKedua;
+    const capitalizeEachWord = (str) => {
+      return str.replace(/\b\w/g, (char) => char.toUpperCase());
+    };
 
-  const capitalizeEachWord = (str) => {
-    return str.replace(/\b\w/g, (char) => char.toUpperCase());
-  };
-  const namaHari = capitalizeEachWord(
-    tanggal.toLocaleDateString("id-ID", { weekday: "long" })
-  );
-  const namaBulan = capitalizeEachWord(
-    tanggal.toLocaleDateString("id-ID", { month: "long" })
-  );
-  const tanggalHuruf = capitalizeEachWord(terbilang(tanggal.getDate()));
-  const tahunHuruf = capitalizeEachWord(terbilang(tanggal.getFullYear()));
-  // Format (08-04-2025)
-  const formatAngka = `${tanggal.getDate().toString().padStart(2, "0")}-${(
-    tanggal.getMonth() + 1
-  )
-    .toString()
-    .padStart(2, "0")}-${tanggal.getFullYear()}`;
-  // Gabungkan kalimat lengkap
-  const kalimatTanggal = `${namaHari}, tanggal ${tanggalHuruf} bulan ${namaBulan} tahun ${tahunHuruf} (${formatAngka})`;
+    const namaHari = capitalizeEachWord(
+      tanggal.toLocaleDateString("id-ID", { weekday: "long" })
+    );
+    const namaBulan = capitalizeEachWord(
+      tanggal.toLocaleDateString("id-ID", { month: "long" })
+    );
+    const tanggalHuruf = capitalizeEachWord(terbilang(tanggal.getDate()));
+    const tahunHuruf = capitalizeEachWord(terbilang(tanggal.getFullYear()));
+    const formatAngka = `${tanggal.getDate().toString().padStart(2, "0")}-${(
+      tanggal.getMonth() + 1
+    )
+      .toString()
+      .padStart(2, "0")}-${tanggal.getFullYear()}`;
+    const kalimatTanggal = `${namaHari}, tanggal ${tanggalHuruf} bulan ${namaBulan} tahun ${tahunHuruf} (${formatAngka})`;
 
   // Load gambar (logo kiri)
   //const logoLeft = fs.readFileSync("logo/upn.png");
@@ -1395,22 +1381,17 @@ export const generateDocument = async (req, res, next) => {
     ],
   });
 
-  Packer.toBuffer(doc)
-    .then((buffer) => {
-      const id = req.params.id; // ✅ tambahkan ini dulu
-      const filePath = `./uploads/pks-${id}.docx`;
+  const buffer = await Packer.toBuffer(doc);
+    
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+    res.setHeader('Content-Disposition', `attachment; filename=pks-${req.params.id}.docx`);
+    res.send(buffer);
 
-      fs.writeFileSync(filePath, buffer);
-      res.download(filePath, (err) => {
-        if (err) {
-          console.error(err);
-        }
-        // Optionally, you can delete the file after download
-        fs.unlinkSync(filePath);
-      });
-    })
-    .catch((err) => {
-      console.error(err);
-      res.status(500).send("Error generating document");
+  } catch (error) {
+    console.error('Document generation error:', error);
+    res.status(500).json({
+      message: "Error generating document",
+      error: error.message
     });
+  }
 };
