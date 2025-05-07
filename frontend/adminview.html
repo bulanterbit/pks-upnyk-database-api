@@ -222,40 +222,40 @@
     }
 
     /* Status Containers */
-    .status-container {
-      display: inline-block;
-      padding: 0.4rem 1rem;
-      border-radius: 2rem;
-      font-size: 0.85rem;
-      font-weight: 500;
-      text-align: center;
-      min-width: 100px;
-    }
+.status-container {
+  display: inline-block;
+  padding: 0.4rem 1rem;
+  border-radius: 2rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-align: center;
+  min-width: 100px;
+}
 
-    .status-aktif {
-      background-color: #e8f5e9;
-      color: #2e7d32;
-    }
+.status-disetujui {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
 
-    .status-menunggu {
-      background-color: #beb9ee;
-      color: #2e357d;
-    }
+.status-menunggu {
+  background-color: #beb9ee;
+  color: #2e357d;
+}
 
-    .status-review {
-      background-color: #fff8e1;
-      color: #ff8f00;
-    }
+.status-review {
+  background-color: #fff8e1;
+  color: #ff8f00;
+}
 
-    .status-draft {
-      background-color: #eceff1;
-      color: #546e7a;
-    }
+.status-draft {
+  background-color: #eceff1;
+  color: #546e7a;
+}
 
-    .status-dibatalkan {
-      background-color: #ffebee;
-      color: #c62828;
-    }
+.status-ditolak {
+  background-color: #ffebee;
+  color: #c62828;
+}
 
     /* Action Buttons */
     .action-buttons {
@@ -522,11 +522,10 @@
 
       // Logout functionality
       document.getElementById("logoutBtn").addEventListener("click", function () {
-        if (confirm("Apakah Anda yakin ingin logout?")) {
-          window.location.href = "index.html";
-        }
+      if (confirm("Apakah Anda yakin ingin logout?")) {
+     logout(); // Fungsi dari auth.js
+      }
       });
-
       // Search functionality
       const searchInput = document.getElementById("searchInput");
       const searchButton = document.getElementById("searchButton");
@@ -668,33 +667,32 @@
       }
 
       // Determine status class and text
-      let statusClass = "draft";
-      let statusText = "draft";
+      let statusClass = "status-draft";
+let statusText = "Draft";
 
-      if (pks.properties?.status) {
-        switch (pks.properties.status) {
-          case "approved":
-            statusClass = "approved";
-            statusText = "approved";
-            break;
-
-          case "menunggu review":
-            statusClass = "menunggu review";
-            statusText = "menunggu review";
-            break;
-          case "rejected":
-            statusClass = "rejected";
-            statusText = "rejected";
-            break;
-          case "menunggu dokumen":
-            statusClass = "menunggu dokumen";
-            statusText = "menunggu dokumen";
-            break;
-          default:
-            statusClass = "draft";
-            statusText = "draft";
-        }
-      }
+if (pks.properties?.status) {
+  switch (pks.properties.status) {
+    case "approved":
+      statusClass = "status-disetujui";
+      statusText = "Disetujui";
+      break;
+    case "menunggu review":
+      statusClass = "status-review";
+      statusText = "Menunggu Review";
+      break;
+    case "rejected":
+      statusClass = "status-ditolak";
+      statusText = "Ditolak";
+      break;
+    case "menunggu dokumen":
+      statusClass = "status-menunggu";
+      statusText = "Menunggu Dokumen";
+      break;
+    default:
+      statusClass = "status-draft";
+      statusText = "Draft";
+  }
+}
 
       // Store the current status for upload button display logic
       row.setAttribute("data-status", pks.properties?.status || "draft");
@@ -985,6 +983,7 @@
     }
   </script>
   <script src="utils.js"></script>
+  <script src="auth.js"></script>
 </body>
 
 </html>

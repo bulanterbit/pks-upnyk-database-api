@@ -219,7 +219,7 @@ export const generateDocument = async (req, res, next) => {
                         style: "Normal",
                         children: [
                           new TextRun({
-                            text: "......................",
+                            text: `${pihakKedua.nomor}`,
                             size: 24,
                             bold: true,
                           }),

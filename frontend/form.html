@@ -426,34 +426,40 @@
 
             // Form submission - Save data to backend API
             document.getElementById('perjanjianForm').addEventListener('submit', async function (e) {
-                e.preventDefault();
+    e.preventDefault();
 
-                try {
-                    // Collect form data
-                    const formData = new FormData(this);
-                    const data = {
-                        content: {},
-                        pihakKedua: {},
-                        properties: {
-                            status: "draft",
-                            uploadDate: new Date().toISOString()
-                        }
-                    };
+    try {
+        // Collect form data
+        const formData = new FormData(this);
+        const data = {
+            content: {},
+            pihakKedua: {},
+            properties: {
+                status: "draft",
+                uploadDate: new Date().toISOString()
+            }
+        };
 
-                    // Convert FormData to object with the expected structure
-                    formData.forEach((value, key) => {
-                        // Handle nested objects
-                        const keys = key.split('.');
+        // Convert FormData to object with the expected structure
+        formData.forEach((value, key) => {
+            // Handle nested objects
+            const keys = key.split('.');
 
-                        if (keys.length > 1) {
-                            if (!data[keys[0]]) {
-                                data[keys[0]] = {};
-                            }
-                            data[keys[0]][keys[1]] = value;
-                        } else {
-                            data[key] = value;
-                        }
-                    });
+            if (keys.length > 1) {
+                if (!data[keys[0]]) {
+                    data[keys[0]] = {};
+                }
+                
+                // Khusus untuk field instansi, konversi ke uppercase
+                if (keys[0] === 'pihakKedua' && keys[1] === 'instansi') {
+                    data[keys[0]][keys[1]] = value.toUpperCase();
+                } else {
+                    data[keys[0]][keys[1]] = value;
+                }
+            } else {
+                data[key] = value;
+            }
+        });
 
                     // Convert tanggal to Date object
                     if (data.content.tanggal) {

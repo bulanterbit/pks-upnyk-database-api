@@ -924,6 +924,26 @@
         searchTerm === "" ? "#ddd" : hasResults ? "#4CAF50" : "#F44336";
     }
 
+    // Handle form submission
+loginForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const username = document.getElementById("username").value;
+  const password = document.getElementById("password").value;
+
+  // Static credentials (username: admin, password: admin123)
+  if (username === "admin" && password === "admin123") {
+    // Set session
+    sessionStorage.setItem("isLoggedIn", "true");
+    
+    // Redirect to adminview.html if login is successful
+    window.location.href = "adminview.html";
+  } else {
+    // Show error message
+    errorMessage.style.display = "block";
+  }
+});
+
   </script>
   <script src="utils.js"></script>
 </body>
