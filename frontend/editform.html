@@ -711,10 +711,33 @@
       });
 
       // Setup download template button
-      $('#downloadTemplateBtn').click(function () {
-        const templateUrl = `${BASE_URL}/api/document/${pksId}`;
-        window.open(templateUrl, '_blank');
-      });
+      $('#downloadTemplateBtn').click(async function () {
+  try {
+    const response = await fetch(`${BASE_URL}/api/document/${pksId}`);
+    
+    if (!response.ok) {
+      throw new Error('Gagal mengambil template');
+    }
+
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    
+    // Buat elemen <a> untuk trigger download
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `template-pks-${pksId}.docx`; // Nama file default
+    document.body.appendChild(a);
+    a.click();
+    
+    // Bersihkan
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+    
+  } catch (error) {
+    console.error('Error:', error);
+    alert('Gagal mengunduh template: ' + error.message);
+  }
+});
 
       // Handle main form submission
       $("#perjanjianForm").submit(async function (e) {
