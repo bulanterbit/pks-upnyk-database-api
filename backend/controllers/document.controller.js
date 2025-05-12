@@ -16,19 +16,11 @@ import {
 import terbilang from "terbilang";
 
 export const generateDocument = async (req, res, next) => {
-  const data = await PKS.findById(req.params.id);
-
   try {
     const data = await PKS.findById(req.params.id);
-
     if (!data) {
-      const error = new Error("PKS not found");
-      error.statusCode = 404;
-      throw error;
+      return res.status(404).send("PKS not found");
     }
-  } catch (error) {
-    next(error);
-  }
 
   // Content
   const content = data.content;
@@ -219,7 +211,7 @@ export const generateDocument = async (req, res, next) => {
                         style: "Normal",
                         children: [
                           new TextRun({
-                            text: "......................",
+                            text: `${pihakKedua.nomor}`,
                             size: 24,
                             bold: true,
                           }),
@@ -1395,22 +1387,20 @@ export const generateDocument = async (req, res, next) => {
     ],
   });
 
-  Packer.toBuffer(doc)
-    .then((buffer) => {
-      const id = req.params.id; // ✅ tambahkan ini dulu
-      const filePath = `./uploads/pks-${id}.docx`;
+  const buffer = await Packer.toBuffer(doc);
 
-      fs.writeFileSync(filePath, buffer);
-      res.download(filePath, (err) => {
-        if (err) {
-          console.error(err);
-        }
-        // Optionally, you can delete the file after download
-        fs.unlinkSync(filePath);
-      });
-    })
-    .catch((err) => {
-      console.error(err);
-      res.status(500).send("Error generating document");
-    });
+    // Set header untuk download langsung
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename="pks-${req.params.id}.docx"`
+    );
+    res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+    
+    // Kirim buffer sebagai response
+    res.end(buffer);
+
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).send("Error generating document");
+  }
 };

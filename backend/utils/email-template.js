@@ -1,4 +1,4 @@
-// email-template.js - dengan penyesuaian untuk pengingat berkala
+// email-template.js - dengan penyesuaian untuk pengingat berkala dan prosedur dokumen
 
 export const generateEmailTemplate = (instansi, link, reminderNumber = 1) => {
   // Variasi judul dan pesan berdasarkan nomor pengingat
@@ -7,28 +7,28 @@ export const generateEmailTemplate = (instansi, link, reminderNumber = 1) => {
   switch (reminderNumber) {
     case 1:
       title = "Pemberitahuan Perjanjian Kerjasama";
-      message = `Berkaitan dengan perjanjian kerjasama antara ${instansi} dengan LPPM UPN "Veteran" Yogyakarta, kami mengimbau untuk segera <strong>mencetak dokumen perjanjian kerjasama yang telah dibuat.</strong>`;
+      message = `Berkaitan dengan perjanjian kerjasama antara ${instansi} dengan LPPM UPN "Veteran" Yogyakarta, kami mengimbau untuk segera memproses dokumen perjanjian dengan langkah-langkah berikut:`;
       break;
     case 2:
       title = "Pengingat Pertama: Perjanjian Kerjasama";
-      message = `Ini adalah pengingat pertama terkait perjanjian kerjasama antara ${instansi} dengan LPPM UPN "Veteran" Yogyakarta. Kami belum menerima dokumen yang sudah ditandatangani dan bermaterai. Mohon segera <strong>mencetak dan melengkapi dokumen perjanjian</strong> yang telah dibuat.`;
+      message = `Ini adalah pengingat pertama terkait perjanjian kerjasama antara ${instansi} dengan LPPM UPN "Veteran" Yogyakarta. Kami belum menerima dokumen yang sudah diproses sesuai ketentuan. Mohon segera lakukan langkah-langkah berikut:`;
       break;
     case 3:
       title = "Pengingat Kedua: Perjanjian Kerjasama";
-      message = `Ini adalah pengingat kedua untuk perjanjian kerjasama antara ${instansi} dengan LPPM UPN "Veteran" Yogyakarta. Kami masih menunggu dokumen yang telah ditandatangani dan bermaterai. Mohon prioritaskan untuk <strong>segera menyelesaikan proses administrasi</strong> ini.`;
+      message = `Ini adalah pengingat kedua untuk perjanjian kerjasama antara ${instansi} dengan LPPM UPN "Veteran" Yogyakarta. Kami masih menunggu dokumen yang telah diproses sesuai ketentuan. Mohon prioritaskan langkah-langkah berikut:`;
       break;
     case 4:
       title = "Pengingat Terakhir: Perjanjian Kerjasama";
-      message = `Ini adalah pengingat terakhir mengenai perjanjian kerjasama antara ${instansi} dengan LPPM UPN "Veteran" Yogyakarta. Harap segera <strong>menyelesaikan proses administrasi</strong> untuk menghindari keterlambatan lebih lanjut. Jika memerlukan bantuan, silakan hubungi kami melalui kontak yang tersedia.`;
+      message = `Ini adalah pengingat terakhir mengenai perjanjian kerjasama antara ${instansi} dengan LPPM UPN "Veteran" Yogyakarta. Harap segera selesaikan langkah-langkah berikut untuk menghindari keterlambatan:`;
       break;
     default:
       title = "Pemberitahuan Perjanjian Kerjasama";
-      message = `Berkaitan dengan perjanjian kerjasama antara ${instansi} dengan LPPM UPN "Veteran" Yogyakarta, kami mengimbau untuk segera <strong>mencetak dokumen perjanjian kerjasama yang telah dibuat.</strong>`;
+      message = `Berkaitan dengan perjanjian kerjasama antara ${instansi} dengan LPPM UPN "Veteran" Yogyakarta, kami mengimbau untuk segera memproses dokumen perjanjian dengan langkah-langkah berikut:`;
   }
 
   return `<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px;">
           <div style="text-align: center; margin-bottom: 20px;">
-            <img src="https://upnyk.ac.id/assets/img/logo-upn.png" alt="Logo UPNYK" style="max-width: 150px;">
+            <img src="https://kompaspedia.kompas.id/wp-content/uploads/2020/08/logo_Universitas-Pembangunan-Nasional-Veteran-Yogyakarta-thumb.png" alt="Logo UPNYK" style="max-width: 150px;">
             <h2 style="color: #00529b;">LPPM UPN "Veteran" Yogyakarta</h2>
             <h3 style="color: #00529b;">${title}</h3>
           </div>
@@ -37,9 +37,18 @@ export const generateEmailTemplate = (instansi, link, reminderNumber = 1) => {
           
           <p>${message}</p>
           
-          <p>Mohon untuk <strong>melengkapi persyaratan administrasi dengan mencantumkan tanda tangan basah dan bermaterai</strong> dalam dokumen yang telah dicetak.</p>
-
-          <p>Kemudian scan dokumen dan upload pada tautan berikut:</p>
+          <ol style="margin-left: 20px; padding-left: 0;">
+            <li><strong>Cetak dokumen perjanjian kerja sama</strong> sebanyak <strong>2 (dua) eksemplar</strong>.</li>
+            <li><strong>Lakukan penandatanganan</strong> pada kedua dokumen dengan ketentuan:
+              <ul style="margin-top: 5px;">
+                <li><strong>1 eksemplar</strong> ditandatangani <strong>di atas materai</strong> (sesuai ketentuan berlaku).</li>
+                <li><strong>1 eksemplar</strong> ditandatangani <strong>tanpa materai</strong>.</li>
+              </ul>
+            </li>
+            <li>Serahkan kedua dokumen yang telah ditandatangani kepada <strong>Bagian Tata Usaha (TU)</strong> untuk ditandatangani oleh <strong>Pihak Pertama</strong> (LPPM UPN "Veteran" Yogyakarta).</li>
+            <li>Setelah penandatanganan lengkap, <strong>scan dokumen</strong> (kedua eksemplar) dalam format yang jelas.</li>
+            <li><strong>Upload dokumen yang telah discan</strong> melalui tautan berikut:</li>
+          </ol>
           
           <div style="text-align: center; margin: 25px 0;">
             <a href="${link}" style="background-color: #00529b; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">Submit Dokumen</a>

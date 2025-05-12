@@ -70,6 +70,11 @@
       height: 3rem;
     }
 
+    .flowchart-button {
+  margin-left: auto;
+  margin-right: 1rem;
+}
+
     .login-button {
       background-color: white;
       color: var(--primary-color);
@@ -449,12 +454,21 @@
 
       .action-container {
         flex-direction: column;
-        align-items: stretch;
       }
 
       .search-box {
         max-width: 100%;
       }
+
+      .flowchart-button {
+    margin-left: 0;
+    margin-right: 0;
+    order: 2; /* Place between search and create button */
+  }
+
+  .add-button:not(.flowchart-button) {
+    order: 3;
+  }
 
       .content-container {
         padding: 1.5rem;
@@ -553,6 +567,9 @@
               <i class="fas fa-search"></i>
             </button>
           </div>
+          <a href="flowchart.html" class="add-button flowchart-button">
+            <span>Alur Pengajuan</span>
+          </a>
           <a href="form.html" class="add-button">
             <i class="fas fa-plus"></i>
             <span>Buat PKS</span>
@@ -923,6 +940,26 @@
       searchInput.style.borderColor =
         searchTerm === "" ? "#ddd" : hasResults ? "#4CAF50" : "#F44336";
     }
+
+    // Handle form submission
+loginForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const username = document.getElementById("username").value;
+  const password = document.getElementById("password").value;
+
+  // Static credentials (username: admin, password: admin123)
+  if (username === "admin" && password === "admin123") {
+    // Set session
+    sessionStorage.setItem("isLoggedIn", "true");
+    
+    // Redirect to adminview.html if login is successful
+    window.location.href = "adminview.html";
+  } else {
+    // Show error message
+    errorMessage.style.display = "block";
+  }
+});
 
   </script>
   <script src="utils.js"></script>
