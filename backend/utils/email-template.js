@@ -57,8 +57,8 @@ export const generateEmailTemplate = (instansi, link, reminderNumber = 1) => {
           <p>Apabila ada pertanyaan atau kendala teknis dalam proses pencetakan atau pengunggahan dokumen, silakan menghubungi kami melalui:</p>
           <ul style="list-style-type: none; padding-left: 10px;">
             <li>Email: lppm@upnyk.ac.id</li>
-            <li>Telepon: (0274) 486733</li>
-            <li>WhatsApp: 0812-3456-7890</li>
+            <li>Telepon: 0821-3867-4252</li>
+            <li>WhatsApp: 0821-3867-4252</li>
           </ul>
           
           <p>Atas perhatian dan kerjasamanya, kami ucapkan terima kasih.</p>
