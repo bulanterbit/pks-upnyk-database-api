@@ -71,9 +71,9 @@
     }
 
     .flowchart-button {
-  margin-left: auto;
-  margin-right: 1rem;
-}
+      margin-left: auto;
+      margin-right: 1rem;
+    }
 
     .login-button {
       background-color: white;
@@ -461,14 +461,15 @@
       }
 
       .flowchart-button {
-    margin-left: 0;
-    margin-right: 0;
-    order: 2; /* Place between search and create button */
-  }
+        margin-left: 0;
+        margin-right: 0;
+        order: 2;
+        /* Place between search and create button */
+      }
 
-  .add-button:not(.flowchart-button) {
-    order: 3;
-  }
+      .add-button:not(.flowchart-button) {
+        order: 3;
+      }
 
       .content-container {
         padding: 1.5rem;
@@ -525,7 +526,7 @@
         </div>
         <button class="login-button" id="loginBtn">
           <i class="fas fa-sign-in-alt"></i>
-          <span>Login</span>
+          <span>Login Admin</span>
         </button>
       </div>
     </div>
@@ -942,24 +943,24 @@
     }
 
     // Handle form submission
-loginForm.addEventListener("submit", (e) => {
-  e.preventDefault();
+    loginForm.addEventListener("submit", (e) => {
+      e.preventDefault();
 
-  const username = document.getElementById("username").value;
-  const password = document.getElementById("password").value;
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
 
-  // Static credentials (username: admin, password: admin123)
-  if (username === "admin" && password === "admin123") {
-    // Set session
-    sessionStorage.setItem("isLoggedIn", "true");
-    
-    // Redirect to adminview.html if login is successful
-    window.location.href = "adminview.html";
-  } else {
-    // Show error message
-    errorMessage.style.display = "block";
-  }
-});
+      // Static credentials (username: admin, password: admin123)
+      if (username === "admin" && password === "admin123") {
+        // Set session
+        sessionStorage.setItem("isLoggedIn", "true");
+
+        // Redirect to adminview.html if login is successful
+        window.location.href = "adminview.html";
+      } else {
+        // Show error message
+        errorMessage.style.display = "block";
+      }
+    });
 
   </script>
   <script src="utils.js"></script>

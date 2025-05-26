@@ -2,6 +2,7 @@
 <html lang="id">
 
 <!-- tambahan supaya nge trigger ulang -->
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,11 +11,17 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
   <style>
     :root {
-      --primary-color: #2e7d32;
-      --primary-dark: #1b5e20;
-      --primary-light: #4caf50;
+      --primary-color: #1565c0;
+      /* Biru utama */
+      --primary-dark: #0d47a1;
+      /* Biru gelap */
+      --primary-light: #42a5f5;
+      /* Biru terang */
       --secondary-color: #f9f9f9;
-      --text-color: #333;
+      /* Tetap netral sebagai latar */
+      --text-color: #222f3e;
+      /* Biru tua keabu-abuan untuk teks */
+
       --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
       --border-radius: 0.5rem;
       --transition: all 0.3s ease;
@@ -223,40 +230,40 @@
     }
 
     /* Status Containers */
-.status-container {
-  display: inline-block;
-  padding: 0.4rem 1rem;
-  border-radius: 2rem;
-  font-size: 0.85rem;
-  font-weight: 500;
-  text-align: center;
-  min-width: 100px;
-}
+    .status-container {
+      display: inline-block;
+      padding: 0.4rem 1rem;
+      border-radius: 2rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+      text-align: center;
+      min-width: 100px;
+    }
 
-.status-disetujui {
-  background-color: #e8f5e9;
-  color: #2e7d32;
-}
+    .status-disetujui {
+      background-color: #e8f5e9;
+      color: #2e7d32;
+    }
 
-.status-menunggu {
-  background-color: #beb9ee;
-  color: #2e357d;
-}
+    .status-menunggu {
+      background-color: #beb9ee;
+      color: #2e357d;
+    }
 
-.status-review {
-  background-color: #fff8e1;
-  color: #ff8f00;
-}
+    .status-review {
+      background-color: #fff8e1;
+      color: #ff8f00;
+    }
 
-.status-draft {
-  background-color: #eceff1;
-  color: #546e7a;
-}
+    .status-draft {
+      background-color: #eceff1;
+      color: #546e7a;
+    }
 
-.status-ditolak {
-  background-color: #ffebee;
-  color: #c62828;
-}
+    .status-ditolak {
+      background-color: #ffebee;
+      color: #c62828;
+    }
 
     /* Action Buttons */
     .action-buttons {
@@ -374,9 +381,9 @@
     }
 
     .flowchart-button {
-  margin-left: auto;
-  margin-right: 1rem;
-}
+      margin-left: auto;
+      margin-right: 1rem;
+    }
 
     @media (max-width: 768px) {
       .navbar-brand h1 {
@@ -384,18 +391,19 @@
       }
 
       .action-container {
-    flex-direction: column;
-  }
-  
-  .flowchart-button {
-    margin-left: 0;
-    margin-right: 0;
-    order: 2; /* Place between search and create button */
-  }
+        flex-direction: column;
+      }
 
-  .add-button:not(.flowchart-button) {
-    order: 3;
-  }
+      .flowchart-button {
+        margin-left: 0;
+        margin-right: 0;
+        order: 2;
+        /* Place between search and create button */
+      }
+
+      .add-button:not(.flowchart-button) {
+        order: 3;
+      }
 
       .navbar-logo {
         height: 2.5rem;
@@ -548,9 +556,9 @@
 
       // Logout functionality
       document.getElementById("logoutBtn").addEventListener("click", function () {
-      if (confirm("Apakah Anda yakin ingin logout?")) {
-     logout(); // Fungsi dari auth.js
-      }
+        if (confirm("Apakah Anda yakin ingin logout?")) {
+          logout(); // Fungsi dari auth.js
+        }
       });
       // Search functionality
       const searchInput = document.getElementById("searchInput");
@@ -694,31 +702,31 @@
 
       // Determine status class and text
       let statusClass = "status-draft";
-let statusText = "Draft";
+      let statusText = "Draft";
 
-if (pks.properties?.status) {
-  switch (pks.properties.status) {
-    case "approved":
-      statusClass = "status-disetujui";
-      statusText = "Disetujui";
-      break;
-    case "menunggu review":
-      statusClass = "status-review";
-      statusText = "Menunggu Review";
-      break;
-    case "rejected":
-      statusClass = "status-ditolak";
-      statusText = "Ditolak";
-      break;
-    case "menunggu dokumen":
-      statusClass = "status-menunggu";
-      statusText = "Menunggu Dokumen";
-      break;
-    default:
-      statusClass = "status-draft";
-      statusText = "Draft";
-  }
-}
+      if (pks.properties?.status) {
+        switch (pks.properties.status) {
+          case "approved":
+            statusClass = "status-disetujui";
+            statusText = "Disetujui";
+            break;
+          case "menunggu review":
+            statusClass = "status-review";
+            statusText = "Menunggu Review";
+            break;
+          case "rejected":
+            statusClass = "status-ditolak";
+            statusText = "Ditolak";
+            break;
+          case "menunggu dokumen":
+            statusClass = "status-menunggu";
+            statusText = "Menunggu Dokumen";
+            break;
+          default:
+            statusClass = "status-draft";
+            statusText = "Draft";
+        }
+      }
 
       // Store the current status for upload button display logic
       row.setAttribute("data-status", pks.properties?.status || "draft");
