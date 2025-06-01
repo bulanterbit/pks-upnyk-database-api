@@ -12,4 +12,5 @@ export const {
   ARCJET_ENV,
   ARCJET_KEY,
   EMAIL_PASSWORD,
+  GCS_BUCKET_NAME,
 } = process.env;
