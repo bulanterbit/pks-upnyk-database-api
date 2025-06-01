@@ -19,7 +19,7 @@ export const sendPksNotificationEmail = async (pksId) => {
       // URL untuk mengakses dokumen PKS
       link: `${
         process.env.BASE_URL ||
-        "https://project-upn.uc.r.appspot.com/detailadmin.html?id="
+        "https://project-upn.uc.r.appspot.com/detailuser.html?id="
       }${pksId}`,
       subject: `Pengingat: Dokumen Perjanjian Kerjasama - ${pksData.content.judul}`,
     };

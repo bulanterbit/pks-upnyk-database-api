@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Detail PKS - User</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <style>
+        :root {
+            --primary-color: #2e7d32;
+            --primary-dark: #1b5e20;
+            --primary-light: #4caf50;
+            --text-color: #222f3e;
+            --border-radius: 0.5rem;
+            --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-color);
+            background: linear-gradient(135deg, #e8f5e8 0%, #f0f8f0 100%);
+            font-size: 15px;
+            min-height: 100vh;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: white;
+            box-shadow: var(--shadow);
+        }
+
+        .detail-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 1.5rem 2rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .detail-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid #e8f5e8;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.25rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 0.75rem;
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            border: 1px solid #e8f5e8;
+            border-left: 4px solid var(--primary-light);
+        }
+
+        .status-message {
+            padding: 0.75rem 1rem;
+            border-radius: var(--border-radius);
+            margin-top: 1rem;
+            display: none;
+            font-size: 0.9rem;
+            border-left: 4px solid;
+        }
+
+        .status-success {
+            background: linear-gradient(135deg, #d4edda 0%, #e8f5e9 100%);
+            color: #155724;
+            border-left-color: var(--primary-color);
+        }
+
+        .status-error {
+            background: linear-gradient(135deg, #f8d7da 0%, #ffe6e6 100%);
+            color: #721c24;
+            border-left-color: #dc3545;
+        }
+
+        .action-buttons-group {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .app-button {
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius);
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+        }
+
+        .app-button:disabled,
+        .app-button.disabled {
+            opacity: 0.6 !important;
+            cursor: not-allowed !important;
+            background: #ccc !important;
+            color: #666 !important;
+            box-shadow: none !important;
+        }
+
+        .app-button:disabled::before,
+        .app-button.disabled::before {
+            display: none;
+        }
+
+        .app-button-primary {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            color: white;
+        }
+
+        .app-button-info {
+            background: linear-gradient(135deg, #17a2b8 0%, #20c997 100%);
+            color: white;
+        }
+
+        .app-button-success {
+            background: linear-gradient(135deg, #28a745 0%, #34ce57 100%);
+            color: white;
+        }
+
+        .app-button-secondary {
+            background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+            color: white;
+        }
+
+        .upload-area {
+            border: 2px dashed var(--primary-light);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            text-align: center;
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            transition: var(--transition);
+        }
+
+        .upload-area.dragover {
+            border-color: var(--primary-color);
+            background: linear-gradient(135deg, #e8f5e8 0%, #f0f8f0 100%);
+        }
+
+        .locked-feature {
+            opacity: 0.5;
+            pointer-events: none;
+            position: relative;
+        }
+
+        .locked-feature::after {
+            content: '\f023';
+            /* Lock icon */
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2rem;
+            color: #dc3545;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 0.5rem;
+            border-radius: 50%;
+            z-index: 10;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="px-6 py-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center">
+                <img src="img/logo_upn.png" alt="Logo UPNYK" class="h-12 mr-4" />
+                <h1 class="text-2xl font-bold">Detail PKS - Panel User</h1>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-8">
+        <div class="page-actions-top mb-4">
+            <a href="userview.html" class="app-button app-button-secondary"> <i class="fas fa-arrow-left"></i> Kembali
+                ke Daftar
+            </a>
+        </div>
+
+        <div id="globalStatusMessage" class="status-message mb-4"></div>
+
+        <div class="detail-card">
+            <h2 class="detail-title"><i class="fas fa-file-contract text-green-600"></i> Informasi Dokumen PKS</h2>
+            <div id="pksInfoLoading" class="text-gray-500">Memuat detail PKS...</div>
+            <div id="pksInfoContent" style="display: none;">
+                <div class="detail-row grid grid-cols-1 md:grid-cols-[220px_1fr] mb-2 items-center">
+                    <span class="font-medium text-gray-600">Nomor Dokumen Internal:</span>
+                    <span class="text-gray-800" id="content_nomor">-</span>
+                </div>
+                <div class="detail-row grid grid-cols-1 md:grid-cols-[220px_1fr] mb-2 items-center">
+                    <span class="font-medium text-gray-600">Judul Perjanjian:</span>
+                    <span class="text-gray-800" id="content_judul">-</span>
+                </div>
+                <div class="detail-row grid grid-cols-1 md:grid-cols-[220px_1fr] mb-2 items-center">
+                    <span class="font-medium text-gray-600">Status Saat Ini:</span>
+                    <span class="text-gray-800 status-badge" id="properties_status">-</span>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="detail-card">
+            <h2 class="detail-title"><i class="fas fa-cloud-upload-alt text-green-600"></i> Upload & Info Dokumen PKS
+                dari Mitra</h2>
+            <div id="documentFileSection" class="mb-4">
+                <div id="documentFileInfo" class="file-item">
+                    <div>
+                        <i id="documentFileIcon" class="fas fa-file-alt text-gray-500 mr-2"></i>
+                        <span id="documentFileName" class="text-gray-700 italic">Belum ada dokumen yang diunggah</span>
+                        <div id="uploadDate" class="text-xs text-gray-500 mt-1"></div>
+                    </div>
+                    <div class="file-actions">
+                        <button id="downloadDocBtn" class="app-button app-button-info text-xs" disabled>
+                            <i class="fas fa-download"></i> Download Dokumen Mitra
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="upload-area" id="uploadAreaContainer">
+                <form id="uploadForm" class="space-y-3">
+                </form>
+            </div>
+            <div id="uploadStatus" class="status-message"></div>
+        </div>
+
+        <div class="detail-card">
+            <h2 class="detail-title"><i class="fas fa-download text-green-600"></i> Download Template</h2>
+            <p class="text-sm text-gray-600 mb-3">Unduh template standar PKS dari UPN untuk diisi oleh Mitra.</p>
+            <div class="action-buttons-group">
+                <button id="downloadTemplateBtn" type="button" class="app-button app-button-primary">
+                    <i class="fas fa-file-download"></i> Download Template UPN
+                </button>
+            </div>
+            <div id="downloadStatus" class="status-message"></div>
+        </div>
+
+        <div class="detail-card locked-feature mt-6">
+            <h2 class="detail-title"><i class="fas fa-cogs text-gray-400"></i> Manajemen Status (Dikunci)</h2>
+            <p class="text-gray-500">Fitur ini hanya untuk Administrator.</p>
+        </div>
+        <div class="detail-card locked-feature mt-6">
+            <h2 class="detail-title"><i class="fas fa-edit text-gray-400"></i> Edit Informasi PKS (Dikunci)</h2>
+            <p class="text-gray-500">Fitur ini hanya untuk Administrator.</p>
+        </div>
+
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // --- KONFIGURASI & STATE ---
+        const BASE_URL = "http://localhost:3000"; // GANTI DENGAN URL API BACKEND ANDA
+        let currentPksId = null;
+        let currentPksData = null; // Untuk menyimpan data PKS yang diambil dari server
+        let selectedFileObject = null; // Untuk menyimpan objek File yang akan diunggah
+
+        // --- FUNGSI UTILITAS ---
+        function showStatusMessage(elementId, message, type) {
+            const element = $(`#${elementId}`);
+            element.text(message);
+            element.removeClass('status-success status-error').addClass(type === 'success' ? 'status-success' : 'status-error');
+            element.show().delay(7000).fadeOut();
+        }
+
+        function getFileIconClass(fileName) {
+            if (!fileName) return 'fa-file-alt text-gray-500';
+            if (fileName.endsWith('.pdf')) return 'fa-file-pdf text-red-500';
+            if (fileName.endsWith('.doc') || fileName.endsWith('.docx')) return 'fa-file-word text-blue-500';
+            return 'fa-file text-gray-700';
+        }
+
+        function displayPKSInfo(data) {
+            if (!data) {
+                $('#pksInfoLoading').text('Gagal memuat data PKS atau data tidak ditemukan.');
+                return;
+            }
+            $('#content_nomor').text(data.content?.nomor || 'Belum ada');
+            $('#content_judul').text(data.content?.judul || '-');
+
+            const status = data.properties?.status || 'draft';
+            const statusBadge = $('#properties_status');
+            statusBadge.text(status.charAt(0).toUpperCase() + status.slice(1));
+            statusBadge.removeClass('status-draft status-review status-approved status-rejected status-menunggu'); // Hapus kelas lama
+            statusBadge.addClass(`status-${status.toLowerCase().replace(/\s+/g, '-')}`); // Tambah kelas baru
+
+            $('#pksInfoLoading').hide();
+            $('#pksInfoContent').show();
+
+            // Perbarui info file dokumen mitra jika ada
+            if (data.fileUpload && data.fileUpload.docName) {
+                $('#documentFileName').text(data.fileUpload.docName).removeClass("italic text-gray-700").addClass("text-gray-800 font-medium");
+                $('#documentFileIcon').attr('class', `fas ${getFileIconClass(data.fileUpload.docName)} mr-2`);
+                if (data.fileUpload.uploadDate) {
+                    $('#uploadDate').html(`<i class="fas fa-calendar-alt mr-1"></i>Diunggah: ${new Date(data.fileUpload.uploadDate).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' })}`);
+                }
+                $('#downloadDocBtn').prop("disabled", false).removeClass("disabled");
+            } else {
+                $('#documentFileName').text("Belum ada dokumen yang diunggah oleh Mitra.").addClass("italic text-gray-700");
+                $('#documentFileIcon').attr('class', 'fas fa-file-alt text-gray-500 mr-2');
+                $('#uploadDate').text("");
+                $('#downloadDocBtn').prop("disabled", true).addClass("disabled");
+            }
+        }
+
+        async function fetchPKSDataForUser(id) {
+            if (!id) {
+                showStatusMessage('globalStatusMessage', "ID PKS tidak valid.", 'error');
+                $('#pksInfoLoading').text('ID PKS tidak valid.');
+                return;
+            }
+            try {
+                const response = await fetch(`${BASE_URL}/api/pks/${id}`); // Asumsi endpoint ini ada
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({ message: "Gagal memuat data PKS." }));
+                    throw new Error(errorData.message || `Error ${response.status}`);
+                }
+                const result = await response.json();
+                if (result.success && result.data) {
+                    currentPksData = result.data;
+                    displayPKSInfo(currentPksData);
+                } else {
+                    throw new Error(result.message || "Data PKS tidak ditemukan.");
+                }
+            } catch (error) {
+                console.error("Error fetching PKS data for user:", error);
+                showStatusMessage('globalStatusMessage', `Error memuat data: ${error.message}`, 'error');
+                $('#pksInfoLoading').text(`Error: ${error.message}`);
+            }
+        }
+
+        // --- FUNGSI UPLOAD AREA & DRAG-DROP ---
+        function renderUploadArea(state = 'initial', fileName = null) {
+            const uploadAreaContainer = $('#uploadAreaContainer #uploadForm');
+            let content = '';
+            const isDisabled = currentPksData?.properties?.status === 'approved' || currentPksData?.properties?.status === 'disetujui'; // Cek jika PKS sudah disetujui
+
+            if (isDisabled) {
+                content = `<div class="text-center text-gray-600 bg-gray-100 p-4 rounded-lg">
+                                <i class="fas fa-lock text-2xl text-gray-500 mb-2"></i>
+                                <p>PKS sudah disetujui. Tidak dapat mengunggah dokumen baru.</p>
+                           </div>`;
+            } else if (state === 'initial' || state === 'empty') {
+                content = `
+                    <div>
+                        <i class="fas fa-cloud-upload-alt text-4xl text-green-500 mb-3"></i>
+                        <h3 class="font-medium text-gray-700 mb-2 text-lg">Upload Dokumen PKS dari Mitra</h3>
+                        <p class="text-sm text-gray-600 mb-4">Drag & drop file PDF/DOCX atau klik untuk memilih.</p>
+                        <input type="file" id="filledPksFile" name="filledPksFile" class="hidden" accept=".pdf,.docx,.doc">
+                        <div class="action-buttons-group justify-center">
+                            <button type="button" id="selectFileBtn" class="app-button app-button-primary">
+                                <i class="fas fa-folder-open"></i> Pilih File
+                            </button>
+                            <button type="submit" id="uploadBtn" class="app-button app-button-success" disabled>
+                                <i class="fas fa-upload"></i> Upload Dokumen
+                            </button>
+                        </div>
+                    </div>`;
+            } else if (state === 'file-selected' && fileName) {
+                content = `
+                    <div class="text-center">
+                        <i class="fas ${getFileIconClass(fileName)} text-4xl mb-3"></i>
+                        <h3 class="font-medium text-gray-700 mb-1">File Dipilih:</h3>
+                        <p class="text-lg font-semibold text-green-600 mb-3">${fileName}</p>
+                        <input type="file" id="filledPksFile" name="filledPksFile" class="hidden" accept=".pdf,.docx,.doc">
+                        <div class="action-buttons-group justify-center">
+                            <button type="button" id="changeFileBtn" class="app-button app-button-secondary">
+                                <i class="fas fa-exchange-alt"></i> Ganti File
+                            </button>
+                            <button type="submit" id="uploadBtn" class="app-button app-button-success">
+                                <i class="fas fa-upload"></i> Upload Dokumen
+                            </button>
+                        </div>
+                    </div>`;
+            }
+            uploadAreaContainer.html(content);
+            if (!isDisabled) { // Hanya bind event jika tidak disabled
+                bindUploadAreaEvents();
+            }
+        }
+
+        function handleFileSelection(filesFromEventOrDrop) {
+            if (filesFromEventOrDrop && filesFromEventOrDrop.length > 0) {
+                selectedFileObject = filesFromEventOrDrop[0];
+                renderUploadArea('file-selected', selectedFileObject.name);
+            } else {
+                selectedFileObject = null;
+                renderUploadArea('empty');
+            }
+        }
+
+        function bindUploadAreaEvents() {
+            const uploadAreaDiv = $('#uploadAreaContainer'); // jQuery object
+            const fileInput = document.getElementById('filledPksFile'); // DOM element
+
+            uploadAreaDiv.off('click', '#selectFileBtn').on('click', '#selectFileBtn', () => fileInput.click());
+            uploadAreaDiv.off('click', '#changeFileBtn').on('click', '#changeFileBtn', () => fileInput.click());
+            $(fileInput).off('change').on('change', (e) => handleFileSelection(e.target.files));
+
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                uploadAreaDiv.off(eventName).on(eventName, preventDefaults);
+            });
+            ['dragenter', 'dragover'].forEach(eventName => {
+                uploadAreaDiv.on(eventName, () => uploadAreaDiv.addClass('dragover'));
+            });
+            ['dragleave', 'drop'].forEach(eventName => {
+                uploadAreaDiv.on(eventName, () => uploadAreaDiv.removeClass('dragover'));
+            });
+            uploadAreaDiv.on('drop', (e) => handleFileSelection(e.originalEvent.dataTransfer.files));
+        }
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        $(document).ready(function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            currentPksId = urlParams.get("id");
+
+            if (currentPksId) {
+                fetchPKSDataForUser(currentPksId).then(() => {
+                    renderUploadArea('initial'); // Render setelah data PKS (terutama status) dimuat
+                });
+            } else {
+                showStatusMessage('globalStatusMessage', "ID PKS tidak ditemukan di URL.", 'error');
+                $('#pksInfoLoading').text('ID PKS tidak valid.');
+                $('#uploadBtn, #downloadTemplateBtn, #downloadDocBtn').prop('disabled', true).addClass('disabled');
+                renderUploadArea('initial'); // Tetap render area upload, mungkin dalam keadaan disabled
+            }
+
+            // Handler Upload Dokumen
+            $("#uploadForm").submit(async function (e) {
+                e.preventDefault();
+                if (!currentPksId) {
+                    showStatusMessage('uploadStatus', 'ID PKS tidak valid untuk upload.', 'error');
+                    return;
+                }
+                const fileToUpload = selectedFileObject;
+                if (!fileToUpload) {
+                    showStatusMessage('uploadStatus', 'Pilih file terlebih dahulu.', 'error');
+                    return;
+                }
+
+                const formData = new FormData();
+                formData.append('file', fileToUpload); // 'file' adalah key yang umum, sesuaikan jika backend beda
+
+                const submitBtn = $(this).find('button[type="submit"]');
+                const originalBtnHtml = submitBtn.html();
+                submitBtn.html('<i class="fas fa-spinner fa-spin"></i> Mengunggah...').prop('disabled', true);
+
+                try {
+                    // Endpoint disamakan dengan admin, namun mungkin perlu path berbeda untuk user
+                    // atau backend membedakan berdasarkan role/token.
+                    // Asumsi endpoint untuk mengunggah PDF PKS yang sudah diisi oleh mitra:
+                    const response = await fetch(`${BASE_URL}/api/upload/pdf/${currentPksId}`, {
+                        method: 'POST',
+                        body: formData,
+                        // Jika ada autentikasi (misal JWT Token), tambahkan di headers:
+                        // headers: { 'Authorization': `Bearer ${localStorage.getItem('userToken')}` } 
+                    });
+
+                    const result = await response.json();
+                    if (!response.ok) {
+                        throw new Error(result.message || `Gagal mengunggah file. Status: ${response.status}`);
+                    }
+
+                    showStatusMessage('uploadStatus', result.message || 'Dokumen berhasil diunggah!', 'success');
+                    selectedFileObject = null;
+
+                    // PENTING: Setelah upload, idealnya status PKS berubah (misal, 'menunggu review')
+                    // dan data PKS di-refresh untuk update UI secara keseluruhan.
+                    await fetchPKSDataForUser(currentPksId); // Re-fetch data PKS
+                    renderUploadArea('empty'); // Reset area upload setelah data PKS baru dimuat
+
+                } catch (error) {
+                    console.error('Upload error:', error);
+                    showStatusMessage('uploadStatus', `Error: ${error.message}`, 'error');
+                } finally {
+                    submitBtn.html(originalBtnHtml).prop('disabled', false);
+                }
+            });
+
+            // Handler Download Template UPN
+            $('#downloadTemplateBtn').on('click', async function () {
+                if (!currentPksId) {
+                    showStatusMessage('downloadStatus', 'ID PKS tidak valid.', 'error'); return;
+                }
+                const btn = $(this);
+                const originalBtnHtml = btn.html();
+                btn.html('<i class="fas fa-spinner fa-spin"></i> Mengunduh...').prop('disabled', true);
+
+                try {
+                    // Endpoint untuk template PKS UPN, sama seperti di admin
+                    const response = await fetch(`${BASE_URL}/api/document/${currentPksId}`);
+                    if (!response.ok) {
+                        const err = await response.json().catch(() => ({}));
+                        throw new Error(err.message || `Gagal mengambil template. Status: ${response.status}`);
+                    }
+                    const blob = await response.blob();
+                    const contentDisposition = response.headers.get('content-disposition');
+                    let fileName = `template-pks-upn-${currentPksId}.docx`; // Default
+                    if (contentDisposition) {
+                        const fileNameMatch = contentDisposition.match(/filename="?(.+)"?/i);
+                        if (fileNameMatch && fileNameMatch.length > 1) fileName = fileNameMatch[1];
+                    }
+
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url; a.download = fileName;
+                    document.body.appendChild(a); a.click();
+                    window.URL.revokeObjectURL(url); a.remove();
+                    showStatusMessage('downloadStatus', 'Template berhasil diunduh!', 'success');
+                } catch (error) {
+                    console.error('Error download template:', error);
+                    showStatusMessage('downloadStatus', `Error: ${error.message}`, 'error');
+                } finally {
+                    btn.html(originalBtnHtml).prop('disabled', false);
+                }
+            });
+
+            // Handler Download Dokumen Mitra yang sudah diupload
+            $("#downloadDocBtn").on('click', async function () {
+                if (!currentPksData || !currentPksData.fileUpload || !currentPksData.fileUpload.docName) {
+                    showStatusMessage('uploadStatus', 'Informasi file tidak lengkap atau file belum ada.', 'error'); return;
+                }
+                const fileName = currentPksData.fileUpload.docName;
+                const btn = $(this);
+                const originalBtnHtml = btn.html();
+                btn.html('<i class="fas fa-spinner fa-spin"></i> Mengunduh...').prop('disabled', true);
+
+                try {
+                    // Endpoint untuk file spesifik yang diupload mitra, sama seperti di admin
+                    const response = await fetch(`${BASE_URL}/api/file/${currentPksId}.pdf`);
+                    if (!response.ok) {
+                        const err = await response.json().catch(() => ({}));
+                        throw new Error(err.message || `Gagal mengambil file. Status: ${response.status}`);
+                    }
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url; a.download = fileName;
+                    document.body.appendChild(a); a.click();
+                    window.URL.revokeObjectURL(url); a.remove();
+                } catch (error) {
+                    console.error('Error download PKS Mitra:', error);
+                    showStatusMessage('uploadStatus', `Error: ${error.message}`, 'error');
+                } finally {
+                    btn.html(originalBtnHtml).prop('disabled', false);
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
