@@ -1,78 +1,168 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Detail PKS - UPNYK</title>
+  <title>Manajemen PKS - UPNYK</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
   <style>
+    :root {
+      --primary-color: #1565c0;
+      --primary-dark: #0d47a1;
+      --text-color: #222f3e;
+      --border-radius: 0.5rem;
+      --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s ease;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--text-color);
+      background-color: #f5f5f5;
+      font-size: 15px;
+      /* Base font size sedikit diperbesar */
+    }
+
+    header {
+      background-color: var(--primary-color);
+      color: white;
+      box-shadow: var(--shadow);
+    }
+
     .detail-card {
       background-color: white;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      padding: 20px;
-      margin-bottom: 20px;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      padding: 1.5rem 2rem;
+      /* Padding disesuaikan */
+      margin-bottom: 1.5rem;
     }
 
     .detail-title {
-      font-size: 18px;
-      font-weight: bold;
-      color: #2e7d32;
-      margin-bottom: 15px;
-      padding-bottom: 8px;
-      border-bottom: 1px solid #eee;
+      font-size: 1.25rem;
+      /* Sedikit lebih besar */
+      font-weight: 600;
+      /* Lebih tebal */
+      color: var(--primary-dark);
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid #e0e0e0;
     }
 
-    .detail-row {
+    .detail-row,
+    .form-row {
+      /* .form-row untuk mode edit */
       display: grid;
-      grid-template-columns: 250px 1fr;
-      margin-bottom: 10px;
+      grid-template-columns: 220px 1fr;
+      /* Lebar label disesuaikan */
+      margin-bottom: 0.8rem;
+      /* Jarak antar baris */
+      align-items: center;
     }
+
+    .form-row-full {
+      /* Untuk textarea atau elemen yang butuh lebar penuh */
+      grid-template-columns: 1fr;
+    }
+
+    .form-row-full .form-label {
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
 
     @media (max-width: 768px) {
-      .detail-row {
+
+      .detail-row,
+      .form-row {
         grid-template-columns: 1fr;
+        /* Stack di mobile */
+      }
+
+      .detail-label,
+      .form-label {
+        margin-bottom: 0.25rem;
       }
     }
 
-    .detail-label {
+    .detail-label,
+    .form-label {
       font-weight: 500;
-      color: #555;
+      color: #4a5568;
+      /* Warna label sedikit lebih soft */
     }
 
     .detail-value {
-      color: #333;
+      color: #2d3748;
+      word-break: break-word;
     }
+
+    /* Styling untuk input agar menyerupai teks biasa saat tidak edit mode */
+    .form-control-viewmode {
+      border: 1px solid transparent;
+      background-color: transparent;
+      padding: 0.375rem 0.1rem;
+      /* Sesuaikan padding agar align */
+      box-shadow: none;
+      cursor: default;
+      color: #2d3748;
+    }
+
+    .form-control-viewmode:focus {
+      border: 1px solid transparent;
+      background-color: transparent;
+      box-shadow: none;
+    }
+
+    /* Styling untuk input dalam mode edit */
+    .form-control-editmode {
+      border: 1px solid #cbd5e0;
+      background-color: white;
+      padding: 0.5rem 0.75rem;
+      border-radius: 0.375rem;
+      box-shadow: none;
+    }
+
+    .form-control-editmode:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 0.2rem rgba(21, 101, 192, 0.25);
+    }
+
+    textarea.form-control-editmode {
+      min-height: 80px;
+    }
+
 
     .file-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 12px;
-      border-radius: 6px;
-      margin-bottom: 10px;
+      padding: 0.75rem 1rem;
+      border-radius: var(--border-radius);
+      margin-bottom: 0.75rem;
       background-color: #f8f9fa;
       border: 1px solid #dee2e6;
     }
 
     .file-actions {
       display: flex;
-      gap: 10px;
+      gap: 0.75rem;
     }
 
     .status-badge {
-      padding: 4px 12px;
-      border-radius: 12px;
-      font-size: 12px;
+      padding: 0.3rem 0.8rem;
+      border-radius: 50px;
+      font-size: 0.8rem;
       font-weight: 500;
+      text-transform: capitalize;
     }
 
     .status-draft {
-      background-color: #e0e0e0;
-      color: #424242;
+      background-color: #eceff1;
+      color: #546e7a;
     }
 
     .status-review {
@@ -90,264 +180,318 @@
       color: #c62828;
     }
 
-    .hint-container {
-      position: relative;
+    .status-menunggu {
+      background-color: #e1f5fe;
+      color: #0277bd;
     }
 
-    .hint {
-      background-color: #f0f9ff;
-      border-left: 4px solid #2196f3;
-      padding: 10px 15px;
-      margin-bottom: 15px;
-      border-radius: 4px;
-      font-size: 13px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      position: relative;
-      cursor: pointer;
-    }
+    /* Menunggu Dokumen */
 
-    .hint-close {
-      position: absolute;
-      top: 5px;
-      right: 10px;
-      color: #666;
-      cursor: pointer;
-      font-size: 14px;
-    }
-
-    .hint-text {
-      margin-right: 20px;
-    }
-
-    .hint-banner {
-      background-color: #e8f5e9;
-      border-bottom: 1px solid #c8e6c9;
-      padding: 10px 0;
-      text-align: center;
-      position: relative;
-    }
-
-    .hint-banner-content {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 0 40px;
-    }
-
-    .hint-actions {
-      display: flex;
-      gap: 10px;
-      margin-left: 15px;
-    }
-
-    .hint-button {
-      background-color: #4caf50;
-      color: white;
-      border: none;
-      padding: 5px 10px;
-      border-radius: 4px;
-      font-size: 12px;
-      cursor: pointer;
-    }
-
-    .hint-skip {
-      background-color: #f5f5f5;
-      color: #333;
-    }
 
     .status-message {
-      padding: 8px;
-      border-radius: 4px;
-      margin-top: 10px;
+      padding: 0.75rem 1rem;
+      border-radius: var(--border-radius);
+      margin-top: 1rem;
       display: none;
+      font-size: 0.9rem;
     }
 
     .status-success {
-      background-color: #d1fae5;
-      color: #065f46;
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
     }
 
     .status-error {
-      background-color: #fee2e2;
-      color: #b91c1c;
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
     }
 
-    .action-buttons {
+    .action-buttons-group {
       display: flex;
-      gap: 10px;
-      margin-top: 20px;
+      gap: 0.75rem;
+      margin-top: 1rem;
+      flex-wrap: wrap;
     }
 
-    .document-status {
-      display: flex;
+    .app-button {
+      padding: 0.6rem 1.2rem;
+      border-radius: var(--border-radius);
+      font-weight: 500;
+      text-decoration: none;
+      display: inline-flex;
       align-items: center;
-      gap: 8px;
+      gap: 0.5rem;
+      border: none;
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 0.9rem;
+    }
+
+    .app-button i {
+      font-size: 0.9em;
+    }
+
+    .app-button-primary {
+      background-color: var(--primary-color);
+      color: white;
+    }
+
+    .app-button-primary:hover {
+      background-color: var(--primary-dark);
+    }
+
+    .app-button-secondary {
+      background-color: #6c757d;
+      color: white;
+    }
+
+    .app-button-secondary:hover {
+      background-color: #5a6268;
+    }
+
+    .app-button-success {
+      background-color: #28a745;
+      color: white;
+    }
+
+    .app-button-success:hover {
+      background-color: #218838;
+    }
+
+    .app-button-danger {
+      background-color: #dc3545;
+      color: white;
+    }
+
+    .app-button-danger:hover {
+      background-color: #c82333;
+    }
+
+    .app-button-warning {
+      background-color: #ffc107;
+      color: var(--text-color);
+    }
+
+    .app-button-warning:hover {
+      background-color: #e0a800;
+    }
+
+    .app-button-info {
+      background-color: #17a2b8;
+      color: white;
+    }
+
+    .app-button-info:hover {
+      background-color: #138496;
+    }
+
+
+    /* Section for edit mode toggle */
+    .page-actions-top {
+      margin-bottom: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      /* For back button and edit button */
+      align-items: center;
+    }
+
+    .back-link {
+      color: var(--primary-color);
+      font-weight: 500;
+    }
+
+    .back-link:hover {
+      color: var(--primary-dark);
+    }
+
+    /* Hide elements in view mode or edit mode */
+    .view-mode-item {
+      display: block;
+    }
+
+    .edit-mode-item {
+      display: none;
+    }
+
+    body.edit-active .view-mode-item {
+      display: none;
+    }
+
+    body.edit-active .edit-mode-item {
+      display: block;
+    }
+
+    /* Inputs are part of edit-mode-item by default */
+    input[type="text"].form-control-viewmode,
+    input[type="date"].form-control-viewmode,
+    input[type="email"].form-control-viewmode,
+    textarea.form-control-viewmode,
+    select.form-control-viewmode {
+      pointer-events: none;
+      /* Prevent interaction in view mode */
+    }
+
+    body.edit-active input,
+    body.edit-active textarea,
+    body.edit-active select {
+      pointer-events: auto !important;
     }
   </style>
 </head>
 
-<body class="bg-gray-50">
-  <!-- Header -->
-  <header class="bg-green-700 text-white shadow-md">
-    <div class="container mx-auto flex justify-between items-center px-6 py-4">
+<body>
+  <header class="px-6 py-4">
+    <div class="container mx-auto flex justify-between items-center">
       <div class="flex items-center">
-        <img src="img/logo_upn.png" alt="Logo" class="h-12 mr-4" />
-        <h1 class="text-2xl font-bold">Detail PKS UPNYK</h1>
+        <img src="img/logo_upn.png" alt="Logo UPNYK" class="h-12 mr-4" />
+        <h1 class="text-2xl font-bold">Manajemen Detail PKS</h1>
       </div>
     </div>
   </header>
 
-  <!-- Hint Banner -->
-  <div id="hintBanner" class="hint-banner">
-    <div class="hint-banner-content">
-      <div>
-        <i class="fas fa-lightbulb text-yellow-500 mr-2"></i>
-        <span>Bantuan tersedia untuk memandu Anda dalam meninjau dokumen PKS ini</span>
-      </div>
-      <div class="hint-actions">
-        <button id="enableHints" class="hint-button">Aktifkan Bantuan</button>
-        <button id="skipHints" class="hint-button hint-skip">Lewati</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Main Content -->
   <main class="container mx-auto px-6 py-8">
-    <!-- Back button -->
-    <div class="mb-6">
-      <a href="adminview.html" class="text-green-600 hover:text-green-800 flex items-center">
-        <i class="fas fa-arrow-left mr-2"></i> Kembali ke Daftar PKS
+    <div class="page-actions-top">
+      <a href="adminview.html" class="back-link app-button app-button-secondary">
+        <i class="fas fa-arrow-left"></i> Kembali ke Daftar
       </a>
-    </div>
-
-    <!-- Document Status Card -->
-    <div class="detail-card">
-      <div id="statusHint" class="hint" style="display: none;">
-        <span class="hint-text">
-          <strong>Status Dokumen:</strong> Status menunjukkan tahapan proses PKS ini.
-          'Draft' berarti belum diunggah, 'Menunggu Review' berarti sudah diunggah dan menunggu verifikasi,
-          'Disetujui' berarti sudah diverifikasi, dan 'Ditolak' berarti perlu perbaikan.
-        </span>
-        <span class="hint-close"><i class="fas fa-times"></i></span>
-      </div>
-      <div class="flex justify-between items-center">
-        <div>
-          <h2 class="detail-title">Status Dokumen</h2>
-          <div class="document-status">
-            <span id="docStatusBadge" class="status-badge status-draft">Draft</span>
-            <span id="docStatusMessage" class="text-sm text-gray-600"></span>
-          </div>
+      <div>
+        <button id="toggleEditModeBtn" class="app-button app-button-primary view-mode-item">
+          <i class="fas fa-edit"></i> Ubah Data PKS
+        </button>
+        <div class="action-buttons-group edit-mode-item">
+          <button id="saveChangesBtn" class="app-button app-button-success">
+            <i class="fas fa-save"></i> Simpan Perubahan
+          </button>
+          <button id="cancelEditBtn" class="app-button app-button-secondary">
+            <i class="fas fa-times"></i> Batal
+          </button>
         </div>
-        <div id="docNumber" class="text-gray-500 text-sm"></div>
       </div>
     </div>
+    <div id="globalStatusMessage" class="status-message mb-4"></div>
 
-    <!-- PKS Details -->
+    <form id="pksForm">
+      <div class="detail-card">
+        <h2 class="detail-title">Informasi Dokumen</h2>
+        <div class="form-row">
+          <label class="form-label" for="content_nomor">Nomor Dokumen Internal:</label>
+          <input type="text" id="content_nomor" name="content.nomor" class="form-control-viewmode" readonly
+            placeholder="Terisi otomatis setelah disetujui">
+        </div>
+        <div class="form-row">
+          <label class="form-label" for="content_judul">Judul Perjanjian:</label>
+          <input type="text" id="content_judul" name="content.judul" class="form-control-viewmode" readonly required>
+        </div>
+        <div class="form-row">
+          <label class="form-label" for="content_tanggal">Tanggal Efektif:</label>
+          <input type="date" id="content_tanggal" name="content.tanggal" class="form-control-viewmode" readonly
+            required>
+        </div>
+      </div>
+
+      <div class="detail-card">
+        <h2 class="detail-title">Pihak Kedua (Mitra)</h2>
+        <div class="form-row">
+          <label class="form-label" for="pihakKedua_instansi">Nama Instansi:</label>
+          <input type="text" id="pihakKedua_instansi" name="pihakKedua.instansi" class="form-control-viewmode" readonly
+            required>
+        </div>
+        <div class="form-row">
+          <label class="form-label" for="pihakKedua_nomor">Nomor Surat Pihak Kedua:</label>
+          <input type="text" id="pihakKedua_nomor" name="pihakKedua.nomor" class="form-control-viewmode" readonly>
+        </div>
+        <div class="form-row">
+          <label class="form-label" for="pihakKedua_nama">Nama Perwakilan:</label>
+          <input type="text" id="pihakKedua_nama" name="pihakKedua.nama" class="form-control-viewmode" readonly
+            required>
+        </div>
+        <div class="form-row">
+          <label class="form-label" for="pihakKedua_jabatan">Jabatan Perwakilan:</label>
+          <input type="text" id="pihakKedua_jabatan" name="pihakKedua.jabatan" class="form-control-viewmode" readonly
+            required>
+        </div>
+        <div class="form-row">
+          <label class="form-label" for="pihakKedua_alamat">Alamat Instansi:</label>
+          <textarea id="pihakKedua_alamat" name="pihakKedua.alamat" class="form-control-viewmode" readonly rows="2"
+            required></textarea>
+        </div>
+      </div>
+
+      <div class="detail-card">
+        <h2 class="detail-title">Properti & Kontak</h2>
+        <div class="form-row">
+          <label class="form-label" for="properties_email">Email Kontak Mitra:</label>
+          <input type="email" id="properties_email" name="properties.email" class="form-control-viewmode" readonly
+            required>
+        </div>
+        <div class="form-row form-row-full edit-mode-item"> <label class="form-label"
+            for="properties_comment_edit">Komentar Admin (Internal):</label>
+          <textarea id="properties_comment_edit" name="properties.comment" class="form-control-editmode"
+            rows="3"></textarea>
+        </div>
+        <div class="detail-row view-mode-item"> <span class="detail-label">Komentar Admin (Internal):</span>
+          <span class="detail-value" id="properties_comment_view">-</span>
+        </div>
+      </div>
+    </form>
     <div class="detail-card">
-      <div id="docInfoHint" class="hint" style="display: none;">
-        <span class="hint-text">
-          <strong>Informasi Dokumen:</strong> Bagian ini berisi detail utama perjanjian kerjasama termasuk judul,
-          tanggal, dan informasi pihak kedua. Pastikan semua informasi sesuai sebelum melanjutkan proses.
-        </span>
-        <span class="hint-close"><i class="fas fa-times"></i></span>
+      <h2 class="detail-title">Status & Tindakan Dokumen</h2>
+      <div class="mb-3">
+        <span class="detail-label">Status Saat Ini: </span>
+        <span id="docStatusBadge" class="status-badge status-draft">Memuat...</span>
       </div>
-      <h2 class="detail-title">Informasi Dokumen</h2>
-      <div class="detail-row">
-        <span class="detail-label">Judul Perjanjian:</span>
-        <span class="detail-value" id="docTitle"></span>
+      <div id="docStatusMessage" class="text-sm text-gray-600 mb-3"></div>
+
+      <div id="statusActionsSection">
+        <div class="form-row-full mb-3">
+          <label class="form-label" for="adminCommentStatus">Komentar untuk Perubahan Status (jika perlu):</label>
+          <textarea id="adminCommentStatus" class="form-control-editmode w-full" rows="3"
+            placeholder="Misal: Alasan penolakan, atau catatan persetujuan"></textarea>
+        </div>
+        <div class="action-buttons-group" id="dynamicStatusButtons">
+          <p class="text-gray-500">Memuat tindakan yang tersedia...</p>
+        </div>
       </div>
-      <div class="detail-row">
-        <span class="detail-label">Tanggal:</span>
-        <span class="detail-value" id="docDate"></span>
-      </div>
+      <div id="statusActionMessage" class="status-message mt-3"></div>
     </div>
 
-    <!-- Pihak Kedua -->
-    <div class="detail-card">
-      <div id="mitraHint" class="hint" style="display: none;">
-        <span class="hint-text">
-          <strong>Pihak Kedua (Mitra):</strong> Informasi lengkap tentang mitra kerjasama.
-          Verifikasi kebenaran data sebelum melanjutkan proses review.
-        </span>
-        <span class="hint-close"><i class="fas fa-times"></i></span>
-      </div>
-      <h2 class="detail-title">Pihak Kedua (Mitra)</h2>
-      <div class="detail-row">
-        <span class="detail-label">Nama Instansi:</span>
-        <span class="detail-value" id="secondParty"></span>
-      </div>
-      <div class="detail-row">
-        <span class="detail-label">Nomor Surat Pihak Kedua:</span>
-        <span class="detail-value" id="secondPartyPhone"></span>
-      </div>
-      <div class="detail-row">
-        <span class="detail-label">Nama Perwakilan:</span>
-        <span class="detail-value" id="secondPartyName"></span>
-      </div>
-      <div class="detail-row">
-        <span class="detail-label">Jabatan:</span>
-        <span class="detail-value" id="secondPartyPosition"></span>
-      </div>
-      <div class="detail-row">
-        <span class="detail-label">Alamat:</span>
-        <span class="detail-value" id="secondPartyAddress"></span>
-      </div>
-      
-      <div class="detail-row">
-        <span class="detail-label">Email:</span>
-        <span class="detail-value" id="docEmail"></span>
-      </div>
-    </div>
 
-    <!-- Document Upload Section -->
     <div class="detail-card">
-      <div id="uploadHint" class="hint" style="display: none;">
-        <span class="hint-text">
-          <strong>Unggah Dokumen:</strong> Mitra dapat mengunggah dokumen PKS yang sudah ditandatangani.
-          Setelah diunggah, status akan berubah menjadi 'Menunggu Review' dan admin akan menerima notifikasi.
-        </span>
-        <span class="hint-close"><i class="fas fa-times"></i></span>
-      </div>
-      <h2 class="detail-title">Dokumen PKS</h2>
-
-      <!-- Current Document -->
-      <div id="documentFileSection">
+      <h2 class="detail-title">Dokumen PKS dari Mitra</h2>
+      <div id="documentFileSection" class="mb-4">
         <div id="documentFileInfo" class="file-item">
           <div>
             <span id="documentFileName" class="text-gray-600 italic">Belum ada dokumen</span>
             <div id="uploadDate" class="text-xs text-gray-500 mt-1"></div>
           </div>
           <div class="file-actions">
-            <button id="downloadDocBtn" class="text-blue-600 hover:text-blue-800 disabled:opacity-50" disabled>
-              <i class="fas fa-download mr-1"></i> Download
+            <button id="downloadDocBtn" class="app-button app-button-info text-xs" disabled>
+              <i class="fas fa-download"></i> Download
             </button>
-            <button id="deleteDocBtn" class="text-red-600 hover:text-red-800 disabled:opacity-50" disabled>
-              <i class="fas fa-trash mr-1"></i> Hapus
+            <button id="deleteDocBtn" class="app-button app-button-danger text-xs" disabled>
+              <i class="fas fa-trash"></i> Hapus File
             </button>
           </div>
         </div>
       </div>
-
-      <!-- Upload Form -->
-      <div class="mt-6">
-        <h3 class="font-medium text-gray-700 mb-2">
-          Upload Dokumen PKS yang Sudah Ditandatangani
-        </h3>
+      <div>
+        <h3 class="font-medium text-gray-700 mb-2 text-md">Upload Dokumen PKS (oleh Admin atas nama Mitra jika
+          diperlukan)</h3>
         <form id="uploadForm" class="space-y-3">
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">
-              Dokumen PKS (PDF)
-            </label>
+            <label class="block text-sm font-medium text-gray-700 mb-1" for="filledPksFile">Pilih Dokumen PKS
+              (PDF/DOCX):</label>
             <input type="file" id="filledPksFile" name="filledPksFile"
-              class="w-full p-2 border border-gray-300 rounded-lg" accept=".pdf,.docx" required />
+              class="w-full p-2 border border-gray-300 rounded-lg text-sm" accept=".pdf,.docx">
           </div>
-          <div class="action-buttons">
-            <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
-              <i class="fas fa-upload mr-2"></i> Upload Dokumen
+          <div class="action-buttons-group">
+            <button type="submit" class="app-button app-button-success">
+              <i class="fas fa-upload"></i> Upload Dokumen Mitra
             </button>
-            <button id="downloadTemplateBtn" type="button"
-              class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
-              <i class="fas fa-file-download mr-2"></i> Download Template
+            <button id="downloadTemplateBtn" type="button" class="app-button app-button-primary">
+              <i class="fas fa-file-download"></i> Download Template UPN
             </button>
           </div>
           <div id="uploadStatus" class="status-message"></div>
@@ -355,439 +499,484 @@
       </div>
     </div>
 
-    <!-- Admin Actions (only visible when status is 'Menunggu Review') -->
-    <div id="adminActions" class="detail-card" style="display: none;">
-      <div id="reviewHint" class="hint" style="display: none;">
-        <span class="hint-text">
-          <strong>Tindakan Admin:</strong> Setelah memeriksa dokumen, Anda dapat menyetujui atau menolak PKS ini.
-          Jika ditolak, berikan komentar untuk perbaikan.
-        </span>
-        <span class="hint-close"><i class="fas fa-times"></i></span>
-      </div>
-      <h2 class="detail-title">Tindakan Admin</h2>
-      <form id="reviewForm" class="space-y-4">
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Komentar (Opsional)</label>
-          <textarea id="adminComment" class="w-full p-2 border border-gray-300 rounded-lg" rows="3"></textarea>
-        </div>
-        <div class="action-buttons">
-          <button id="approveBtn" type="button" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
-            <i class="fas fa-check mr-2"></i> Setujui PKS
-          </button>
-          <button id="rejectBtn" type="button" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">
-            <i class="fas fa-times mr-2"></i> Tolak PKS
-          </button>
-        </div>
-      </form>
+    <div class="detail-card bg-red-50 border-red-200">
+      <h2 class="detail-title text-red-700">Zona Berbahaya</h2>
+      <p class="text-sm text-red-600 mb-3">Tindakan menghapus PKS bersifat permanen dan tidak dapat diurungkan. Pastikan
+        Anda benar-benar yakin.</p>
+      <button id="deletePksPageBtn" class="app-button app-button-danger">
+        <i class="fas fa-trash-alt"></i> Hapus PKS Ini Secara Permanen
+      </button>
+      <div id="deletePksStatus" class="status-message mt-3"></div>
     </div>
+
   </main>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    $(document).ready(function () {
-      // Initialize hint system
-      const hintBanner = document.getElementById('hintBanner');
-      const enableHints = document.getElementById('enableHints');
-      const skipHints = document.getElementById('skipHints');
-      const sectionHints = document.querySelectorAll('.hint');
+    let currentPksId = null;
+    let currentPksData = null; // Untuk menyimpan data PKS asli saat mode edit
+    const initialFormState = {}; // Untuk menyimpan state awal form saat mode edit diaktifkan
 
-      // Set hint preferences in local storage
-      let hintsEnabled = localStorage.getItem('hintsEnabled') === 'true';
+    // Fungsi untuk mengisi field form dari objek data
+    function populateFormFields(data) {
+      if (!data) return;
+      // Content
+      $('#content_nomor').val(data.content?.nomor || '');
+      $('#content_judul').val(data.content?.judul || '');
+      $('#content_tanggal').val(data.content?.tanggal ? new Date(data.content.tanggal).toISOString().split('T')[0] : '');
 
-      // Function to show all hints
-      function showAllHints() {
-        sectionHints.forEach(hint => {
-          hint.style.display = 'block';
-        });
-        localStorage.setItem('hintsEnabled', 'true');
-        hintsEnabled = true;
-      }
+      // Pihak Kedua
+      $('#pihakKedua_instansi').val(data.pihakKedua?.instansi || '');
+      $('#pihakKedua_nomor').val(data.pihakKedua?.nomor || '');
+      $('#pihakKedua_nama').val(data.pihakKedua?.nama || '');
+      $('#pihakKedua_jabatan').val(data.pihakKedua?.jabatan || '');
+      $('#pihakKedua_alamat').val(data.pihakKedua?.alamat || '');
 
-      // Function to hide all hints
-      function hideAllHints() {
-        sectionHints.forEach(hint => {
-          hint.style.display = 'none';
-        });
-        localStorage.setItem('hintsEnabled', 'false');
-        hintsEnabled = false;
-      }
-
-      // Check saved preference
-      if (hintsEnabled === true) {
-        showAllHints();
-        hintBanner.style.display = 'none';
-      }
-
-      // Banner buttons
-      enableHints.addEventListener('click', function () {
-        showAllHints();
-        hintBanner.style.display = 'none';
-      });
-
-      skipHints.addEventListener('click', function () {
-        hideAllHints();
-        hintBanner.style.display = 'none';
-      });
-
-      // Close individual hints
-      document.querySelectorAll('.hint-close').forEach(close => {
-        close.addEventListener('click', function (e) {
-          e.stopPropagation();
-          this.parentElement.style.display = 'none';
-        });
-      });
-
-      // Get the ID from URL parameters
-      const urlParams = new URLSearchParams(window.location.search);
-      const pksId = urlParams.get("id");
-
-      if (pksId) {
-        // Fetch the PKS data when page loads
-        fetchPKSData(pksId);
-      }
-
-      // Setup download template button
-      $('#downloadTemplateBtn').click(async function () {
-  try {
-    const response = await fetch(`${BASE_URL}/api/document/${pksId}`);
-    
-    if (!response.ok) {
-      throw new Error('Gagal mengambil template');
+      // Properties
+      $('#properties_email').val(data.properties?.email || '');
+      $('#properties_comment_edit').val(data.properties?.comment || ''); // Untuk textarea mode edit
+      $('#properties_comment_view').text(data.properties?.comment || '-'); // Untuk tampilan view mode
     }
 
-    const blob = await response.blob();
-    const url = window.URL.createObjectURL(blob);
-    
-    // Buat elemen <a> untuk trigger download
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `template-pks-${pksId}.docx`; // Nama file default
-    document.body.appendChild(a);
-    a.click();
-    
-    // Bersihkan
-    window.URL.revokeObjectURL(url);
-    document.body.removeChild(a);
-    
-  } catch (error) {
-    console.error('Error:', error);
-    alert('Gagal mengunduh template: ' + error.message);
-  }
-});
-      
+    // Fungsi untuk menyimpan state awal form sebelum edit
+    function storeInitialFormState() {
+      document.querySelectorAll('#pksForm input, #pksForm textarea, #pksForm select').forEach(el => {
+        initialFormState[el.name] = el.value;
+      });
+    }
 
-      // Setup document upload form
-      $("#uploadForm").submit(async function (e) {
-        e.preventDefault();
-        const formData = new FormData();
-        const fileInput = document.getElementById('filledPksFile');
-        const file = fileInput.files[0];
-
-        if (!file) {
-          showStatusMessage('uploadStatus', 'Pilih file terlebih dahulu', 'error');
-          return;
-        }
-
-        formData.append('file', file);
-
-        try {
-          // Show loading state
-          const submitBtn = $(this).find('button[type="submit"]');
-          const originalText = submitBtn.html();
-          submitBtn.html('<i class="fas fa-spinner fa-spin mr-2"></i> Uploading...');
-          submitBtn.prop('disabled', true);
-
-          const response = await fetch(`${BASE_URL}/api/upload/pdf/${pksId}`, {
-            method: 'POST',
-            body: formData
-          });
-
-          if (!response.ok) {
-            throw new Error(await response.text());
-          }
-
-          const result = await response.json();
-
-          // Update status to "Menunggu Review"
-          await fetch(`${BASE_URL}/api/pks/${pksId}/status`, {
-            method: 'PATCH',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ status: "menunggu review" })
-          });
-
-          showStatusMessage('uploadStatus', 'Dokumen berhasil diunggah! Status berubah menjadi Menunggu Review', 'success');
-
-          // Reset form state
-          submitBtn.html(originalText);
-          submitBtn.prop('disabled', false);
-
-          // Clear file input
-          fileInput.value = '';
-
-          fetchPKSData(pksId); // Refresh data
-        } catch (error) {
-          console.error('Upload error:', error);
-          showStatusMessage('uploadStatus', `Gagal upload: ${error.message}`, 'error');
+    // Fungsi untuk mengembalikan form ke state awal (sebelum edit)
+    function restoreInitialFormState() {
+      document.querySelectorAll('#pksForm input, #pksForm textarea, #pksForm select').forEach(el => {
+        if (initialFormState.hasOwnProperty(el.name)) {
+          el.value = initialFormState[el.name];
         }
       });
+      // Khusus untuk tampilan komentar di view mode
+      $('#properties_comment_view').text(initialFormState['properties.comment'] || '-');
+    }
 
-      // Setup delete document button
-      $("#deleteDocBtn").click(async function () {
-        if (confirm("Apakah Anda yakin ingin menghapus dokumen ini?")) {
-          try {
-            const response = await fetch(`${BASE_URL}/api/file/${pksId}.pdf`, {
-              method: 'DELETE'
-            });
 
-            if (!response.ok) {
-              throw new Error('Gagal menghapus dokumen');
-            }
-
-            // Update status back to "Draft"
-            await fetch(`${BASE_URL}/api/pks/${pksId}/status`, {
-              method: 'PATCH',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({ status: "draft" })
-            });
-
-            showStatusMessage('uploadStatus', 'Dokumen berhasil dihapus. Status kembali ke Draft', 'success');
-            fetchPKSData(pksId); // Refresh data
-          } catch (error) {
-            console.error('Delete error:', error);
-            showStatusMessage('uploadStatus', `Gagal menghapus dokumen: ${error.message}`, 'error');
-          }
+    function setEditMode(isEditing) {
+      const formControls = document.querySelectorAll('#pksForm input, #pksForm textarea, #pksForm select');
+      if (isEditing) {
+        storeInitialFormState(); // Simpan state sebelum diedit
+        $('body').addClass('edit-active');
+        formControls.forEach(el => {
+          el.removeAttribute('readonly');
+          el.classList.remove('form-control-viewmode');
+          el.classList.add('form-control-editmode');
+        });
+        // Nomor dokumen internal tetap readonly
+        $('#content_nomor').attr('readonly', true).removeClass('form-control-editmode').addClass('form-control-viewmode');
+      } else {
+        $('body').removeClass('edit-active');
+        formControls.forEach(el => {
+          el.setAttribute('readonly', true);
+          el.classList.add('form-control-viewmode');
+          el.classList.remove('form-control-editmode');
+        });
+        if (currentPksData) { // Jika batal, kembalikan ke data asli dari server
+          populateFormFields(currentPksData);
+        } else { // Jika batal dari form baru (belum ada data server), kembalikan ke state awal edit
+          restoreInitialFormState();
         }
-      });
+      }
+    }
 
-      // Setup download document button
-      $("#downloadDocBtn").click(function () {
-        window.open(`${BASE_URL}/api/file/${pksId}.pdf`, '_blank');
-      });
-
-      // Setup approve button
-      $("#approveBtn").click(async function () {
-        if (confirm("Apakah Anda yakin ingin menyetujui PKS ini?")) {
-          try {
-            const comment = $("#adminComment").val();
-
-            // Show loading state
-            const originalText = $(this).html();
-            $(this).html('<i class="fas fa-spinner fa-spin mr-2"></i> Memproses...');
-            $(this).prop('disabled', true);
-
-            const response = await fetch(`${BASE_URL}/api/pks/${pksId}/status`, {
-              method: 'PATCH',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                status: "approved",
-                comment: comment || null
-              })
-            });
-
-            if (!response.ok) {
-              throw new Error('Gagal memperbarui status');
-            }
-
-            // Reset button state
-            $(this).html(originalText);
-            $(this).prop('disabled', false);
-
-            alert('PKS telah disetujui');
-            fetchPKSData(pksId); // Refresh data
-          } catch (error) {
-            console.error('Approve error:', error);
-            alert(`Gagal menyetujui PKS: ${error.message}`);
-          }
-        }
-      });
-
-      // Setup reject button
-      $("#rejectBtn").click(async function () {
-        const comment = $("#adminComment").val();
-        if (!comment) {
-          alert('Harap berikan komentar/alasan penolakan');
-          return;
-        }
-
-        if (confirm("Apakah Anda yakin ingin menolak PKS ini?")) {
-          try {
-            // Show loading state
-            const originalText = $(this).html();
-            $(this).html('<i class="fas fa-spinner fa-spin mr-2"></i> Memproses...');
-            $(this).prop('disabled', true);
-
-            const response = await fetch(`${BASE_URL}/api/pks/${pksId}/status`, {
-              method: 'PATCH',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                status: "rejected",
-                comment: comment
-              })
-            });
-
-            if (!response.ok) {
-              throw new Error('Gagal memperbarui status');
-            }
-
-            // Reset button state
-            $(this).html(originalText);
-            $(this).prop('disabled', false);
-
-            alert('PKS telah ditolak');
-            fetchPKSData(pksId); // Refresh data
-          } catch (error) {
-            console.error('Reject error:', error);
-            alert(`Gagal menolak PKS: ${error.message}`);
-          }
-        }
-      });
-    });
+    function showGlobalStatusMessage(message, type) {
+      const element = $("#globalStatusMessage");
+      element.text(message);
+      element.removeClass('status-success status-error hidden');
+      element.addClass(type === 'success' ? 'status-success' : 'status-error');
+      element.show();
+      setTimeout(() => element.fadeOut(), 7000);
+    }
 
     function showStatusMessage(elementId, message, type) {
       const element = $(`#${elementId}`);
       element.text(message);
-      element.removeClass('status-success status-error');
+      element.removeClass('status-success status-error hidden');
       element.addClass(type === 'success' ? 'status-success' : 'status-error');
       element.show();
-      setTimeout(() => element.fadeOut(), 5000);
+      setTimeout(() => element.fadeOut(), 7000);
     }
 
     async function fetchPKSData(id) {
       try {
         const response = await fetch(`${BASE_URL}/api/pks/${id}`);
-
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-
-        const data = await response.json();
-
-        if (data.success && data.data) {
-          displayPKSData(data.data);
+        if (!response.ok) { throw new Error("Gagal memuat data PKS. Status: " + response.status); }
+        const result = await response.json();
+        if (result.success && result.data) {
+          currentPksData = JSON.parse(JSON.stringify(result.data)); // Deep copy data
+          populateFormFields(currentPksData);
+          displayPKSFileDetails(currentPksData.fileUpload);
+          updateStatusDisplay(currentPksData.properties?.status, currentPksData.properties?.comment);
+          setEditMode(false); // Pastikan mulai dalam view mode
+        } else {
+          throw new Error(result.message || "Data PKS tidak ditemukan.");
         }
       } catch (error) {
         console.error("Error fetching PKS data:", error);
-        alert("Error loading PKS data: " + error.message);
+        showGlobalStatusMessage(`Error memuat data: ${error.message}`, 'error');
+        // Menonaktifkan tombol aksi utama jika data gagal dimuat
+        $('#toggleEditModeBtn, #saveChangesBtn, #cancelEditBtn, #deletePksPageBtn').prop('disabled', true);
       }
     }
 
-    function displayPKSData(pksData) {
-      // Format date for display
-      function formatDate(dateString) {
-        if (!dateString) return "-";
-        const date = new Date(dateString);
-        return date.toLocaleDateString("id-ID", {
-          day: "numeric",
-          month: "long",
-          year: "numeric",
+    function updateStatusDisplay(status, adminComment) {
+      const badge = $("#docStatusBadge");
+      const messageEl = $("#docStatusMessage");
+      badge.removeClass("status-draft status-review status-approved status-rejected status-menunggu");
+
+      let statusText = status || "draft";
+      let badgeClass = "status-draft";
+      let statusMessageText = "Status tidak diketahui.";
+
+      switch (statusText.toLowerCase()) {
+        case "draft": badgeClass = "status-draft"; statusMessageText = "PKS masih dalam tahap draft / persiapan awal."; break;
+        case "menunggu dokumen": badgeClass = "status-menunggu"; statusMessageText = "Menunggu kelengkapan dokumen dari pihak mitra."; break;
+        case "menunggu review": badgeClass = "status-review"; statusMessageText = "Dokumen telah lengkap dan menunggu review dari admin."; break;
+        case "approved": case "disetujui": statusText = "Disetujui"; badgeClass = "status-approved"; statusMessageText = "PKS telah disetujui."; break;
+        case "rejected": case "ditolak": statusText = "Ditolak"; badgeClass = "status-rejected"; statusMessageText = "PKS ditolak."; break;
+      }
+      badge.text(statusText.charAt(0).toUpperCase() + statusText.slice(1)).addClass(badgeClass);
+
+      let commentHtml = adminComment ? `<br><small class="text-gray-500"><i>Komentar Admin: ${adminComment}</i></small>` : "";
+      messageEl.html(statusMessageText + commentHtml);
+
+      renderStatusActionButtons(statusText.toLowerCase());
+    }
+
+    function renderStatusActionButtons(currentStatus) {
+      const container = $('#dynamicStatusButtons');
+      container.empty();
+      let buttons = [];
+
+      // Logika penentuan tombol berdasarkan status saat ini
+      if (currentStatus === 'draft') {
+        buttons.push({ text: 'Ajukan (Menunggu Dokumen)', newStatus: 'menunggu dokumen', class: 'app-button-primary' });
+      } else if (currentStatus === 'menunggu dokumen') {
+        buttons.push({ text: 'Lanjut ke Review Admin', newStatus: 'menunggu review', class: 'app-button-primary' });
+        buttons.push({ text: 'Kembalikan ke Draft', newStatus: 'draft', class: 'app-button-secondary' });
+      } else if (currentStatus === 'menunggu review') {
+        buttons.push({ text: 'Setujui PKS', newStatus: 'approved', class: 'app-button-success' });
+        buttons.push({ text: 'Tolak PKS', newStatus: 'rejected', class: 'app-button-danger' });
+        buttons.push({ text: 'Kembalikan (Menunggu Dokumen)', newStatus: 'menunggu dokumen', class: 'app-button-warning' });
+      } else if (currentStatus === 'rejected') {
+        buttons.push({ text: 'Ajukan Ulang (ke Menunggu Review)', newStatus: 'menunggu review', class: 'app-button-primary' });
+        buttons.push({ text: 'Kembalikan ke Draft', newStatus: 'draft', class: 'app-button-secondary' });
+      } else if (currentStatus === 'approved') {
+        // Contoh: Mungkin ada tombol "Arsipkan" atau "Batalkan Persetujuan (kembali ke review)"
+        // buttons.push({ text: 'Batalkan Persetujuan (Review Ulang)', newStatus: 'menunggu review', class: 'app-button-warning' });
+        container.append('<p class="text-green-600 font-medium">PKS sudah disetujui. Tidak ada tindakan status lebih lanjut.</p>');
+      }
+
+      buttons.forEach(btnInfo => {
+        const button = $(`<button type="button" class="app-button ${btnInfo.class}"></button>`).text(btnInfo.text);
+        button.on('click', function () {
+          const adminCommentForStatus = $('#adminCommentStatus').val().trim();
+          if (btnInfo.newStatus === 'rejected' && !adminCommentForStatus) {
+            showStatusMessage('statusActionMessage', 'Komentar wajib diisi jika menolak PKS.', 'error');
+            $('#adminCommentStatus').focus();
+            return;
+          }
+          let confirmMessage = `Anda yakin ingin mengubah status PKS menjadi "${btnInfo.newStatus.replace("_", " ").toUpperCase()}"?`;
+          if (adminCommentForStatus) confirmMessage += `\nDengan Komentar: "${adminCommentForStatus}"`;
+
+          if (confirm(confirmMessage)) {
+            handleChangeStatus(btnInfo.newStatus, adminCommentForStatus);
+          }
         });
-      }
-
-      // Format date time for upload date
-      function formatDateTime(dateString) {
-        if (!dateString) return "";
-        const date = new Date(dateString);
-        return `Diunggah pada: ${date.toLocaleDateString("id-ID")} ${date.toLocaleTimeString("id-ID")}`;
-      }
-
-      // Update status display
-      function updateStatusDisplay(status) {
-        const badge = $("#docStatusBadge");
-        badge.removeClass("status-draft status-review status-approved status-rejected");
-
-        let statusText = "";
-        let badgeClass = "";
-        let docFileInfo = $("#documentFileInfo");
-
-        switch (status) {
-          case "Draft":
-            statusText = "draft";
-            badgeClass = "status-draft";
-            $("#docStatusMessage").text("Dokumen belum diunggah");
-            $("#adminActions").hide();
-            break;
-          case "Menunggu Review":
-            statusText = "menunggu review";
-            badgeClass = "status-review";
-            $("#docStatusMessage").text("Dokumen telah diunggah dan menunggu verifikasi");
-            $("#adminActions").show();
-            break;
-          case "Disetujui":
-            statusText = "approved";
-            badgeClass = "status-approved";
-            $("#docStatusMessage").text("Dokumen telah disetujui");
-            $("#adminActions").hide();
-            break;
-          case "Ditolak":
-            statusText = "rejected";
-            badgeClass = "status-rejected";
-            $("#docStatusMessage").text("Dokumen memerlukan perbaikan");
-            $("#adminActions").hide();
-            break;
-          default:
-            statusText = status;
-            badgeClass = "status-draft";
-        }
-
-        badge.text(statusText).addClass(badgeClass);
-      }
-
-      // Content section
-      if (pksData.content) {
-        $("#docNumber").text(pksData.content.nomor ? `No. Dokumen: ${pksData.content.nomor}` : "");
-        $("#docTitle").text(pksData.content.judul || "-");
-        $("#docDate").text(formatDate(pksData.content.tanggal));
-      }
-
-      // Pihak Kedua section
-      if (pksData.pihakKedua) {
-        $("#secondParty").text(pksData.pihakKedua.instansi || "-");
-        $("#secondPartyName").text(pksData.pihakKedua.nama || "-");
-        $("#secondPartyPosition").text(pksData.pihakKedua.jabatan || "-");
-        $("#secondPartyAddress").text(pksData.pihakKedua.alamat || "-");
-        $("#secondPartyPhone").text(pksData.pihakKedua.nomor || "-");
-      }
-
-      // Properties section
-      if (pksData.properties) {
-        $("#docEmail").text(pksData.properties.email || "-");
-        updateStatusDisplay(pksData.properties.status || "draft");
-
-        // Show comment if exists
-        if (pksData.properties.comment) {
-          $("#docStatusMessage").append(`<div class="mt-1 text-sm">Komentar: ${pksData.properties.comment}</div>`);
-        }
-      }
-
-      // File Upload section
-      if (pksData?.fileUpload) {
-        // Document file
-        if (pksData.fileUpload.docName) {
-          $("#documentFileName")
-            .text(pksData.fileUpload.docName)
-            .removeClass("italic text-gray-600")
-            .addClass("text-gray-800");
-          $("#uploadDate").text(formatDateTime(pksData.fileUpload.uploadDate));
-          $("#downloadDocBtn, #deleteDocBtn").prop("disabled", false);
-        } else {
-          $("#documentFileName")
-            .text("Belum ada dokumen")
-            .addClass("italic text-gray-600")
-            .removeClass("text-gray-800");
-          $("#uploadDate").text("");
-          $("#downloadDocBtn, #deleteDocBtn").prop("disabled", true);
-        }
+        container.append(button);
+      });
+      if (buttons.length === 0 && currentStatus !== 'approved') {
+        container.append('<p class="text-gray-500">Tidak ada tindakan status yang tersedia saat ini.</p>');
       }
     }
+
+    async function handleChangeStatus(newStatus, comment) {
+      if (!currentPksId) {
+        showStatusMessage('statusActionMessage', 'ID PKS tidak ditemukan.', 'error');
+        return;
+      }
+
+      // Pastikan currentPksData tersedia
+      if (!currentPksData) {
+        showStatusMessage('statusActionMessage', 'Data PKS tidak tersedia. Coba refresh halaman.', 'error');
+        return;
+      }
+
+      try {
+        // PERBAIKAN: Ambil semua data dari currentPksData, lalu update status dan comment
+        const payload = {
+          ...currentPksData, // Sertakan semua data yang sudah ada
+          properties: {
+            ...currentPksData.properties, // Pertahankan properties yang ada
+            status: newStatus // Update status
+          }
+        };
+
+        // Tambahkan comment jika ada
+        if (comment !== undefined && comment !== null && comment.trim() !== '') {
+          payload.properties.comment = comment.trim();
+        }
+
+        const response = await fetch(`${BASE_URL}/api/pks/${currentPksId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const contentType = response.headers.get("content-type");
+
+        if (response.ok) {
+          let resultMessage = `Status PKS berhasil diubah menjadi "${newStatus}".`;
+
+          if (contentType && contentType.includes("application/json")) {
+            const result = await response.json();
+            if (result.message) {
+              resultMessage = result.message;
+            }
+          }
+
+          showStatusMessage('statusActionMessage', resultMessage, 'success');
+          $('#adminCommentStatus').val(''); // Clear comment field
+          await fetchPKSData(currentPksId); // Refresh data untuk update UI
+
+        } else {
+          let errorMessage = `Gagal mengubah status. Status: ${response.status}`;
+
+          if (contentType && contentType.includes("application/json")) {
+            const errorResult = await response.json();
+            errorMessage = errorResult.message || errorMessage;
+          } else {
+            const errorText = await response.text();
+            console.error("Server error saat ubah status:", errorText);
+            errorMessage = `Terjadi kesalahan di server. Status: ${response.status}`;
+          }
+
+          throw new Error(errorMessage);
+        }
+
+      } catch (error) {
+        console.error('Error changing status:', error);
+        showStatusMessage('statusActionMessage', `Error: ${error.message}`, 'error');
+      }
+    }
+
+    function displayPKSFileDetails(fileUploadData) {
+      const docFileNameSpan = $("#documentFileName");
+      const uploadDateSpan = $("#uploadDate");
+      const downloadDocBtn = $("#downloadDocBtn");
+      const deleteDocBtn = $("#deleteDocBtn");
+
+      if (fileUploadData && fileUploadData.docName) {
+        docFileNameSpan.text(fileUploadData.docName).removeClass("italic text-gray-600").addClass("text-gray-800 font-medium");
+        uploadDateSpan.text(fileUploadData.uploadDate ? `Diunggah: ${new Date(fileUploadData.uploadDate).toLocaleString('id-ID')}` : '');
+        downloadDocBtn.prop("disabled", false).data('filename', fileUploadData.docName);
+        deleteDocBtn.prop("disabled", false).data('filename', fileUploadData.docName);
+      } else {
+        docFileNameSpan.text("Belum ada dokumen yang diunggah.").addClass("italic text-gray-600").removeClass("text-gray-800 font-medium");
+        uploadDateSpan.text("");
+        downloadDocBtn.prop("disabled", true).removeData('filename');
+        deleteDocBtn.prop("disabled", true).removeData('filename');
+      }
+    }
+
+    $(document).ready(function () {
+      const urlParams = new URLSearchParams(window.location.search);
+      currentPksId = urlParams.get("id");
+
+      if (currentPksId) {
+        fetchPKSData(currentPksId);
+      } else {
+        showGlobalStatusMessage("ID PKS tidak ditemukan di URL.", 'error');
+        $('button').prop('disabled', true); // Disable all buttons if no ID
+      }
+
+      $('#toggleEditModeBtn').on('click', function () {
+        setEditMode(true);
+      });
+
+      $('#cancelEditBtn').on('click', function () {
+        if (confirm("Apakah Anda yakin ingin membatalkan perubahan? Semua yang belum disimpan akan hilang.")) {
+          setEditMode(false); // Akan restore ke currentPksData
+        }
+      });
+
+      $('#saveChangesBtn').on('click', async function () {
+        const formData = {};
+        // Ambil data dari form
+        new FormData(document.getElementById('pksForm')).forEach((value, key) => {
+          const keys = key.split('.');
+          let current = formData;
+          for (let i = 0; i < keys.length - 1; i++) {
+            current[keys[i]] = current[keys[i]] || {};
+            current = current[keys[i]];
+          }
+          current[keys[keys.length - 1]] = value;
+        });
+
+        // Tambahkan data yang tidak ada di form secara eksplisit jika perlu
+        // Misalnya, status diambil dari currentPksData karena tidak diedit di form utama ini lagi
+        if (currentPksData && currentPksData.properties) {
+          formData.properties = formData.properties || {};
+          formData.properties.status = currentPksData.properties.status;
+        }
+
+
+        try {
+          $(this).html('<i class="fas fa-spinner fa-spin"></i> Menyimpan...').prop('disabled', true);
+          const response = await fetch(`${BASE_URL}/api/pks/${currentPksId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData)
+          });
+          const result = await response.json();
+          if (!response.ok) {
+            throw new Error(result.message || 'Gagal menyimpan perubahan.');
+          }
+          showGlobalStatusMessage('Perubahan berhasil disimpan!', 'success');
+          fetchPKSData(currentPksId); // Re-fetch untuk update tampilan dan kembali ke view mode
+        } catch (error) {
+          console.error('Save error:', error);
+          showGlobalStatusMessage(`Error: ${error.message}`, 'error');
+        } finally {
+          $(this).html('<i class="fas fa-save"></i> Simpan Perubahan').prop('disabled', false);
+        }
+      });
+
+      // Handler untuk Hapus PKS
+      $('#deletePksPageBtn').click(async function () {
+        if (!currentPksId) {
+          showStatusMessage('deletePksStatus', 'ID PKS tidak valid.', 'error');
+          return;
+        }
+        if (confirm(`ANDA YAKIN ingin menghapus PKS ini (ID: ${currentPksId}) secara permanen? Tindakan ini TIDAK DAPAT DIURUNGKAN.`)) {
+          try {
+            $(this).html('<i class="fas fa-spinner fa-spin"></i> Menghapus...').prop('disabled', true);
+            const response = await fetch(`${BASE_URL}/api/pks/${currentPksId}`, { method: 'DELETE' });
+            const result = await response.json();
+            if (!response.ok) { throw new Error(result.message || 'Gagal menghapus PKS.'); }
+
+            alert('PKS berhasil dihapus. Anda akan diarahkan kembali ke daftar PKS.');
+            window.location.href = 'adminview.html';
+          } catch (error) {
+            console.error("Error deleting PKS:", error);
+            showStatusMessage('deletePksStatus', `Error: ${error.message}`, 'error');
+            $(this).html('<i class="fas fa-trash-alt"></i> Hapus PKS Ini Secara Permanen').prop('disabled', false);
+          }
+        }
+      });
+
+      // Handler untuk Upload Dokumen Mitra
+      $("#uploadForm").submit(async function (e) {
+        e.preventDefault();
+        if (!currentPksId) {
+          showStatusMessage('uploadStatus', 'ID PKS tidak valid untuk upload.', 'error');
+          return;
+        }
+        const fileInput = document.getElementById('filledPksFile');
+        const file = fileInput.files[0];
+        if (!file) {
+          showStatusMessage('uploadStatus', 'Pilih file terlebih dahulu.', 'error');
+          return;
+        }
+
+        const formData = new FormData();
+        formData.append('file', file); // Backend mungkin expect 'file' atau 'filledPksFile'
+
+        const submitBtn = $(this).find('button[type="submit"]');
+        const originalText = submitBtn.html();
+        submitBtn.html('<i class="fas fa-spinner fa-spin"></i> Mengunggah...').prop('disabled', true);
+
+        try {
+          // 1. Upload file
+          const uploadResponse = await fetch(`${BASE_URL}/api/upload/pdf/${currentPksId}`, { // Sesuaikan endpoint jika perlu
+            method: 'POST',
+            body: formData
+          });
+          const uploadResult = await uploadResponse.json();
+          if (!uploadResponse.ok) { throw new Error(uploadResult.message || 'Gagal mengunggah file.'); }
+
+          // 2. Update status PKS ke 'menunggu review' (atau status lain yang sesuai)
+          //    Backend mungkin sudah menangani ini saat file diupload, jika tidak:
+          const statusUpdateResponse = await fetch(`${BASE_URL}/api/pks/${currentPksId}/status`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status: "menunggu review" }) // Asumsi status jadi 'menunggu review'
+          });
+          const statusResult = await statusUpdateResponse.json();
+          if (!statusUpdateResponse.ok) { throw new Error(statusResult.message || 'Gagal update status PKS setelah upload.'); }
+
+          showStatusMessage('uploadStatus', 'Dokumen berhasil diunggah dan status PKS diperbarui!', 'success');
+          fileInput.value = '';
+          fetchPKSData(currentPksId); // Refresh data
+        } catch (error) {
+          console.error('Upload error:', error);
+          showStatusMessage('uploadStatus', `Gagal: ${error.message}`, 'error');
+        } finally {
+          submitBtn.html(originalText).prop('disabled', false);
+        }
+      });
+
+      // Handler untuk Download Template UPN
+      $('#downloadTemplateBtn').click(async function () {
+        if (!currentPksId) { alert('ID PKS tidak ditemukan.'); return; }
+        try {
+          const response = await fetch(`${BASE_URL}/api/document/${currentPksId}`); // Endpoint untuk template PKS UPN
+          if (!response.ok) { throw new Error('Gagal mengambil template. Status: ' + response.status); }
+          const blob = await response.blob();
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `template-pks-upn-${currentPksId}.docx`; // Nama file default
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(url);
+          document.body.removeChild(a);
+        } catch (error) {
+          console.error('Error download template:', error);
+          alert('Gagal mengunduh template UPN: ' + error.message);
+        }
+      });
+
+      // Handler untuk Download Dokumen yang sudah diupload Mitra
+      $("#downloadDocBtn").click(function () {
+        const fileName = $(this).data('filename');
+        if (!currentPksId || !fileName) { alert('Informasi file tidak lengkap.'); return; }
+        window.open(`${BASE_URL}/api/file/${currentPksId}/${fileName}`, '_blank'); // Endpoint untuk file spesifik
+      });
+
+      // Handler untuk Hapus Dokumen yang sudah diupload Mitra
+      $("#deleteDocBtn").click(async function () {
+        const fileName = $(this).data('filename');
+        if (!currentPksId || !fileName) { showStatusMessage('uploadStatus', 'Informasi file tidak lengkap.', 'error'); return; }
+
+        if (confirm(`Apakah Anda yakin ingin menghapus file "${fileName}"? Status PKS mungkin akan kembali ke 'Draft' atau 'Menunggu Dokumen'.`)) {
+          try {
+            $(this).html('<i class="fas fa-spinner fa-spin"></i>').prop('disabled', true);
+            const response = await fetch(`${BASE_URL}/api/file/${currentPksId}/${fileName}`, { method: 'DELETE' }); // Endpoint hapus file
+            const result = await response.json();
+            if (!response.ok) { throw new Error(result.message || 'Gagal menghapus file.'); }
+
+            // Opsional: Update status PKS kembali ke draft atau menunggu dokumen
+            // const statusUpdate = await fetch(`${BASE_URL}/api/pks/${currentPksId}/status`, { ... body: { status: "draft" } ... });
+            // if(!statusUpdate.ok) { throw new Error('Gagal update status PKS setelah file dihapus.');}
+
+            showStatusMessage('uploadStatus', `File "${fileName}" berhasil dihapus.`, 'success');
+            fetchPKSData(currentPksId);
+          } catch (error) {
+            console.error('Delete file error:', error);
+            showStatusMessage('uploadStatus', `Gagal hapus file: ${error.message}`, 'error');
+          } finally {
+            $(this).html('<i class="fas fa-trash"></i> Hapus File').prop('disabled', false);
+          }
+        }
+      });
+
+    }); // End of document.ready
   </script>
   <script src="utils.js"></script>
 </body>
