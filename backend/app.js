@@ -1,16 +1,19 @@
 import express from "express";
-import cors from "cors"; // <-- Tambah ini
-import pksRouter from "./routes/pks.routes.js";
-import connectToDatabase from "./database/mongodb.js";
+import cors from "cors";
 
-import { PORT } from "./config/env.js";
+// router backend
+import pksRouter from "./routes/pks.routes.js";
 import uploadRouter from "./routes/upload.routes.js";
 import fileRouter from "./routes/file.routes.js";
+import authRouter from "./routes/auth.routes.js";
 import documentRouter from "./routes/document.routes.js";
 import notificationRouter from "./routes/notification.routes.js";
 import initCronJobs from "./config/cron.js";
 
+//konfigurasi
 import { DB_URI } from "./config/env.js";
+import connectToDatabase from "./database/mongodb.js";
+import { PORT } from "./config/env.js";
 
 const app = express();
 
@@ -21,6 +24,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Static & Routes
 app.use(express.static("public"));
+app.use("/api/auth", authRouter);
 app.use("/api/pks", pksRouter);
 app.use("/api/upload", uploadRouter);
 app.use("/api/file", fileRouter);
