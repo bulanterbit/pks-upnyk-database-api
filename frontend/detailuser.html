@@ -270,7 +270,6 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         // --- KONFIGURASI & STATE ---
-        const BASE_URL = "http://localhost:3000"; // GANTI DENGAN URL API BACKEND ANDA
         let currentPksId = null;
         let currentPksData = null; // Untuk menyimpan data PKS yang diambil dari server
         let selectedFileObject = null; // Untuk menyimpan objek File yang akan diunggah
@@ -571,6 +570,7 @@
             });
         });
     </script>
+    <script src="utils.js"></script>
     <!-- <script src="auth.js"></script> -->
 </body>
 
