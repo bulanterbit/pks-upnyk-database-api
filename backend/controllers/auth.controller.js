@@ -89,6 +89,6 @@ export const signIn = async (req, res, next) => {
   }
 };
 
-export const signOut = async (req, res, next) => {
-  //implement logic here
-};
+// export const signOut = async (req, res, next) => {
+//   //implement logic here
+// };
