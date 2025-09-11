@@ -1,0 +1,14 @@
+cat > Caddyfile <<'EOF'
+pkslppmupnyk.io, www.pkslppmupnyk.io {
+  encode gzip
+  root * /site
+  file_server
+
+  handle_path /api/* {
+    reverse_proxy api:3000
+  }
+
+  @assets path *.js *.css *.png *.jpg *.svg *.ico
+  header @assets Cache-Control "public, max-age=31536000, immutable"
+}
+EOF

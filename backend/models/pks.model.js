@@ -128,6 +128,19 @@ const pksSchema = new mongoose.Schema({
   },
 });
 
+pksSchema.post("findOneAndDelete", async function (doc) {
+  if (doc?.fileUpload?.docPath) {
+    fs.unlink(doc.fileUpload.docPath, (err) => {
+      if (err) console.error("Gagal hapus file PDF:", err);
+    });
+  }
+  if (doc?.fileUpload?.logoPath) {
+    fs.unlink(doc.fileUpload.logoPath, (err) => {
+      if (err) console.error("Gagal hapus logo:", err);
+    });
+  }
+});
+
 // Calculate reminder and expiration dates before saving
 pksSchema.pre("save", function (next) {
   // Set upload date if not already set
